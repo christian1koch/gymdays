@@ -4,20 +4,29 @@ import Exercise from "./checklist-page/exercise";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import GymDay from "./checklist-page/gym-day/gym-day";
 import { gymDataMock } from "./checklist-page/data";
+import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
+import * as eva from "@eva-design/eva";
+import { default as theme } from "./theme/theme.json";
+import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
 export default function App() {
   return (
-    <AutocompleteDropdownContextProvider>
-      <View className="flex-1 items-center justify-center bg-slate-200">
-        <GymDay
-          name={gymDataMock.name}
-          date={gymDataMock.date}
-          exercises={gymDataMock.exercises}
-        />
-        {/* <Exercise /> */}
-        <StatusBar style="auto" />
-      </View>
-    </AutocompleteDropdownContextProvider>
+    <>
+      <IconRegistry icons={EvaIconsPack} />
+      <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
+        <AutocompleteDropdownContextProvider>
+          <View className="flex-1 items-center justify-center bg-slate-200">
+            <GymDay
+              name={gymDataMock.name}
+              date={gymDataMock.date}
+              exercises={gymDataMock.exercises}
+            />
+            {/* <Exercise /> */}
+            <StatusBar style="auto" />
+          </View>
+        </AutocompleteDropdownContextProvider>
+      </ApplicationProvider>
+    </>
   );
 }
 
