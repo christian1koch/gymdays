@@ -20,3 +20,8 @@ export const gymDataMock = {
   date: new Date(),
   exercises: exercisesMock,
 };
+
+export const newExerciseMock: BasicExercise = {
+  name: "Barbel Bench Press",
+  weightsPerSet: [20, 25, 20, 20],
+};

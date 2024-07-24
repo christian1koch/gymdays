@@ -1,10 +1,11 @@
-import { BasicExercise, GymDayData } from "../data";
+import { BasicExercise, GymDayData, newExerciseMock } from "../data";
 import { View, Pressable, FlatList } from "react-native";
 import { dateToYearMonthDay } from "../../libs/utils/utils";
 import { styled } from "nativewind";
 import ExerciseCard from "./exercise-card";
 import Divider from "../../ui/divider";
 import { Button, Icon, Text } from "@ui-kitten/components";
+import { useState } from "react";
 
 interface GymDayProps extends GymDayData {}
 
@@ -30,6 +31,12 @@ const StyledText = styled(Text);
 const PlusIcon = (props: any) => <Icon name="plus" {...props} />;
 
 const GymDay: React.FC<GymDayProps> = ({ name, date, exercises }) => {
+  const [currentExercises, setCurrentExercises] = useState(exercises);
+
+  const handleOnAddExercise = () => {
+    setCurrentExercises((prev) => [...prev, newExerciseMock]);
+  };
+
   return (
     <View className="w-full h-full mt-40 px-5">
       <View>
@@ -41,10 +48,13 @@ const GymDay: React.FC<GymDayProps> = ({ name, date, exercises }) => {
         <FlatList
           className="h-[450]"
           renderItem={renderExercise}
-          data={exercises}
+          data={currentExercises}
         />
         <View className="mt-16">
-          <Button accessoryLeft={PlusIcon}></Button>
+          <Button
+            onPress={handleOnAddExercise}
+            accessoryLeft={PlusIcon}
+          ></Button>
         </View>
       </View>
     </View>
