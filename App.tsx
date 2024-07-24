@@ -3,11 +3,12 @@ import { StyleSheet, Text, View } from "react-native";
 import Exercise from "./checklist-page/exercise";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import GymDay from "./checklist-page/gym-day/gym-day";
-import { gymDataMock } from "./checklist-page/data";
+import { gymDataMock, gymDataMocks } from "./checklist-page/data";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { default as theme } from "./theme/theme.json";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
+import GimDayList from "./checklist-page/gym-day-list/gym-day-list";
 
 export default function App() {
   return (
@@ -16,11 +17,7 @@ export default function App() {
       <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
         <AutocompleteDropdownContextProvider>
           <View className="flex-1 items-center justify-center bg-slate-200">
-            <GymDay
-              name={gymDataMock.name}
-              date={gymDataMock.date}
-              exercises={gymDataMock.exercises}
-            />
+            <GimDayList gymDays={gymDataMocks} />
             {/* <Exercise /> */}
             <StatusBar style="auto" />
           </View>
