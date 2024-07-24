@@ -17,7 +17,8 @@ export default function App() {
       <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
         <AutocompleteDropdownContextProvider>
           <View className="flex-1 items-center justify-center bg-slate-200">
-            <GimDayList gymDays={gymDataMocks} />
+            {/* <GimDayList gymDays={gymDataMocks} /> */}
+            <GymDay {...gymDataMock} />
             {/* <Exercise /> */}
             <StatusBar style="auto" />
           </View>
