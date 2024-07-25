@@ -26,7 +26,8 @@
     "react-native-autocomplete-dropdown": "^4.0.0-rc.5",
     "react-native-get-random-values": "^1.11.0",
     "react-native-svg": "^15.4.0",
-    "react-native-web": "~0.19.10"
+    "react-native-web": "~0.19.10",
+    "expo-sqlite": "~14.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
