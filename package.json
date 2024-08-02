@@ -16,7 +16,10 @@
     "@ui-kitten/components": "^5.3.1",
     "@ui-kitten/eva-icons": "^5.3.1",
     "classnames": "^2.5.1",
+    "drizzle-orm": "^0.32.1",
     "expo": "~51.0.21",
+    "expo-drizzle-studio-plugin": "^0.0.2",
+    "expo-sqlite": "~14.0.5",
     "expo-status-bar": "~1.12.1",
     "nanoid": "^5.0.7",
     "nativewind": "^2.0.11",
@@ -26,12 +29,12 @@
     "react-native-autocomplete-dropdown": "^4.0.0-rc.5",
     "react-native-get-random-values": "^1.11.0",
     "react-native-svg": "^15.4.0",
-    "react-native-web": "~0.19.10",
-    "expo-sqlite": "~14.0.5"
+    "react-native-web": "~0.19.10"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.45",
+    "drizzle-kit": "^0.23.1",
     "eslint": "^8.57.0",
     "eslint-config-expo": "^7.0.0",
     "eslint-plugin-prettier": "^5.2.1",
