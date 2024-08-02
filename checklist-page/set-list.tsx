@@ -1,8 +1,7 @@
 import React from "react";
-import { FlatList, View } from "react-native";
-import Set, { WeightItem } from "./set";
+import { View } from "react-native";
+import Set from "./set";
 import "react-native-get-random-values";
-import { nanoid } from "nanoid";
 import RemoveSetButton from "./remove-set-button";
 
 interface SetListProps {

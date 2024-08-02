@@ -1,12 +1,11 @@
 import { Card, Layout, List, Text, useTheme } from "@ui-kitten/components";
-import { BasicExercise, GymDayData } from "../data";
+import { GymDayData } from "../data";
 import {
   bulkNumberToWeightString,
   dateToYearMonthDay,
 } from "../../libs/utils/utils";
 import { styled } from "nativewind";
-import { View, ViewProps } from "react-native";
-import Divider from "../../ui/divider";
+import { ViewProps } from "react-native";
 
 interface GimDayListProps {
   gymDays: GymDayData[];

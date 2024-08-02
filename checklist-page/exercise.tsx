@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { StyleSheet, Button, Pressable, Text, View } from "react-native";
+import { View } from "react-native";
 import {
   AutocompleteDropdown,
   AutocompleteDropdownItem,
 } from "react-native-autocomplete-dropdown";
 import SetList from "./set-list";
 import AddSetButton from "./add-set-button";
-import { WeightItem } from "./set";
 
 interface ExerciseItem extends AutocompleteDropdownItem {}
 

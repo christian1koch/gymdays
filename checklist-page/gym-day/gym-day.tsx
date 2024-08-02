@@ -1,5 +1,5 @@
 import { BasicExercise, GymDayData, newExerciseMock } from "../data";
-import { View, Pressable, FlatList } from "react-native";
+import { View, FlatList } from "react-native";
 import { dateToYearMonthDay } from "../../libs/utils/utils";
 import { styled } from "nativewind";
 import ExerciseCard from "./exercise-card";

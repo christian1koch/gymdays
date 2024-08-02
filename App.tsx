@@ -1,16 +1,14 @@
 import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
-import Exercise from "./checklist-page/exercise";
+import { StyleSheet, Text, View } from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
-import GymDay from "./checklist-page/gym-day/gym-day";
-import { gymDataMock, gymDataMocks, GymDayData } from "./checklist-page/data";
+import { GymDayData } from "./checklist-page/data";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { default as theme } from "./theme/theme.json";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import GimDayList from "./checklist-page/gym-day-list/gym-day-list";
 import { useEffect, useState } from "react";
-import { getGymDays, getTest, initDatabase } from "./db/db";
+import { getGymDays } from "./db/db";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import * as SQLite from "expo-sqlite";
 
