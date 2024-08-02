@@ -1,18 +1,21 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
-import { GymDayData } from "./checklist-page/data";
+import { GymDayData } from "../checklist-page/data";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
-import * as eva from "@eva-design/eva";
-import { default as theme } from "./theme/theme.json";
-import { EvaIconsPack } from "@ui-kitten/eva-icons";
-import GimDayList from "./checklist-page/gym-day-list/gym-day-list";
+
+import GimDayList from "../checklist-page/gym-day-list/gym-day-list";
 import { useEffect, useState } from "react";
-import { getGymDays } from "./db/db";
+import { getGymDays } from "../db/db";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import * as SQLite from "expo-sqlite";
+import { Text } from "@ui-kitten/components";
+import { styled } from "nativewind";
+import HeaderNav from "../ui/header-nav";
 
 const dbForStudio = SQLite.openDatabaseSync("databaseName.db");
+
+const StyledText = styled(Text);
 
 export default function App() {
   useDrizzleStudio(dbForStudio);
@@ -28,24 +31,17 @@ export default function App() {
     };
     fetchGymDays();
   }, []);
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
+  // if (isLoading) {
+  //   return <Text>Loading...</Text>;
+  // }
   return (
-    <>
-      <IconRegistry icons={EvaIconsPack} />
-      <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
-        <AutocompleteDropdownContextProvider>
-          <View className="flex-1 items-center justify-center bg-slate-200">
-            <GimDayList gymDays={gymDays} />
-            {/* <GymDay {...gymDataMock} /> */}
-            {/* <Exercise /> */}
-            {/* <Button onPress={() => getTest()} title="get test" /> */}
-            <StatusBar style="auto" />
-          </View>
-        </AutocompleteDropdownContextProvider>
-      </ApplicationProvider>
-    </>
+    <View className="h-full">
+      <GimDayList gymDays={gymDays} />
+      {/* <GymDay {...gymDataMock} /> */}
+      {/* <Exercise /> */}
+      {/* <Button onPress={() => getTest()} title="get test" /> */}
+      <StatusBar style="auto" />
+    </View>
   );
 }
 

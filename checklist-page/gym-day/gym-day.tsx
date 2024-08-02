@@ -6,6 +6,9 @@ import ExerciseCard from "./exercise-card";
 import Divider from "../../ui/divider";
 import { Button, Icon, Text } from "@ui-kitten/components";
 import { useState } from "react";
+import HeaderNav from "../../ui/header-nav";
+import AddButton from "../../ui/add-button";
+import { updateGymDayName } from "../../db/db";
 
 interface GymDayProps extends GymDayData {}
 
@@ -28,34 +31,38 @@ const renderExercise = ({
 
 const StyledText = styled(Text);
 
-const PlusIcon = (props: any) => <Icon name="plus" {...props} />;
-
-const GymDay: React.FC<GymDayProps> = ({ name, date, exercises }) => {
+const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
   const [currentExercises, setCurrentExercises] = useState(exercises);
-
+  const [currentName, setCurrentName] = useState(name);
   const handleOnAddExercise = () => {
     setCurrentExercises((prev) => [...prev, newExerciseMock]);
   };
 
+  const onBlur = async () => {
+    const res = await updateGymDayName(id, currentName);
+    console.log("blurred", res);
+  };
+
   return (
-    <View className="w-full h-full mt-40 px-5">
+    <View className="w-full h-full">
       <View>
-        <StyledText category="h2">{name}</StyledText>
-        <StyledText className="text-base" appearance="hint">
+        <HeaderNav
+          title={currentName}
+          isEditable
+          onChangeText={setCurrentName}
+          onBlur={onBlur}
+          href={"/"}
+        />
+        <StyledText className="self-center" appearance="hint">
           {dateToYearMonthDay(date)}
         </StyledText>
-        <Divider className="my-5" horizonal />
+        <Divider className="mb-5" horizonal />
         <FlatList
-          className="h-[450]"
+          className="h-4/6"
           renderItem={renderExercise}
           data={currentExercises}
         />
-        <View className="mt-16">
-          <Button
-            onPress={handleOnAddExercise}
-            accessoryLeft={PlusIcon}
-          ></Button>
-        </View>
+        <AddButton onPress={handleOnAddExercise} />
       </View>
     </View>
   );

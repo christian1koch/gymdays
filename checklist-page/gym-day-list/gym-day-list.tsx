@@ -5,7 +5,12 @@ import {
   dateToYearMonthDay,
 } from "../../libs/utils/utils";
 import { styled } from "nativewind";
-import { ViewProps } from "react-native";
+import { View, ViewProps } from "react-native";
+import { Link } from "expo-router";
+import AddButton from "../../ui/add-button";
+import HeaderNav from "../../ui/header-nav";
+import { insertNewGymDay } from "../../db/db";
+import { router } from "expo-router";
 
 interface GimDayListProps {
   gymDays: GymDayData[];
@@ -40,40 +45,53 @@ const Header = ({ date, name, ...viewProps }: HeaderProps) => {
 };
 
 const renderGymDay = ({ item, index }: { item: GymDayData; index: number }) => {
+  console.log(item.id);
   return (
-    <Card
-      style={{ marginVertical: 4 }}
-      header={<Header date={item.date} name={item.name} />}
+    <Link
+      href={{
+        pathname: "/gym-days/[id]",
+        params: { id: item.id },
+      }}
+      asChild
     >
-      <StyledLayout className="flex-row">
-        <StyledLayout>
-          {item.exercises.map((exercise, i) => (
-            <Text category="p1" key={i}>
-              {exercise.name}
-            </Text>
-          ))}
+      <Card
+        style={{ marginVertical: 4 }}
+        header={<Header date={item.date} name={item.name} />}
+      >
+        <StyledLayout className="flex-row">
+          <StyledLayout>
+            {item.exercises.map((exercise, i) => (
+              <Text category="p1" key={i}>
+                {exercise.name}
+              </Text>
+            ))}
+          </StyledLayout>
+          <StyledLayout className="flex-1 items-end">
+            {item.exercises.map((exercise, i) => (
+              <Text key={i} category="p1">
+                {bulkNumberToWeightString(exercise.weightsPerSet)}
+              </Text>
+            ))}
+          </StyledLayout>
         </StyledLayout>
-        <StyledLayout className="flex-1 items-end">
-          {item.exercises.map((exercise, i) => (
-            <Text key={i} category="p1">
-              {bulkNumberToWeightString(exercise.weightsPerSet)}
-            </Text>
-          ))}
-        </StyledLayout>
-      </StyledLayout>
-    </Card>
+      </Card>
+    </Link>
   );
 };
 const StyledList = styled(List);
 export default function GimDayList({ gymDays }: GimDayListProps) {
+  const onPressInsert = async () => {
+    const res = await insertNewGymDay();
+    router.replace({
+      pathname: "/gym-days/[id]",
+      params: { id: res.insertedId },
+    });
+  };
   return (
-    <List
-      style={{
-        width: "100%",
-        marginTop: 40,
-      }}
-      data={gymDays}
-      renderItem={renderGymDay}
-    />
+    <View className="w-full h-full">
+      <HeaderNav title="Gym Days" />
+      <List className="h-5/6" data={gymDays} renderItem={renderGymDay} />
+      <AddButton onPress={onPressInsert} />
+    </View>
   );
 }

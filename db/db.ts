@@ -4,6 +4,7 @@ import { exercise, gymDay } from "./schema";
 import { eq } from "drizzle-orm";
 import * as schema from "./schema";
 import { parseDBGymDay } from "./helper";
+import { dateToYearMonthDay } from "../libs/utils/utils";
 
 export const initDatabase = async () => {
   const db = await SQLite.openDatabaseAsync("databaseName.db");
@@ -33,4 +34,42 @@ export const getGymDays = async () => {
     },
   });
   return gymDays.map((gymDay) => parseDBGymDay(gymDay));
+};
+
+export const getGymDayById = async (id: number) => {
+  const expo = await SQLite.openDatabaseAsync("databaseName.db");
+  const db = drizzle(expo, { schema: { ...schema } });
+  const gymDay = await db.query.gymDay.findFirst({
+    where: (gymDay, { eq }) => eq(gymDay.id, id),
+    with: {
+      exercises: true,
+    },
+  });
+  if (!gymDay) {
+    throw new Error("Cannot find this GymDay");
+  }
+  return parseDBGymDay(gymDay);
+};
+
+export const insertNewGymDay = async () => {
+  const expo = await SQLite.openDatabaseAsync("databaseName.db");
+  const db = drizzle(expo, { schema: { ...schema } });
+  const date = new Date();
+  const insertedIds = await db
+    .insert(gymDay)
+    .values({ name: "New Gym Day", date: dateToYearMonthDay(date) })
+    .returning({ insertedId: gymDay.id });
+  return insertedIds[0];
+};
+
+export const updateGymDayName = async (id: number, name: string) => {
+  const expo = await SQLite.openDatabaseAsync("databaseName.db");
+  const db = drizzle(expo, { schema: { ...schema } });
+  const res = await db
+    .update(gymDay)
+    .set({ name: name })
+    .where(eq(gymDay.id, id))
+    .returning({ updatedId: gymDay.id });
+  console.log("id", id);
+  return res;
 };
