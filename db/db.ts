@@ -3,8 +3,14 @@ import * as SQLite from "expo-sqlite";
 import { exercise, gymDay } from "./schema";
 import { eq } from "drizzle-orm";
 import * as schema from "./schema";
-import { parseDBGymDay } from "./helper";
+import { parseDBExercise, parseDBGymDay } from "./helper";
 import { dateToYearMonthDay } from "../libs/utils/utils";
+
+const getDB = async () => {
+  const expo = await SQLite.openDatabaseAsync("databaseName.db");
+  const db = drizzle(expo, { schema: { ...schema } });
+  return db;
+};
 
 export const initDatabase = async () => {
   const db = await SQLite.openDatabaseAsync("databaseName.db");
@@ -63,8 +69,7 @@ export const insertNewGymDay = async () => {
 };
 
 export const updateGymDayName = async (id: number, name: string) => {
-  const expo = await SQLite.openDatabaseAsync("databaseName.db");
-  const db = drizzle(expo, { schema: { ...schema } });
+  const db = await getDB();
   const res = await db
     .update(gymDay)
     .set({ name: name })
@@ -72,4 +77,16 @@ export const updateGymDayName = async (id: number, name: string) => {
     .returning({ updatedId: gymDay.id });
   console.log("id", id);
   return res;
+};
+
+// Exercises
+export const getExerciseById = async (id: number) => {
+  const db = await getDB();
+  const dbExercise = await db.query.exercise.findFirst({
+    where: (exercise, { eq }) => eq(exercise.id, id),
+  });
+  if (!dbExercise) {
+    throw new Error("Cannot find this Exercise");
+  }
+  return parseDBExercise(dbExercise);
 };

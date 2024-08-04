@@ -4,12 +4,13 @@ import { Text, View } from "react-native";
 import { GymDayData } from "../../checklist-page/data";
 import { getGymDayById, getGymDays } from "../../db/db";
 import GymDay from "../../checklist-page/gym-day/gym-day";
+import { useSafeAreaInsetsStyles } from "../app.helpers";
 
 export default function Page() {
   const { gymdayId } = useLocalSearchParams();
   const [gymDay, setGymDay] = useState<GymDayData>();
   // const [isLoading, setIsLoading] = useState(true);
-
+  const styles = useSafeAreaInsetsStyles();
   useEffect(() => {
     const fetchGymDay = async () => {
       // setIsLoading(true);
@@ -25,5 +26,9 @@ export default function Page() {
   if (!gymDay) {
     return null;
   }
-  return <GymDay {...gymDay} />;
+  return (
+    <View style={styles.safeArea}>
+      <GymDay {...gymDay} />
+    </View>
+  );
 }

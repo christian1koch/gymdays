@@ -9,6 +9,7 @@ import { useState } from "react";
 import HeaderNav from "../../ui/header-nav";
 import AddButton from "../../ui/add-button";
 import { updateGymDayName } from "../../db/db";
+import { Link } from "expo-router";
 
 interface GymDayProps extends GymDayData {}
 
@@ -20,12 +21,20 @@ const renderExercise = ({
   index: number;
 }) => {
   return (
-    <ExerciseCard
-      key={index}
-      name={item.name}
-      sets={item.weightsPerSet}
-      index={index}
-    />
+    <Link
+      href={{
+        pathname: "/gym-days/exercises/[id]",
+        params: { id: item.id },
+      }}
+      asChild
+    >
+      <ExerciseCard
+        key={index}
+        name={item.name}
+        sets={item.weightsPerSet}
+        index={index}
+      />
+    </Link>
   );
 };
 

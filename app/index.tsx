@@ -12,6 +12,9 @@ import * as SQLite from "expo-sqlite";
 import { Text } from "@ui-kitten/components";
 import { styled } from "nativewind";
 import HeaderNav from "../ui/header-nav";
+import { useNavigation } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsetsStyles } from "./app.helpers";
 
 const dbForStudio = SQLite.openDatabaseSync("databaseName.db");
 
@@ -21,7 +24,7 @@ export default function App() {
   useDrizzleStudio(dbForStudio);
   const [gymDays, setGymDays] = useState<GymDayData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const styles = useSafeAreaInsetsStyles();
   useEffect(() => {
     const fetchGymDays = async () => {
       setIsLoading(true);
@@ -35,7 +38,7 @@ export default function App() {
   //   return <Text>Loading...</Text>;
   // }
   return (
-    <View className="h-full">
+    <View className="h-full" style={styles.safeArea}>
       <GimDayList gymDays={gymDays} />
       {/* <GymDay {...gymDataMock} /> */}
       {/* <Exercise /> */}
@@ -44,13 +47,3 @@ export default function App() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    height: "100%",
-    width: "100%",
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
