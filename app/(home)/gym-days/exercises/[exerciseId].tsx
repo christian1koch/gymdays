@@ -1,8 +1,9 @@
 import { useLocalSearchParams } from "expo-router";
-import { BasicExercise } from "../../../checklist-page/data";
+import { BasicExercise } from "../../../../checklist-page/data";
 import { useEffect, useState } from "react";
-import { getExerciseById } from "../../../db/db";
-import Exercise from "../../../checklist-page/exercise";
+import { getExerciseById } from "../../../../db/db";
+import Exercise from "../../../../checklist-page/exercise";
+import HeaderNav from "../../../../ui/header-nav";
 
 export default function Page() {
   const { exerciseId } = useLocalSearchParams();
@@ -24,5 +25,16 @@ export default function Page() {
   if (!exercise) {
     return null;
   }
-  return <Exercise />;
+  return (
+    <>
+      <HeaderNav
+        title="Edit Exercise"
+        href={{
+          pathname: "/gym-days/[id]",
+          params: { id: exercise.gymDay },
+        }}
+      />
+      <Exercise />
+    </>
+  );
 }

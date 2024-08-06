@@ -6,6 +6,7 @@ import {
 } from "react-native-autocomplete-dropdown";
 import SetList from "./set-list";
 import AddSetButton from "./add-set-button";
+import AddButton from "../ui/add-button";
 
 interface ExerciseItem extends AutocompleteDropdownItem {}
 
@@ -47,6 +48,7 @@ export default function Exercise() {
     <View
       style={{
         width: "100%",
+        height: "100%",
       }}
     >
       <View
@@ -65,13 +67,15 @@ export default function Exercise() {
           dataSet={DEFAULT_EXERCISES}
           showClear={false}
         />
-        <AddSetButton onPress={onAddNewSet} />
       </View>
       <SetList
         onItemClear={onItemClear}
         sets={weights}
         onChangeIndividualWeight={onChangeIndividualWeight}
       />
+      <View className="absolute w-full bottom-24">
+        <AddButton onPress={onAddNewSet} text="Add new set" />
+      </View>
     </View>
   );
 }

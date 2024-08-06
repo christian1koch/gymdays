@@ -1,10 +1,10 @@
 import { useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
 import { Text, View } from "react-native";
-import { GymDayData } from "../../checklist-page/data";
-import { getGymDayById, getGymDays } from "../../db/db";
-import GymDay from "../../checklist-page/gym-day/gym-day";
-import { useSafeAreaInsetsStyles } from "../app.helpers";
+import { GymDayData } from "../../../checklist-page/data";
+import { getGymDayById, getGymDays } from "../../../db/db";
+import GymDay from "../../../checklist-page/gym-day/gym-day";
+import { useSafeAreaInsetsStyles } from "../../app.helpers";
 
 export default function Page() {
   const { gymdayId } = useLocalSearchParams();
@@ -26,9 +26,5 @@ export default function Page() {
   if (!gymDay) {
     return null;
   }
-  return (
-    <View style={styles.safeArea}>
-      <GymDay {...gymDay} />
-    </View>
-  );
+  return <GymDay {...gymDay} />;
 }

@@ -5,6 +5,7 @@ import * as eva from "@eva-design/eva";
 import { default as theme } from "../theme/theme.json";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { View } from "react-native";
 
 export default function HomeLayout() {
   return (
@@ -13,11 +14,7 @@ export default function HomeLayout() {
       <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
         <AutocompleteDropdownContextProvider>
           <SafeAreaProvider>
-            <Stack
-              screenOptions={{
-                headerShown: false,
-              }}
-            ></Stack>
+            <Slot />
           </SafeAreaProvider>
         </AutocompleteDropdownContextProvider>
       </ApplicationProvider>
