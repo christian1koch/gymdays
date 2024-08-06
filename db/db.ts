@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import * as SQLite from "expo-sqlite";
-import { exercise, gymDay } from "./schema";
+import { exercise, exerciseType, gymDay } from "./schema";
 import { eq } from "drizzle-orm";
 import * as schema from "./schema";
 import { parseDBExercise, parseDBGymDay } from "./helper";
@@ -89,4 +89,26 @@ export const getExerciseById = async (id: number) => {
     throw new Error("Cannot find this Exercise");
   }
   return parseDBExercise(dbExercise);
+};
+
+export const getExerciseTypes = async () => {
+  const db = await getDB();
+  const exerciseTypes = await db.query.exerciseType.findMany();
+  return exerciseTypes.map((exerciseType) => exerciseType.name);
+};
+
+export const createNewExerciseType = async (name: string) => {
+  const db = await getDB();
+  const res = await db.insert(exerciseType).values({ name: name });
+  return res;
+};
+
+export const updateExerciseName = async (id: number, name: string) => {
+  const db = await getDB();
+  const res = await db
+    .update(exercise)
+    .set({ exerciseType: name })
+    .where(eq(exercise.id, id))
+    .returning({ updatedId: exercise.id });
+  return res;
 };
