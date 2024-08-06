@@ -1,8 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
-import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
+import { View } from "react-native";
 import { GymDayData } from "../../checklist-page/data";
-import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 
 import GimDayList from "../../checklist-page/gym-day-list/gym-day-list";
 import { useEffect, useState } from "react";
@@ -11,10 +9,6 @@ import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import * as SQLite from "expo-sqlite";
 import { Text } from "@ui-kitten/components";
 import { styled } from "nativewind";
-import HeaderNav from "../../ui/header-nav";
-import { useNavigation } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useSafeAreaInsetsStyles } from "../app.helpers";
 
 const dbForStudio = SQLite.openDatabaseSync("databaseName.db");
 
@@ -40,9 +34,6 @@ export default function App() {
   return (
     <View className="h-full">
       <GimDayList gymDays={gymDays} />
-      {/* <GymDay {...gymDataMock} /> */}
-      {/* <Exercise /> */}
-      {/* <Button onPress={() => getTest()} title="get test" /> */}
       <StatusBar style="auto" />
     </View>
   );

@@ -7,6 +7,7 @@ import {
 import SetList from "./set-list";
 import AddSetButton from "./add-set-button";
 import AddButton from "../ui/add-button";
+import { BasicExercise } from "./data";
 
 interface ExerciseItem extends AutocompleteDropdownItem {}
 
@@ -24,39 +25,43 @@ const DEFAULT_EXERCISES: ExerciseItem[] = [
 
 const DEFAULT_WEIGHT = "20";
 
-export default function Exercise() {
-  const [selectedItem, setSelectedItem] = useState<ExerciseItem | null>(null);
-  const [weights, setWeights] = useState<string[]>(["20"]);
-
-  const onChangeIndividualWeight = (i: number, v: string) => {
-    const newWeights = [...weights];
-    newWeights[i] = v;
-    setWeights(newWeights);
+function basicExerciseToExerciseItem(exercise: BasicExercise): ExerciseItem {
+  return {
+    id: "" + exercise.id,
+    title: exercise.name,
   };
+}
 
-  const onAddNewSet = () => {
-    setWeights([...weights, DEFAULT_WEIGHT]);
-  };
+interface ExerciseProps {
+  exercise: BasicExercise;
+}
 
-  const onItemClear = (i: number) => {
-    setWeights(weights.toSpliced(i, 1));
-  };
+export default function Exercise({ exercise }: ExerciseProps) {
+  const [selectedItem, setSelectedItem] = useState<ExerciseItem | null>(
+    basicExerciseToExerciseItem(exercise)
+  );
+  const { weightsPerSet: weights } = exercise;
+  // const [weights, setWeights] = useState<string[]>(["20"]);
 
-  console.log(weights);
+  // const onChangeIndividualWeight = (i: number, v: string) => {
+  //   const newWeights = [...weights];
+  //   newWeights[i] = v;
+  //   setWeights(newWeights);
+  // };
+
+  // const onAddNewSet = () => {
+  //   setWeights([...weights, DEFAULT_WEIGHT]);
+  // };
+
+  // const onItemClear = (i: number) => {
+  //   setWeights(weights.toSpliced(i, 1));
+  // };
+
+  // console.log(weights);
 
   return (
-    <View
-      style={{
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
+    <View className="flex-1">
+      <View className="flex-row items-center my-10 mx-6">
         <AutocompleteDropdown
           containerStyle={{ flex: 4, width: 20 }}
           clearOnFocus={false}
@@ -68,13 +73,9 @@ export default function Exercise() {
           showClear={false}
         />
       </View>
-      <SetList
-        onItemClear={onItemClear}
-        sets={weights}
-        onChangeIndividualWeight={onChangeIndividualWeight}
-      />
-      <View className="absolute w-full bottom-24">
-        <AddButton onPress={onAddNewSet} text="Add new set" />
+      <SetList sets={[20, 20, 20, 40, 50, 60, 20, 22.5]} />
+      <View className="justify-center h-26 mx-6">
+        <AddButton onPress={() => {}} text="Add new set" />
       </View>
     </View>
   );

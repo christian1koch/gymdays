@@ -1,33 +1,27 @@
 import React from "react";
-import { View } from "react-native";
-import Set from "./set";
+import { FlatList, View } from "react-native";
 import "react-native-get-random-values";
-import RemoveSetButton from "./remove-set-button";
+import { SetCard } from "./gym-day/set-card";
+import { List } from "@ui-kitten/components";
 
 interface SetListProps {
-  sets: string[];
-  onItemClear: (i: number) => void;
-  onChangeIndividualWeight: (i: number, v: string) => void;
+  sets: number[];
 }
-const SetList: React.FC<SetListProps> = ({
-  sets,
-  onItemClear,
-  onChangeIndividualWeight,
-}) => {
+const setRenderer = (s: number, i: number) => (
+  <View className="gap-1">
+    <SetCard index={i + 1} weight={s} key={i} />
+  </View>
+);
+const SetList: React.FC<SetListProps> = ({ sets }) => {
   return (
-    <View
-      style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center" }}
-    >
-      {sets.map((s, i) => (
-        <Set
-          onClear={() => onItemClear(i)}
-          key={i}
-          currentItem={s}
-          onChangeWeight={(v: string) => onChangeIndividualWeight(i, v)}
-        />
-      ))}
-      <RemoveSetButton onPress={() => onItemClear(sets.length - 1)} />
-    </View>
+    <List
+      data={sets}
+      numColumns={2}
+      columnWrapperStyle={{ gap: 5 }}
+      style={{ alignSelf: "center" }}
+      contentContainerStyle={{ gap: 5 }}
+      renderItem={({ item, index }) => setRenderer(item, index)}
+    />
   );
 };
 

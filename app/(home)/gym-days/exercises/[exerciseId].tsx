@@ -18,7 +18,7 @@ export default function Page() {
       // setIsLoading(false);
     };
     fetchExercise();
-  }, []);
+  }, [exerciseId]);
   // if (isLoading) {
   //   return <Text>Loading...</Text>;
   // }
@@ -34,7 +34,7 @@ export default function Page() {
           params: { id: exercise.gymDay },
         }}
       />
-      <Exercise />
+      <Exercise exercise={exercise} />
     </>
   );
 }

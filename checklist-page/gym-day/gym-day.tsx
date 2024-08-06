@@ -4,7 +4,7 @@ import { dateToYearMonthDay } from "../../libs/utils/utils";
 import { styled } from "nativewind";
 import ExerciseCard from "./exercise-card";
 import Divider from "../../ui/divider";
-import { Button, Icon, Text } from "@ui-kitten/components";
+import { Text } from "@ui-kitten/components";
 import { useState } from "react";
 import HeaderNav from "../../ui/header-nav";
 import AddButton from "../../ui/add-button";
