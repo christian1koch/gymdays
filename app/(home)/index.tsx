@@ -9,6 +9,8 @@ import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import * as SQLite from "expo-sqlite";
 import { Text } from "@ui-kitten/components";
 import { styled } from "nativewind";
+import * as Services from "../services/services";
+import { useAppSelector } from "../hooks";
 
 const dbForStudio = SQLite.openDatabaseSync("databaseName.db");
 
@@ -18,11 +20,11 @@ export default function App() {
   useDrizzleStudio(dbForStudio);
   const [gymDays, setGymDays] = useState<GymDayData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const gymDaysInStore = useAppSelector((state) => state.gymDays.gymDays);
   useEffect(() => {
     const fetchGymDays = async () => {
       setIsLoading(true);
-      const newGymDays = await getGymDays();
+      const newGymDays = await Services.fetchAllGymDays();
       setGymDays(newGymDays);
       setIsLoading(false);
     };
@@ -33,7 +35,7 @@ export default function App() {
   // }
   return (
     <View className="h-full">
-      <GimDayList gymDays={gymDays} />
+      <GimDayList gymDays={gymDaysInStore} />
       <StatusBar style="auto" />
     </View>
   );

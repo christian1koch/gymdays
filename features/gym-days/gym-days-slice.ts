@@ -14,15 +14,18 @@ export const gymDaysSlice = createSlice({
   name: "gymDays",
   initialState,
   reducers: {
-    add: (state, action: PayloadAction<GymDayData>) => {
+    addGymDay: (state, action: PayloadAction<GymDayData>) => {
       state.gymDays.push(action.payload);
     },
-    remove: (state, action: PayloadAction<number>) => {
+    upsertGymDays: (state, action: PayloadAction<GymDayData[]>) => {
+      state.gymDays = action.payload;
+    },
+    removeGymDay: (state, action: PayloadAction<number>) => {
       state.gymDays = state.gymDays.filter(
         (gymDay) => gymDay.id !== action.payload
       );
     },
-    rename: (
+    renameGymDay: (
       state,
       action: PayloadAction<{ gymDayId: number; name: string }>
     ) => {
@@ -82,9 +85,10 @@ export const gymDaysSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
-  add,
-  remove,
-  rename,
+  addGymDay,
+  upsertGymDays,
+  removeGymDay,
+  renameGymDay,
   addExercise,
   removeExercise,
   renameExercise,

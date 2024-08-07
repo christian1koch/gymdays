@@ -5,7 +5,7 @@ import { styled } from "nativewind";
 import ExerciseCard from "./exercise-card";
 import Divider from "../../ui/divider";
 import { Text } from "@ui-kitten/components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HeaderNav from "../../ui/header-nav";
 import AddButton from "../../ui/add-button";
 import { updateGymDayName } from "../../db/db";
@@ -24,7 +24,7 @@ const renderExercise = ({
     <Link
       href={{
         pathname: "/gym-days/exercises/[id]",
-        params: { id: item.id },
+        params: { id: item.id, gymDayId: item.gymDay },
       }}
       asChild
     >
@@ -41,12 +41,9 @@ const renderExercise = ({
 const StyledText = styled(Text);
 
 const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
-  const [currentExercises, setCurrentExercises] = useState(exercises);
   const [currentName, setCurrentName] = useState(name);
-  const handleOnAddExercise = () => {
-    setCurrentExercises((prev) => [...prev, newExerciseMock]);
-  };
 
+  console.log("gym Day in gym Day", JSON.stringify(exercises));
   const onBlur = async () => {
     const res = await updateGymDayName(id, currentName);
     console.log("blurred", res);
@@ -69,9 +66,9 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
         <FlatList
           className="h-4/6"
           renderItem={renderExercise}
-          data={currentExercises}
+          data={exercises}
         />
-        <AddButton onPress={handleOnAddExercise} />
+        <AddButton onPress={() => console.log("pressed")} />
       </View>
     </View>
   );
