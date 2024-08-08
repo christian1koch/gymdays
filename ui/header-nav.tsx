@@ -1,12 +1,31 @@
-import { Button, Icon, IconElement, Input, Text } from "@ui-kitten/components";
+import { ListItem, Popover, Button as TamaguiButton } from "tamagui";
+import { MoreHorizontal, Star } from "@tamagui/lucide-icons";
+import {
+  Button,
+  Icon,
+  IconElement,
+  Input,
+  MenuItem,
+  OverflowMenu,
+  Text,
+} from "@ui-kitten/components";
 import { Href, Link } from "expo-router";
 import { styled } from "nativewind";
 import { useState } from "react";
 import { View } from "react-native";
+import { Adapt } from "tamagui";
 
 const BackIcon = (props: any): IconElement => (
   <Icon {...props} name="arrow-back-outline" />
 );
+const ThreeDots = (props: any): IconElement => (
+  <Icon {...props} name="more-horizontal-outline" />
+);
+
+interface MenuItemProps {
+  title: string;
+  onPress: () => void;
+}
 
 interface HeaderNavProps {
   title: string;
@@ -14,6 +33,7 @@ interface HeaderNavProps {
   onChangeText?: (text: string) => void;
   isEditable?: boolean;
   onBlur?: () => void;
+  menuItems?: MenuItemProps[];
 }
 
 const StyledButton = styled(Button);
@@ -25,6 +45,7 @@ export default function HeaderNav({
   onChangeText,
   isEditable,
   onBlur,
+  menuItems,
 }: HeaderNavProps) {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const onInputBlur = () => {
@@ -34,7 +55,16 @@ export default function HeaderNav({
     setIsEditingTitle(false);
   };
   return (
-    <View className="items-center my-4">
+    <View className="items-center justify-center flex-row my-4">
+      {href && !isEditingTitle && (
+        <Link href={href} asChild>
+          <StyledButton
+            className="absolute right-80 rounded-full w-6 h-6 bg-slate-50"
+            appearance="outline"
+            accessoryLeft={BackIcon}
+          />
+        </Link>
+      )}
       {isEditingTitle ? (
         <StyledInput
           autoFocus
@@ -59,15 +89,72 @@ export default function HeaderNav({
           {title}
         </Text>
       )}
-      {href && !isEditingTitle && (
-        <Link href={href} asChild>
-          <StyledButton
-            className="relative right-36 -top-8 rounded-full w-6 h-6 bg-slate-50"
-            appearance="outline"
-            accessoryLeft={BackIcon}
-          />
-        </Link>
-      )}
+      {menuItems && menuItems.length > 0 && <OptionsMenu2 />}
     </View>
   );
 }
+
+const StyledMenuItem = styled(MenuItem);
+
+const OptionsMenu = ({ menuItems }: { menuItems: MenuItemProps[] }) => {
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+
+  const renderToggleButton = () => (
+    <StyledButton
+      className="absolute left-12 -top-5 rounded-full w-6 h-6 bg-slate-50"
+      appearance="outline"
+      accessoryLeft={ThreeDots}
+      onPress={() => setIsMenuVisible(true)}
+    />
+  );
+
+  return (
+    <OverflowMenu
+      visible={isMenuVisible}
+      anchor={renderToggleButton}
+      onBackdropPress={() => setIsMenuVisible(false)}
+    >
+      <>
+        {menuItems.map((menuItem) => (
+          <MenuItem
+            key={menuItem.title}
+            title={menuItem.title}
+            onPress={menuItem.onPress}
+          />
+        ))}
+      </>
+    </OverflowMenu>
+  );
+};
+
+const OptionsMenu2 = () => {
+  return (
+    <Popover placement="bottom-start" size={"$5"}>
+      <Popover.Trigger asChild>
+        <TamaguiButton icon={MoreHorizontal}></TamaguiButton>
+      </Popover.Trigger>
+
+      <Popover.Content
+        padding="$1"
+        borderColor="$borderColor"
+        enterStyle={{ y: -10, opacity: 0 }}
+        exitStyle={{ y: -10, opacity: 0 }}
+        elevate
+        animation={[
+          "quick",
+          {
+            opacity: {
+              overshootClamping: true,
+            },
+          },
+        ]}
+      >
+        <Popover.Arrow />
+        {<TamaguiButton>Delete Set</TamaguiButton>}
+        <Popover.Close />
+        {/* ScrollView is optional, can just put any contents inside if not scrollable */}
+        {/* ... */}
+      </Popover.Content>
+    </Popover>
+  );
+};

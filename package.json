@@ -8,13 +8,18 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "eslint .",
-    "lint-fix": "eslint --fix ."
+    "lint-fix": "eslint --fix .",
+    "generate-themes": "tamagui generate-themes ./theme-builder.ts ./theme-output.ts"
   },
   "dependencies": {
     "@eva-design/eva": "^2.2.0",
     "@expo/metro-runtime": "~3.2.1",
     "@react-native-picker/picker": "2.7.5",
     "@reduxjs/toolkit": "^2.2.7",
+    "@tamagui/cli": "^1.108.2",
+    "@tamagui/config": "^1.108.2",
+    "@tamagui/lucide-icons": "^1.108.2",
+    "@tamagui/portal": "^1.108.2",
     "@ui-kitten/components": "^5.3.1",
     "@ui-kitten/eva-icons": "^5.3.1",
     "classnames": "^2.5.1",
@@ -37,7 +42,8 @@
     "react-native-screens": "3.31.1",
     "react-native-svg": "^15.4.0",
     "react-native-web": "~0.19.10",
-    "react-redux": "^9.1.2"
+    "react-redux": "^9.1.2",
+    "tamagui": "^1.108.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

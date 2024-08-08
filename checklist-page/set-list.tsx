@@ -14,6 +14,7 @@ interface SetRendererProps {
   index: number;
   onWeightChange: (newWeight: number) => void;
   onEndEditing: () => void;
+  isOnDeleteMode: boolean;
 }
 
 const SetRenderer = ({
@@ -32,6 +33,8 @@ const SetRenderer = ({
 );
 const SetList: React.FC<SetListProps> = ({ sets, onEndEditingUpdate }) => {
   const [weights, setWeights] = useState(sets);
+
+  const [isOnDeleteMode, setIsOnDeleteMode] = useState(false);
 
   const onChangeWeight = (index: number, newWeight: number) => {
     const newWeights = [...weights];
@@ -56,6 +59,7 @@ const SetList: React.FC<SetListProps> = ({ sets, onEndEditingUpdate }) => {
           weight={item}
           onWeightChange={(weight) => onChangeWeight(index, weight)}
           onEndEditing={handleOnEndEditing}
+          isOnDeleteMode={isOnDeleteMode}
         />
       )}
     />

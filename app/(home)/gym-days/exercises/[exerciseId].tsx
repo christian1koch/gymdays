@@ -24,6 +24,7 @@ export default function Page() {
           pathname: "/gym-days/[id]",
           params: { id: exercise.gymDay },
         }}
+        menuItems={[{ title: "Test", onPress: () => console.log("pressed") }]}
       />
       <Exercise exercise={exercise} />
     </>
