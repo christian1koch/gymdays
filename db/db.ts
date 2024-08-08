@@ -121,3 +121,37 @@ export const createNewExercise = async (gymDayId: number, name: string) => {
     .returning({ insertedId: exercise.id });
   return await getExerciseById(res[0].insertedId);
 };
+
+export const createNewSet = async (exerciseId: number, weight: number) => {
+  const newExercise = await getExerciseById(exerciseId);
+  newExercise.weightsPerSet.push(weight);
+  const db = await getDB();
+  const res = await db
+    .update(exercise)
+    .set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) });
+  return newExercise;
+};
+
+export const updateSets = async (
+  exerciseId: number,
+  index: number,
+  sets: number[]
+) => {
+  const newExercise = await getExerciseById(exerciseId);
+  newExercise.weightsPerSet = sets;
+  const db = await getDB();
+  const res = await db
+    .update(exercise)
+    .set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) });
+  return newExercise;
+};
+
+export const deleteSet = async (exerciseId: number, index: number) => {
+  const newExercise = await getExerciseById(exerciseId);
+  newExercise.weightsPerSet.splice(index, 1);
+  const db = await getDB();
+  const res = await db
+    .update(exercise)
+    .set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) });
+  return newExercise;
+};

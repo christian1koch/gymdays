@@ -47,6 +47,28 @@ export const gymDaysSlice = createSlice({
         gymDay.exercises.push(action.payload.exercise);
       }
     },
+    updateSets: (
+      state,
+      action: PayloadAction<{
+        gymDayId: number;
+        exerciseId: number;
+        weightsPerSet: number[];
+      }>
+    ) => {
+      const gymDay = state.gymDays.find(
+        (gymDay) => gymDay.id === action.payload.gymDayId
+      );
+      if (!gymDay) {
+        return state;
+      }
+      const exercise = gymDay.exercises.find(
+        (exercise) => exercise.id === action.payload.exerciseId
+      );
+      if (!exercise) {
+        return state;
+      }
+      exercise.weightsPerSet = action.payload.weightsPerSet;
+    },
     removeExercise: (
       state,
       action: PayloadAction<{ gymDayId: number; exerciseId: number }>
@@ -92,6 +114,7 @@ export const {
   addExercise,
   removeExercise,
   renameExercise,
+  updateSets,
 } = gymDaysSlice.actions;
 
 export default gymDaysSlice.reducer;

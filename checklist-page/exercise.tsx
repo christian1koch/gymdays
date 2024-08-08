@@ -9,7 +9,7 @@ import AddSetButton from "./add-set-button";
 import AddButton from "../ui/add-button";
 import { BasicExercise } from "./data";
 import { createNewExerciseType, getExerciseTypes } from "../db/db";
-import { updateExerciseName } from "../app/services/services";
+import * as services from "@services";
 
 interface ExerciseItem extends AutocompleteDropdownItem {}
 
@@ -55,7 +55,11 @@ export default function Exercise({ exercise }: ExerciseProps) {
       return;
     }
     if (item.title && item.title !== exercise.name) {
-      await updateExerciseName(exercise.gymDay, exercise.id, item.title);
+      await services.updateExerciseName(
+        exercise.gymDay,
+        exercise.id,
+        item.title
+      );
     }
   };
 
@@ -87,7 +91,12 @@ export default function Exercise({ exercise }: ExerciseProps) {
       </View>
       <SetList sets={weights} />
       <View className="justify-center h-26 mx-6">
-        <AddButton onPress={() => {}} text="Add new set" />
+        <AddButton
+          onPress={() => {
+            services.addNewSet(exercise.gymDay, exercise.id, 20);
+          }}
+          text="Add new set"
+        />
       </View>
     </View>
   );

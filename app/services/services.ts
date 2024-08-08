@@ -1,48 +1,39 @@
 import * as db from "@db";
-import {
-  addGymDay,
-  upsertGymDays,
-  removeGymDay,
-  renameGymDay,
-  addExercise,
-  removeExercise,
-  renameExercise,
-} from "../../features/gym-days/gym-days-slice";
+import * as actions from "@actions/gymDays";
 import { store } from "../store";
 
 async function fetchAllGymDays() {
   const gymDays = await db.getGymDays();
-  store.dispatch(upsertGymDays(gymDays));
+  store.dispatch(actions.upsertGymDays(gymDays));
   return gymDays;
 }
 
 async function fetchGymDayById(gymDayId: number) {
   const gymDay = await db.getGymDayById(gymDayId);
-  addGymDay(gymDay);
+  actions.addGymDay(gymDay);
   return gymDay;
 }
 
 async function createNewGymDay() {
   const gymDayId = await db.insertNewGymDay();
   const gymDay = await db.getGymDayById(gymDayId.insertedId);
-  addGymDay(gymDay);
+  actions.addGymDay(gymDay);
   return gymDay;
 }
 
 async function updateGymDayName(gymDayId: number, name: string) {
   await db.updateGymDayName(gymDayId, name);
-  renameGymDay({ gymDayId, name });
+  actions.renameGymDay({ gymDayId, name });
 }
 
 async function createNewExercise(gymDayId: number, name: string) {
   const newExercise = await db.createNewExercise(gymDayId, name);
   store.dispatch(
-    addExercise({
+    actions.addExercise({
       gymDayId,
       exercise: newExercise,
     })
   );
-
   return newExercise;
 }
 
@@ -52,7 +43,31 @@ async function updateExerciseName(
   name: string
 ) {
   await db.updateExerciseName(exerciseId, name);
-  store.dispatch(renameExercise({ gymDayId, exerciseId, name }));
+  store.dispatch(actions.renameExercise({ gymDayId, exerciseId, name }));
+}
+
+async function addNewSet(gymId: number, exerciseId: number, weight: number) {
+  const exerciseWithNewSet = await db.createNewSet(exerciseId, weight);
+  store.dispatch(
+    actions.updateSets({
+      gymDayId: gymId,
+      exerciseId: exerciseId,
+      weightsPerSet: exerciseWithNewSet.weightsPerSet,
+    })
+  );
+  return exerciseWithNewSet;
+}
+
+async function updateSets(gymId: number, exerciseId: number, sets: number[]) {
+  const exerciseWithNewSet = await db.updateSets(exerciseId, exerciseId, sets);
+  store.dispatch(
+    actions.updateSets({
+      gymDayId: gymId,
+      exerciseId: exerciseId,
+      weightsPerSet: exerciseWithNewSet.weightsPerSet,
+    })
+  );
+  return exerciseWithNewSet;
 }
 
 export {
@@ -62,4 +77,6 @@ export {
   updateGymDayName,
   createNewExercise,
   updateExerciseName,
+  addNewSet,
+  updateSets,
 };
