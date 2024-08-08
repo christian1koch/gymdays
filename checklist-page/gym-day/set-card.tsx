@@ -1,11 +1,11 @@
-import { View, ViewProps } from "react-native";
+import { TextInput, TextInputProps, View, ViewProps } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { styled } from "nativewind";
 import classNames from "classnames";
 
 const StyledText = styled(Text);
 
-interface SetCardProps extends ViewProps {
+interface SetCardProps extends TextInputProps {
   index: number;
   weight: number;
 }
@@ -13,9 +13,8 @@ interface SetCardProps extends ViewProps {
 export function SetCard({ index, weight, className, ...rest }: SetCardProps) {
   return (
     <View
-      {...rest}
       className={classNames(
-        "bg-slate-900 w-40 h-40 rounded-2xl mt-24 flex-row justify-center",
+        "bg-slate-900 w-40 h-40 rounded-2xl mt-24 flex-row justify-center gap-0",
         className
       )}
     >
@@ -30,9 +29,13 @@ export function SetCard({ index, weight, className, ...rest }: SetCardProps) {
         </View>
       </View>
       <View className="self-center">
-        <StyledText className="text-slate-200 text-4xl font-medium">
+        <TextInput
+          {...rest}
+          className="text-slate-200 text-4xl font-medium"
+          inputMode="decimal"
+        >
           {weight}
-        </StyledText>
+        </TextInput>
       </View>
     </View>
   );

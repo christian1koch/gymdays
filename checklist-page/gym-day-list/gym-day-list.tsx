@@ -45,7 +45,6 @@ const Header = ({ date, name, ...viewProps }: HeaderProps) => {
 };
 
 const renderGymDay = ({ item, index }: { item: GymDayData; index: number }) => {
-  console.log(item.id);
   return (
     <Link
       href={{

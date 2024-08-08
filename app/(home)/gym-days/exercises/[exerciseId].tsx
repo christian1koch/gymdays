@@ -9,10 +9,8 @@ import { useAppSelector } from "../../../hooks";
 export default function Page() {
   const searchParams = useLocalSearchParams();
   const { gymDayId, exerciseId } = searchParams;
-  console.log("Search params", searchParams);
   const gymDays = useAppSelector((state) => state.gymDays.gymDays);
   const gymDay = gymDays.find((g) => g.id === Number(gymDayId));
-  console.log(gymDay);
   const exercise = gymDay?.exercises.find((e) => e.id === Number(exerciseId));
   // Move into the component
   if (!exercise) {

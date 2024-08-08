@@ -27,7 +27,6 @@ export const initDatabase = async () => {
 export const getTest = async () => {
   const db = await SQLite.openDatabaseAsync("databaseName.db");
   const result = await db.getAllAsync("SELECT * FROM test");
-  console.log("result", result);
   return result;
 };
 
@@ -75,7 +74,6 @@ export const updateGymDayName = async (id: number, name: string) => {
     .set({ name: name })
     .where(eq(gymDay.id, id))
     .returning({ updatedId: gymDay.id });
-  console.log("id", id);
   return res;
 };
 

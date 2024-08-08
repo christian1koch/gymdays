@@ -71,6 +71,9 @@ export default function Exercise({ exercise }: ExerciseProps) {
     fetchExerciseTypes();
   }, []);
 
+  const onWeightChange = (weights: number[]) => {
+    services.updateSets(exercise.gymDay, exercise.id, weights);
+  };
   return (
     <View className="flex-1">
       <View className="flex-row items-center my-10 mx-6">
@@ -89,7 +92,7 @@ export default function Exercise({ exercise }: ExerciseProps) {
           onChangeText={setText}
         />
       </View>
-      <SetList sets={weights} />
+      <SetList sets={weights} onEndEditingUpdate={onWeightChange} />
       <View className="justify-center h-26 mx-6">
         <AddButton
           onPress={() => {
