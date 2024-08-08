@@ -37,7 +37,7 @@ const Header = ({ date, name, ...viewProps }: HeaderProps) => {
         }}
       >
         <Text status="control" category="label">
-          {dateToYearMonthDay(date)}
+          {dateToYearMonthDay(new Date(date))}
         </Text>
       </StyledLayout>
     </StyledLayout>
@@ -56,7 +56,7 @@ const renderGymDay = ({ item, index }: { item: GymDayData; index: number }) => {
     >
       <Card
         style={{ marginVertical: 4 }}
-        header={<Header date={item.date} name={item.name} />}
+        header={<Header date={new Date(item.date)} name={item.name} />}
       >
         <StyledLayout className="flex-row">
           <StyledLayout>

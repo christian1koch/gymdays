@@ -1,4 +1,4 @@
-import * as db from "../../db/db";
+import * as db from "@db";
 import {
   addGymDay,
   upsertGymDays,
@@ -34,11 +34,17 @@ async function updateGymDayName(gymDayId: number, name: string) {
   renameGymDay({ gymDayId, name });
 }
 
-// async function createNewExercise(gymDayId: number, name: string) {
-//   const exerciseId = await db.insertNewExercise(gymDayId, name);
-//   const gymDay = await db.getGymDayById(gymDayId);
-//   addExercise({ gymDayId, exercise: gymDay.exercises.find((e) => e.id === exerciseId) });
-// }
+async function createNewExercise(gymDayId: number, name: string) {
+  const newExercise = await db.createNewExercise(gymDayId, name);
+  store.dispatch(
+    addExercise({
+      gymDayId,
+      exercise: newExercise,
+    })
+  );
+
+  return newExercise;
+}
 
 async function updateExerciseName(
   gymDayId: number,
@@ -54,6 +60,6 @@ export {
   fetchGymDayById,
   createNewGymDay,
   updateGymDayName,
-  // createNewExercise,
+  createNewExercise,
   updateExerciseName,
 };

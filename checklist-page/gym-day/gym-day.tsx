@@ -1,4 +1,4 @@
-import { BasicExercise, GymDayData, newExerciseMock } from "../data";
+import { BasicExercise, GymDayData } from "../data";
 import { View, FlatList } from "react-native";
 import { dateToYearMonthDay } from "../../libs/utils/utils";
 import { styled } from "nativewind";
@@ -8,8 +8,10 @@ import { Text } from "@ui-kitten/components";
 import { useEffect, useState } from "react";
 import HeaderNav from "../../ui/header-nav";
 import AddButton from "../../ui/add-button";
-import { updateGymDayName } from "../../db/db";
 import { Link } from "expo-router";
+import * as services from "@services";
+import * as db from "@db";
+import { router } from "expo-router";
 
 interface GymDayProps extends GymDayData {}
 
@@ -43,14 +45,20 @@ const StyledText = styled(Text);
 const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
   const [currentName, setCurrentName] = useState(name);
 
-  console.log("gym Day in gym Day", JSON.stringify(exercises));
   const onBlur = async () => {
-    const res = await updateGymDayName(id, currentName);
-    console.log("blurred", res);
+    const res = await db.updateGymDayName(id, currentName);
+  };
+
+  const onAddExercise = async () => {
+    const newExercise = await services.createNewExercise(id, "Bench Press");
+    router.navigate({
+      pathname: "/gym-days/exercises/[id]",
+      params: { id: newExercise.id, gymDayId: id },
+    });
   };
 
   return (
-    <View className="w-full h-full">
+    <View className="flex-1">
       <View>
         <HeaderNav
           title={currentName}
@@ -60,7 +68,7 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
           href={"/"}
         />
         <StyledText className="self-center" appearance="hint">
-          {dateToYearMonthDay(date)}
+          {dateToYearMonthDay(new Date(date))}
         </StyledText>
         <Divider className="mb-5" horizonal />
         <FlatList
@@ -68,7 +76,9 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
           renderItem={renderExercise}
           data={exercises}
         />
-        <AddButton onPress={() => console.log("pressed")} />
+        <View className="mx-6">
+          <AddButton text="Add New Exercise" onPress={onAddExercise} />
+        </View>
       </View>
     </View>
   );

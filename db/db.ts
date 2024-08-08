@@ -112,3 +112,12 @@ export const updateExerciseName = async (id: number, name: string) => {
     .returning({ updatedId: exercise.id });
   return res;
 };
+
+export const createNewExercise = async (gymDayId: number, name: string) => {
+  const db = await getDB();
+  const res = await db
+    .insert(exercise)
+    .values({ exerciseType: name, gymDay: gymDayId })
+    .returning({ insertedId: exercise.id });
+  return await getExerciseById(res[0].insertedId);
+};

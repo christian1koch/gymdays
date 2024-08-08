@@ -5,7 +5,7 @@ export function parseDBGymDay(dbGymDay: DBGymDayWithExercises): GymDayData {
   const exercises = dbGymDay.exercises.map((e) => parseDBExercise(e));
   const newGymDayData = {
     name: dbGymDay.name,
-    date: new Date(dbGymDay.date),
+    date: dbGymDay.date,
     id: dbGymDay.id,
     exercises: [...exercises],
   };
