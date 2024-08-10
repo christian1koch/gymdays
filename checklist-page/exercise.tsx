@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { View } from "react-native";
 import {
   AutocompleteDropdown,
   AutocompleteDropdownItem,
@@ -10,6 +9,7 @@ import AddButton from "../ui/add-button";
 import { BasicExercise } from "./data";
 import { createNewExerciseType, getExerciseTypes } from "../db/db";
 import * as services from "@services";
+import { View } from "tamagui";
 
 interface ExerciseItem extends AutocompleteDropdownItem {}
 
@@ -29,12 +29,13 @@ function exerciseTypesToExerciseItems(exerciseTypes: string[]): ExerciseItem[] {
 
 interface ExerciseProps {
   exercise: BasicExercise;
+  deleteMode?: boolean;
 }
 
-export default function Exercise({ exercise }: ExerciseProps) {
+export default function Exercise({ exercise, deleteMode }: ExerciseProps) {
   const [exerciseTypes, setExerciseTypes] = useState<string[]>([]);
   const { weightsPerSet: weights } = exercise;
-
+  console.log("sets", weights);
   const exerciseItems = exerciseTypesToExerciseItems(exerciseTypes);
   const [selectedItem, setSelectedItem] = useState<ExerciseItem | null>(
     basicExerciseToExerciseItem(exercise)
@@ -74,8 +75,13 @@ export default function Exercise({ exercise }: ExerciseProps) {
   const onWeightChange = (weights: number[]) => {
     services.updateSets(exercise.gymDay, exercise.id, weights);
   };
+
+  const onDeleteSet = (newWeights: number[]) => {
+    services.updateSets(exercise.gymDay, exercise.id, newWeights);
+  };
+
   return (
-    <View className="flex-1">
+    <View className="flex-1" bg="$background025">
       <View className="flex-row items-center my-10 mx-6">
         <AutocompleteDropdown
           key={exerciseTypes.length}
@@ -92,7 +98,13 @@ export default function Exercise({ exercise }: ExerciseProps) {
           onChangeText={setText}
         />
       </View>
-      <SetList sets={weights} onEndEditingUpdate={onWeightChange} />
+      <SetList
+        key={"set-of" + exercise.id}
+        sets={weights}
+        onEndEditingUpdate={onWeightChange}
+        deleteMode={deleteMode}
+        onDeleteSet={onDeleteSet}
+      />
       <View className="justify-center h-26 mx-6">
         <AddButton
           onPress={() => {

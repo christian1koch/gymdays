@@ -102,6 +102,23 @@ export const gymDaysSlice = createSlice({
         }
       }
     },
+    bulkDeleteExercises: (
+      state,
+      action: PayloadAction<{
+        gymDayId: number;
+        exerciseIds: number[];
+      }>
+    ) => {
+      const gymDay = state.gymDays.find(
+        (gymDay) => gymDay.id === action.payload.gymDayId
+      );
+      if (gymDay) {
+        const exerciseSet = new Set(action.payload.exerciseIds);
+        gymDay.exercises = gymDay.exercises.filter(
+          (exercise) => !exerciseSet.has(exercise.id)
+        );
+      }
+    },
   },
 });
 
@@ -115,6 +132,7 @@ export const {
   removeExercise,
   renameExercise,
   updateSets,
+  bulkDeleteExercises,
 } = gymDaysSlice.actions;
 
 export default gymDaysSlice.reducer;

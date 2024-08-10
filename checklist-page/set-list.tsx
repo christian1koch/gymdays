@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import { FlatList, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList } from "react-native";
 import "react-native-get-random-values";
 import { SetCard } from "./gym-day/set-card";
-import { List } from "@ui-kitten/components";
 import * as Services from "@services";
 interface SetListProps {
   sets: number[];
   onEndEditingUpdate: (weights: number[]) => void;
+  deleteMode?: boolean;
+  onDeleteSet: (weights: number[]) => void;
 }
 
 interface SetRendererProps {
@@ -14,7 +15,8 @@ interface SetRendererProps {
   index: number;
   onWeightChange: (newWeight: number) => void;
   onEndEditing: () => void;
-  isOnDeleteMode: boolean;
+  isOnDeleteMode?: boolean;
+  onDelete: () => void;
 }
 
 const SetRenderer = ({
@@ -22,6 +24,8 @@ const SetRenderer = ({
   index,
   onWeightChange,
   onEndEditing,
+  isOnDeleteMode,
+  onDelete,
 }: SetRendererProps) => (
   <SetCard
     index={index + 1}
@@ -29,12 +33,30 @@ const SetRenderer = ({
     key={index}
     onChangeText={(weight) => onWeightChange(Number(weight))}
     onEndEditing={onEndEditing}
+    deleteMode={isOnDeleteMode}
+    onDelete={onDelete}
   />
 );
-const SetList: React.FC<SetListProps> = ({ sets, onEndEditingUpdate }) => {
+
+const SetList: React.FC<SetListProps> = ({
+  sets,
+  onEndEditingUpdate,
+  onDeleteSet,
+  deleteMode,
+}) => {
   const [weights, setWeights] = useState(sets);
 
-  const [isOnDeleteMode, setIsOnDeleteMode] = useState(false);
+  const _onDeleteSet = (setIndex: number) => {
+    const newWeights = [...weights];
+    newWeights.splice(setIndex, 1);
+    setWeights(newWeights);
+    console.log("new Weights", newWeights);
+    onDeleteSet(newWeights);
+  };
+
+  useEffect(() => {
+    setWeights(sets);
+  }, [sets]);
 
   const onChangeWeight = (index: number, newWeight: number) => {
     const newWeights = [...weights];
@@ -47,11 +69,11 @@ const SetList: React.FC<SetListProps> = ({ sets, onEndEditingUpdate }) => {
   };
 
   return (
-    <List
+    <FlatList
       data={weights}
       numColumns={2}
       columnWrapperStyle={{ gap: 5 }}
-      style={{ alignSelf: "center" }}
+      style={{ alignSelf: "center", backgroundColor: "none" }}
       contentContainerStyle={{ gap: 5 }}
       renderItem={({ item, index }) => (
         <SetRenderer
@@ -59,7 +81,8 @@ const SetList: React.FC<SetListProps> = ({ sets, onEndEditingUpdate }) => {
           weight={item}
           onWeightChange={(weight) => onChangeWeight(index, weight)}
           onEndEditing={handleOnEndEditing}
-          isOnDeleteMode={isOnDeleteMode}
+          isOnDeleteMode={deleteMode}
+          onDelete={() => _onDeleteSet(index)}
         />
       )}
     />

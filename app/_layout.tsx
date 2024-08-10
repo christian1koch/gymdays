@@ -16,6 +16,7 @@ import { Provider } from "react-redux";
 import { TamaguiProvider, createTamagui } from "@tamagui/core";
 import config from "./../tamagui.config";
 import { PortalProvider } from "@tamagui/portal";
+import { Theme } from "tamagui";
 
 const tamaguiConfig = createTamagui(config);
 
@@ -24,7 +25,7 @@ export default function HomeLayout() {
   return (
     <>
       <Provider store={store}>
-        <TamaguiProvider defaultTheme="light" config={tamaguiConfig}>
+        <TamaguiProvider defaultTheme={colorScheme!} config={tamaguiConfig}>
           <ThemeProvider
             value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
           >

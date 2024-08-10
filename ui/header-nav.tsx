@@ -1,31 +1,10 @@
-import { ListItem, Popover, Button as TamaguiButton } from "tamagui";
-import { MoreHorizontal, Star } from "@tamagui/lucide-icons";
-import {
-  Button,
-  Icon,
-  IconElement,
-  Input,
-  MenuItem,
-  OverflowMenu,
-  Text,
-} from "@ui-kitten/components";
+import { Group, H2, Popover, Button as TamaguiButton } from "tamagui";
+import { ChevronLeft, MoreHorizontal } from "@tamagui/lucide-icons";
+import { Input } from "@ui-kitten/components";
 import { Href, Link } from "expo-router";
 import { styled } from "nativewind";
 import { useState } from "react";
-import { View } from "react-native";
-import { Adapt } from "tamagui";
-
-const BackIcon = (props: any): IconElement => (
-  <Icon {...props} name="arrow-back-outline" />
-);
-const ThreeDots = (props: any): IconElement => (
-  <Icon {...props} name="more-horizontal-outline" />
-);
-
-interface MenuItemProps {
-  title: string;
-  onPress: () => void;
-}
+import { Pressable, View } from "react-native";
 
 interface HeaderNavProps {
   title: string;
@@ -33,10 +12,9 @@ interface HeaderNavProps {
   onChangeText?: (text: string) => void;
   isEditable?: boolean;
   onBlur?: () => void;
-  menuItems?: MenuItemProps[];
+  menuItems?: MenuItemProps[] | null;
 }
 
-const StyledButton = styled(Button);
 const StyledInput = styled(Input);
 
 export default function HeaderNav({
@@ -58,10 +36,9 @@ export default function HeaderNav({
     <View className="items-center justify-center flex-row my-4">
       {href && !isEditingTitle && (
         <Link href={href} asChild>
-          <StyledButton
-            className="absolute right-80 rounded-full w-6 h-6 bg-slate-50"
-            appearance="outline"
-            accessoryLeft={BackIcon}
+          <TamaguiButton
+            className="absolute left-4 rounded-full w-10 h-10"
+            icon={ChevronLeft}
           />
         </Link>
       )}
@@ -78,60 +55,42 @@ export default function HeaderNav({
           onChangeText={onChangeText}
         />
       ) : (
-        <Text
+        <H2
           onPress={() => {
             if (isEditable) {
               setIsEditingTitle(true);
             }
           }}
-          category="h4"
         >
           {title}
-        </Text>
+        </H2>
       )}
-      {menuItems && menuItems.length > 0 && <OptionsMenu2 />}
+      {menuItems && menuItems.length > 0 && (
+        <OptionsMenu menuItems={menuItems} />
+      )}
     </View>
   );
 }
+export interface MenuItemProps {
+  title: string;
+  onPress: () => void;
+}
 
-const StyledMenuItem = styled(MenuItem);
+interface OptionsMenuProps {
+  menuItems: MenuItemProps[];
+}
 
-const OptionsMenu = ({ menuItems }: { menuItems: MenuItemProps[] }) => {
-  const [isMenuVisible, setIsMenuVisible] = useState(false);
-
-  const renderToggleButton = () => (
-    <StyledButton
-      className="absolute left-12 -top-5 rounded-full w-6 h-6 bg-slate-50"
-      appearance="outline"
-      accessoryLeft={ThreeDots}
-      onPress={() => setIsMenuVisible(true)}
-    />
-  );
+const OptionsMenu = ({ menuItems }: OptionsMenuProps) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
-    <OverflowMenu
-      visible={isMenuVisible}
-      anchor={renderToggleButton}
-      onBackdropPress={() => setIsMenuVisible(false)}
-    >
-      <>
-        {menuItems.map((menuItem) => (
-          <MenuItem
-            key={menuItem.title}
-            title={menuItem.title}
-            onPress={menuItem.onPress}
-          />
-        ))}
-      </>
-    </OverflowMenu>
-  );
-};
-
-const OptionsMenu2 = () => {
-  return (
-    <Popover placement="bottom-start" size={"$5"}>
+    <Popover placement="bottom-start" size={"$5"} open={isOpen}>
       <Popover.Trigger asChild>
-        <TamaguiButton icon={MoreHorizontal}></TamaguiButton>
+        <TamaguiButton
+          className="absolute right-4 rounded-full w-10 h-10"
+          icon={MoreHorizontal}
+          onPress={() => setIsOpen(true)}
+        ></TamaguiButton>
       </Popover.Trigger>
 
       <Popover.Content
@@ -150,8 +109,22 @@ const OptionsMenu2 = () => {
         ]}
       >
         <Popover.Arrow />
-        {<TamaguiButton>Delete Set</TamaguiButton>}
-        <Popover.Close />
+
+        <Group>
+          {menuItems.map((menuItem) => (
+            <Group.Item>
+              <TamaguiButton
+                onPress={() => {
+                  menuItem.onPress();
+                  setIsOpen(false);
+                }}
+              >
+                {menuItem.title}
+              </TamaguiButton>
+            </Group.Item>
+          ))}
+        </Group>
+
         {/* ScrollView is optional, can just put any contents inside if not scrollable */}
         {/* ... */}
       </Popover.Content>

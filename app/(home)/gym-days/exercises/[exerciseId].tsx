@@ -12,7 +12,15 @@ export default function Page() {
   const gymDays = useAppSelector((state) => state.gymDays.gymDays);
   const gymDay = gymDays.find((g) => g.id === Number(gymDayId));
   const exercise = gymDay?.exercises.find((e) => e.id === Number(exerciseId));
-  // Move into the component
+
+  const [deleteMode, setDeleteMode] = useState(false);
+
+  const getDeleteModeText = () => {
+    if (deleteMode) {
+      return "Disable Delete Mode";
+    }
+    return "Enable Delete Mode";
+  };
   if (!exercise) {
     return null;
   }
@@ -24,9 +32,14 @@ export default function Page() {
           pathname: "/gym-days/[id]",
           params: { id: exercise.gymDay },
         }}
-        menuItems={[{ title: "Test", onPress: () => console.log("pressed") }]}
+        menuItems={[
+          {
+            title: getDeleteModeText(),
+            onPress: () => setDeleteMode(!deleteMode),
+          },
+        ]}
       />
-      <Exercise exercise={exercise} />
+      <Exercise exercise={exercise} deleteMode={deleteMode} />
     </>
   );
 }

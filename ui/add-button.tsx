@@ -1,7 +1,6 @@
-import { Button, Icon } from "@ui-kitten/components";
+import { Plus } from "@tamagui/lucide-icons";
 import { View } from "react-native";
-
-const PlusIcon = (props: any) => <Icon name="plus" {...props} />;
+import { Button } from "tamagui";
 
 interface AddButtonProps {
   onPress: () => void;
@@ -10,7 +9,7 @@ interface AddButtonProps {
 export default function AddButton({ onPress, text }: AddButtonProps) {
   return (
     <View className="w-full my-10">
-      <Button onPress={onPress} accessoryLeft={PlusIcon}>
+      <Button onPress={onPress} icon={Plus}>
         {text}
       </Button>
     </View>

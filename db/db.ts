@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import * as SQLite from "expo-sqlite";
 import { exercise, exerciseType, gymDay } from "./schema";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import * as schema from "./schema";
 import { parseDBExercise, parseDBGymDay } from "./helper";
 import { dateToYearMonthDay } from "../libs/utils/utils";
@@ -83,6 +83,7 @@ export const getExerciseById = async (id: number) => {
   const dbExercise = await db.query.exercise.findFirst({
     where: (exercise, { eq }) => eq(exercise.id, id),
   });
+  console.log("exercise from DB", dbExercise);
   if (!dbExercise) {
     throw new Error("Cannot find this Exercise");
   }
@@ -122,11 +123,13 @@ export const createNewExercise = async (gymDayId: number, name: string) => {
 
 export const createNewSet = async (exerciseId: number, weight: number) => {
   const newExercise = await getExerciseById(exerciseId);
+  console.log(JSON.stringify(newExercise), exerciseId);
   newExercise.weightsPerSet.push(weight);
   const db = await getDB();
   const res = await db
     .update(exercise)
-    .set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) });
+    .set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) })
+    .where(eq(exercise.id, newExercise.id));
   return newExercise;
 };
 
@@ -135,12 +138,14 @@ export const updateSets = async (
   index: number,
   sets: number[]
 ) => {
+  console.log("updating sets");
   const newExercise = await getExerciseById(exerciseId);
   newExercise.weightsPerSet = sets;
   const db = await getDB();
   const res = await db
     .update(exercise)
-    .set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) });
+    .set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) })
+    .where(eq(exercise.id, newExercise.id));
   return newExercise;
 };
 
@@ -152,4 +157,12 @@ export const deleteSet = async (exerciseId: number, index: number) => {
     .update(exercise)
     .set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) });
   return newExercise;
+};
+
+export const bulkDeleteExercises = async (exerciseIds: number[]) => {
+  const db = await getDB();
+  const res = await db
+    .delete(exercise)
+    .where(inArray(exercise.id, exerciseIds));
+  return res;
 };

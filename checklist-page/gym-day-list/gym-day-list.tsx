@@ -1,17 +1,27 @@
-import { Card, Layout, List, Text, useTheme } from "@ui-kitten/components";
+import { Layout, List, useTheme } from "@ui-kitten/components";
 import { GymDayData } from "../data";
+import {
+  Button,
+  Card,
+  CardHeader,
+  H3,
+  H4,
+  Paragraph,
+  Text,
+  View,
+  XStack,
+} from "tamagui";
 import {
   bulkNumberToWeightString,
   dateToYearMonthDay,
 } from "../../libs/utils/utils";
-import { styled } from "nativewind";
-import { View, ViewProps } from "react-native";
+import { styled } from "tamagui";
+import { ViewProps } from "react-native";
 import { Link } from "expo-router";
 import AddButton from "../../ui/add-button";
 import HeaderNav from "../../ui/header-nav";
 import { insertNewGymDay } from "../../db/db";
 import { router } from "expo-router";
-
 interface GimDayListProps {
   gymDays: GymDayData[];
 }
@@ -29,16 +39,14 @@ const Header = ({ date, name, ...viewProps }: HeaderProps) => {
       {...viewProps}
       className="flex-row items-center justify-between"
     >
-      <Text category="h4">{name}</Text>
+      <H3>{name}</H3>
       <StyledLayout
         className="rounded-full p-1 mx-2"
         style={{
           backgroundColor: theme["color-primary-500"],
         }}
       >
-        <Text status="control" category="label">
-          {dateToYearMonthDay(new Date(date))}
-        </Text>
+        <Paragraph>{dateToYearMonthDay(new Date(date))}</Paragraph>
       </StyledLayout>
     </StyledLayout>
   );
@@ -53,26 +61,25 @@ const renderGymDay = ({ item, index }: { item: GymDayData; index: number }) => {
       }}
       asChild
     >
-      <Card
-        style={{ marginVertical: 4 }}
-        header={<Header date={new Date(item.date)} name={item.name} />}
-      >
-        <StyledLayout className="flex-row">
-          <StyledLayout>
+      <Card className="mb-3">
+        <Card.Header>
+          <Header date={new Date(item.date)} name={item.name} />
+        </Card.Header>
+
+        <View className="flex-row p-6">
+          <View>
             {item.exercises.map((exercise, i) => (
-              <Text category="p1" key={i}>
-                {exercise.name}
-              </Text>
+              <Paragraph key={i}>{exercise.name}</Paragraph>
             ))}
-          </StyledLayout>
-          <StyledLayout className="flex-1 items-end">
+          </View>
+          <View className="flex-1 items-end">
             {item.exercises.map((exercise, i) => (
-              <Text key={i} category="p1">
+              <Paragraph key={i}>
                 {bulkNumberToWeightString(exercise.weightsPerSet)}
-              </Text>
+              </Paragraph>
             ))}
-          </StyledLayout>
-        </StyledLayout>
+          </View>
+        </View>
       </Card>
     </Link>
   );
@@ -89,7 +96,12 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
   return (
     <View className="w-full h-full">
       <HeaderNav title="Gym Days" />
-      <List className="h-5/6" data={gymDays} renderItem={renderGymDay} />
+      <List
+        style={{ backgroundColor: "transparent" }}
+        className="h-5/6"
+        data={gymDays}
+        renderItem={renderGymDay}
+      />
       <AddButton onPress={onPressInsert} />
     </View>
   );

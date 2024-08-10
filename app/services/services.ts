@@ -70,6 +70,11 @@ async function updateSets(gymId: number, exerciseId: number, sets: number[]) {
   return exerciseWithNewSet;
 }
 
+async function bulkDeleteExercises(gymId: number, exerciseIds: number[]) {
+  await db.bulkDeleteExercises(exerciseIds);
+  store.dispatch(actions.bulkDeleteExercises({ gymDayId: gymId, exerciseIds }));
+}
+
 export {
   fetchAllGymDays,
   fetchGymDayById,
@@ -79,4 +84,5 @@ export {
   updateExerciseName,
   addNewSet,
   updateSets,
+  bulkDeleteExercises,
 };
