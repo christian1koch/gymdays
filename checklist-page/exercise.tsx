@@ -4,7 +4,6 @@ import {
   AutocompleteDropdownItem,
 } from "react-native-autocomplete-dropdown";
 import SetList from "./set-list";
-import AddSetButton from "./add-set-button";
 import AddButton from "../ui/add-button";
 import { BasicExercise } from "./data";
 import { createNewExerciseType, getExerciseTypes } from "../db/db";
@@ -115,12 +114,16 @@ export default function Exercise({ exercise, deleteMode }: ExerciseProps) {
           closeOnBlur={true}
           closeOnSubmit={true}
           onSubmit={onBlurSave}
+          onBlur={onBlurSave}
           initialValue={selectedItem || basicExerciseToExerciseItem(exercise)} // or just '2'
           onSelectItem={(item) => onSelectItem(item)}
           dataSet={exerciseItems}
           showClear={false}
           emptyResultText="Create new Exercise"
           onChangeText={setText}
+          textInputProps={{
+            enterKeyHint: "done",
+          }}
         />
       </View>
       <SetList
