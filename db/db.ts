@@ -15,12 +15,23 @@ const getDB = async () => {
 export const initDatabase = async () => {
   const db = await SQLite.openDatabaseAsync("databaseName.db");
   const query = await db.execAsync(`
-    PRAGMA journal_mode = WAL;
-    CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY NOT NULL, value TEXT NOT NULL, intValue INTEGER);
-    INSERT INTO test (value, intValue) VALUES ('test1', 123);
-    INSERT INTO test (value, intValue) VALUES ('test2', 456);
-    INSERT INTO test (value, intValue) VALUES ('test3', 789);
-    `);
+   PRAGMA journal_mode = WAL;
+    CREATE TABLE IF NOT EXISTS gym_day (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      date TEXT NOT NULL,
+      name TEXT NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS exercise_type (
+      name TEXT PRIMARY KEY NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS exercise (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      exerciseType TEXT NOT NULL,
+      gym_day INTEGER NOT NULL,
+      weightsPerSet TEXT,
+      FOREIGN KEY(exerciseType) REFERENCES exercise_type(name),
+      FOREIGN KEY(gym_day) REFERENCES gym_day(id) ON DELETE CASCADE
+    );`);
   return db;
 };
 

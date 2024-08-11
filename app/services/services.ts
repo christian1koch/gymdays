@@ -17,7 +17,7 @@ async function fetchGymDayById(gymDayId: number) {
 async function createNewGymDay() {
   const gymDayId = await db.insertNewGymDay();
   const gymDay = await db.getGymDayById(gymDayId.insertedId);
-  actions.addGymDay(gymDay);
+  store.dispatch(actions.addGymDay(gymDay));
   return gymDay;
 }
 

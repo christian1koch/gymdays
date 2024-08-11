@@ -82,11 +82,15 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
   const [selectedExercises, setSelectedExercises] = useState<number[]>([]);
 
   const onAddExercise = async () => {
-    const newExercise = await services.createNewExercise(id, "Bench Press");
-    router.navigate({
-      pathname: "/gym-days/exercises/[id]",
-      params: { id: newExercise.id, gymDayId: id },
-    });
+    try {
+      const newExercise = await services.createNewExercise(id, "Bench Press");
+      router.navigate({
+        pathname: "/gym-days/exercises/[id]",
+        params: { id: newExercise.id, gymDayId: id },
+      });
+    } catch (error: any) {
+      console.log(error.message);
+    }
   };
 
   const getMenuItems = () => {

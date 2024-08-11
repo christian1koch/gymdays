@@ -31,7 +31,11 @@ const SetRenderer = ({
     index={index + 1}
     weight={weight}
     key={index}
-    onChangeText={(weight) => onWeightChange(Number(weight))}
+    onChangeText={(weight) => {
+      let newWeight = weight;
+      newWeight = newWeight.replace(",", ".");
+      onWeightChange(Number(newWeight));
+    }}
     onEndEditing={onEndEditing}
     deleteMode={isOnDeleteMode}
     onDelete={onDelete}

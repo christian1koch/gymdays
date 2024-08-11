@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { View } from "tamagui";
 import { GymDayData } from "../../checklist-page/data";
+import "expo-router/entry";
 
 import GimDayList from "../../checklist-page/gym-day-list/gym-day-list";
 import { useEffect, useState } from "react";
@@ -12,13 +13,15 @@ import { styled } from "nativewind";
 import * as Services from "../services/services";
 import { useAppSelector } from "../hooks";
 import { useFonts } from "expo-font";
+import * as db from "@db";
 
 const dbForStudio = SQLite.openDatabaseSync("databaseName.db");
 
 const StyledText = styled(Text);
 
 export default function App() {
-  useDrizzleStudio(dbForStudio);
+  db.initDatabase();
+  // useDrizzleStudio(dbForStudio);
   const [gymDays, setGymDays] = useState<GymDayData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const gymDaysInStore = useAppSelector((state) => state.gymDays.gymDays);
@@ -35,8 +38,12 @@ export default function App() {
   useEffect(() => {
     const fetchGymDays = async () => {
       setIsLoading(true);
-      const newGymDays = await Services.fetchAllGymDays();
-      setGymDays(newGymDays);
+      try {
+        const newGymDays = await Services.fetchAllGymDays();
+        setGymDays(newGymDays);
+      } catch (error: any) {
+        console.log(error.message);
+      }
       setIsLoading(false);
     };
     fetchGymDays();

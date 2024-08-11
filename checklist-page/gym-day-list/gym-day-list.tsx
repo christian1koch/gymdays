@@ -22,6 +22,7 @@ import AddButton from "../../ui/add-button";
 import HeaderNav from "../../ui/header-nav";
 import { insertNewGymDay } from "../../db/db";
 import { router } from "expo-router";
+import * as Services from "@services";
 interface GimDayListProps {
   gymDays: GymDayData[];
 }
@@ -87,10 +88,10 @@ const renderGymDay = ({ item, index }: { item: GymDayData; index: number }) => {
 const StyledList = styled(List);
 export default function GimDayList({ gymDays }: GimDayListProps) {
   const onPressInsert = async () => {
-    const res = await insertNewGymDay();
+    const res = await Services.createNewGymDay();
     router.replace({
       pathname: "/gym-days/[id]",
-      params: { id: res.insertedId },
+      params: { id: res.id },
     });
   };
   return (
