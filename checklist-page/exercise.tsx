@@ -10,6 +10,10 @@ import { BasicExercise } from "./data";
 import { createNewExerciseType, getExerciseTypes } from "../db/db";
 import * as services from "@services";
 import { View } from "tamagui";
+import { useAppSelector } from "app/hooks";
+import { selectLastExerciseFromExerciseTypeAfterCurrent } from "app/store";
+import { Text } from "tamagui";
+import { SimpleSetList } from "./gym-day/exercise-card";
 
 interface ExerciseItem extends AutocompleteDropdownItem {}
 
@@ -40,6 +44,13 @@ export default function Exercise({ exercise, deleteMode }: ExerciseProps) {
   const [selectedItem, setSelectedItem] = useState<ExerciseItem | null>(
     basicExerciseToExerciseItem(exercise)
   );
+  const lastExerciseOfType = useAppSelector((state) =>
+    selectLastExerciseFromExerciseTypeAfterCurrent(
+      state,
+      selectedItem?.id ?? "",
+      exercise.id
+    )
+  );
   const [text, setText] = useState("");
   const onBlurSave = async () => {
     if (text && !exerciseTypes.includes(text)) {
@@ -51,7 +62,7 @@ export default function Exercise({ exercise, deleteMode }: ExerciseProps) {
   };
 
   const onSelectItem = async (item: ExerciseItem | null) => {
-    // setSelectedItem(item);
+    setSelectedItem(item);
     if (!item) {
       return;
     }
@@ -80,17 +91,31 @@ export default function Exercise({ exercise, deleteMode }: ExerciseProps) {
     services.updateSets(exercise.gymDay, exercise.id, newWeights);
   };
 
+  const firstTimeExerciseText = "Your First time doing " + selectedItem?.id;
+
+  const getSetInfo = () => {
+    if (!lastExerciseOfType) {
+      return <Text>{firstTimeExerciseText}</Text>;
+    }
+    if (lastExerciseOfType.weightsPerSet.length <= 0) {
+      return <Text>{firstTimeExerciseText}</Text>;
+    }
+    return <SimpleSetList sets={lastExerciseOfType?.weightsPerSet ?? []} />;
+  };
+
   return (
     <View className="flex-1" bg="$background025">
-      <View className="flex-row items-center my-10 mx-6">
+      <View className="flex-col items-center my-10 mx-6 h-28 justify-between">
+        {selectedItem && <Text>Last Sets of {selectedItem?.id}: </Text>}
+        {getSetInfo()}
         <AutocompleteDropdown
+          inputContainerStyle={{ width: 300 }}
           key={exerciseTypes.length}
-          containerStyle={{ flex: 4, width: 20 }}
           clearOnFocus={false}
           closeOnBlur={true}
           closeOnSubmit={true}
           onSubmit={onBlurSave}
-          initialValue={selectedItem ?? "1"} // or just '2'
+          initialValue={selectedItem || basicExerciseToExerciseItem(exercise)} // or just '2'
           onSelectItem={(item) => onSelectItem(item)}
           dataSet={exerciseItems}
           showClear={false}

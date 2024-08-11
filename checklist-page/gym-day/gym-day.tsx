@@ -76,8 +76,8 @@ const StyledText = styled(Text);
 const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
   const [currentName, setCurrentName] = useState(name);
   const [selectMode, setSelectMode] = useState(false);
-  const onBlur = async () => {
-    const res = await db.updateGymDayName(id, currentName);
+  const onEndEditing = async () => {
+    services.renameGymDay(id, currentName);
   };
   const [selectedExercises, setSelectedExercises] = useState<number[]>([]);
 
@@ -133,7 +133,7 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
           title={currentName}
           isEditable
           onChangeText={setCurrentName}
-          onBlur={onBlur}
+          onEndEditing={onEndEditing}
           href={"/"}
           menuItems={getMenuItems()}
         />

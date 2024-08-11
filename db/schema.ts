@@ -17,7 +17,7 @@ export const exercise = sqliteTable("exercise", {
     .references(() => exerciseType.name)
     .notNull(),
   gymDay: integer("gym_day")
-    .references(() => gymDay.id)
+    .references(() => gymDay.id, { onDelete: "cascade" })
     .notNull(),
   weightsPerSet: text("weightsPerSet"), // Storing as comma-separated string
 });

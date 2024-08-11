@@ -11,7 +11,7 @@ interface HeaderNavProps {
   href?: Href<string>;
   onChangeText?: (text: string) => void;
   isEditable?: boolean;
-  onBlur?: () => void;
+  onEndEditing?: () => void;
   menuItems?: MenuItemProps[] | null;
 }
 
@@ -22,13 +22,13 @@ export default function HeaderNav({
   href,
   onChangeText,
   isEditable,
-  onBlur,
+  onEndEditing,
   menuItems,
 }: HeaderNavProps) {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const onInputBlur = () => {
-    if (onBlur) {
-      onBlur();
+  const onInputEndEditing = () => {
+    if (onEndEditing) {
+      onEndEditing();
     }
     setIsEditingTitle(false);
   };
@@ -50,7 +50,7 @@ export default function HeaderNav({
             fontSize: 25,
             textAlign: "center",
           }}
-          onBlur={onInputBlur}
+          onEndEditing={onInputEndEditing}
           value={title}
           onChangeText={onChangeText}
         />

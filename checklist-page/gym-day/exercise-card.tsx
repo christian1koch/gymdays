@@ -34,16 +34,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
         </View>
         <View className="justify-between">
           <Paragraph className=" font-semibold">{name}</Paragraph>
-          <View className="flex-row">
-            {sets.map((set, i) => (
-              <View key={i}>
-                <View className="flex-row">
-                  <Paragraph className="">{set + " kg"}</Paragraph>
-                  {i < sets.length - 1 && <Divider className="mx-2" />}
-                </View>
-              </View>
-            ))}
-          </View>
+          <SimpleSetList sets={sets} />
         </View>
       </View>
     </Pressable>
@@ -51,3 +42,18 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
 };
 
 export default ExerciseCard;
+
+export const SimpleSetList = ({ sets }: { sets: number[] }) => {
+  return (
+    <View className="flex-row">
+      {sets.map((set, i) => (
+        <View key={i}>
+          <View className="flex-row">
+            <Paragraph className="">{set + " kg"}</Paragraph>
+            {i < sets.length - 1 && <Divider className="mx-2" />}
+          </View>
+        </View>
+      ))}
+    </View>
+  );
+};
