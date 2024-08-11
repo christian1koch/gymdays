@@ -84,7 +84,12 @@ const OptionsMenu = ({ menuItems }: OptionsMenuProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
-    <Popover placement="bottom-start" size={"$5"} open={isOpen}>
+    <Popover
+      placement="bottom-start"
+      size={"$5"}
+      open={isOpen}
+      onOpenChange={setIsOpen}
+    >
       <Popover.Trigger asChild>
         <TamaguiButton
           className="absolute right-4 rounded-full w-10 h-10"
