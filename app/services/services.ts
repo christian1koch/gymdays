@@ -80,6 +80,11 @@ async function renameGymDay(gymDayId: number, newName: string) {
   store.dispatch(actions.renameGymDay({ gymDayId, name: newName }));
 }
 
+async function bulkDeleteGymDays(gymDayIds: number[]) {
+  await db.bulkDeleteGymDays(gymDayIds);
+  store.dispatch(actions.bulkDeleteGymDays(gymDayIds));
+}
+
 export {
   fetchAllGymDays,
   fetchGymDayById,
@@ -91,4 +96,5 @@ export {
   updateSets,
   bulkDeleteExercises,
   renameGymDay,
+  bulkDeleteGymDays,
 };

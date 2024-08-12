@@ -119,6 +119,11 @@ export const gymDaysSlice = createSlice({
         );
       }
     },
+    bulkDeleteGymDays: (state, action: PayloadAction<number[]>) => {
+      state.gymDays = state.gymDays.filter(
+        (gymDay) => !action.payload.includes(gymDay.id)
+      );
+    },
   },
 });
 
@@ -133,6 +138,7 @@ export const {
   renameExercise,
   updateSets,
   bulkDeleteExercises,
+  bulkDeleteGymDays,
 } = gymDaysSlice.actions;
 
 export default gymDaysSlice.reducer;

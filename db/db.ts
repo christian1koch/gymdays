@@ -177,3 +177,9 @@ export const bulkDeleteExercises = async (exerciseIds: number[]) => {
     .where(inArray(exercise.id, exerciseIds));
   return res;
 };
+
+export const bulkDeleteGymDays = async (gymDayIds: number[]) => {
+  const db = await getDB();
+  const res = await db.delete(gymDay).where(inArray(gymDay.id, gymDayIds));
+  return res;
+};

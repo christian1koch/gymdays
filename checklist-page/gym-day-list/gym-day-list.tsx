@@ -16,13 +16,14 @@ import {
   dateToYearMonthDay,
 } from "../../libs/utils/utils";
 import { styled } from "tamagui";
-import { ViewProps } from "react-native";
+import { Pressable, ViewProps } from "react-native";
 import { Link } from "expo-router";
 import AddButton from "../../ui/add-button";
-import HeaderNav from "../../ui/header-nav";
+import HeaderNav, { MenuItemProps } from "../../ui/header-nav";
 import { insertNewGymDay } from "../../db/db";
 import { router } from "expo-router";
 import * as Services from "@services";
+import { useSelectableItem } from "features/hooks/useSelectableItem";
 interface GimDayListProps {
   gymDays: GymDayData[];
 }
@@ -53,28 +54,55 @@ const Header = ({ date, name, ...viewProps }: HeaderProps) => {
   );
 };
 
-const renderGymDay = ({ item, index }: { item: GymDayData; index: number }) => {
+const LinkGymDayCard = ({
+  item,
+  index,
+  onLongPress,
+}: {
+  item: GymDayData;
+  index: number;
+  onLongPress: () => void;
+}) => {
   return (
     <Link
+      key={index}
       href={{
         pathname: "/gym-days/[id]",
         params: { id: item.id },
       }}
       asChild
     >
-      <Card className="mb-3">
+      <SimpleGymCard onLongPress={onLongPress} gymDayData={item} />
+    </Link>
+  );
+};
+
+const SimpleGymCard = ({
+  gymDayData,
+  onPress,
+  onLongPress,
+  highlighted,
+}: {
+  gymDayData: GymDayData;
+  onPress?: () => void;
+  onLongPress?: () => void;
+  highlighted?: boolean;
+}) => {
+  return (
+    <Pressable onLongPress={onLongPress} onPress={onPress}>
+      <Card className="mb-3" bg={!highlighted ? "$background" : "$borderColor"}>
         <Card.Header>
-          <Header date={new Date(item.date)} name={item.name} />
+          <Header date={new Date(gymDayData.date)} name={gymDayData.name} />
         </Card.Header>
 
         <View className="flex-row p-6">
           <View>
-            {item.exercises.map((exercise, i) => (
+            {gymDayData.exercises.map((exercise, i) => (
               <Paragraph key={i}>{exercise.name}</Paragraph>
             ))}
           </View>
           <View className="flex-1 items-end">
-            {item.exercises.map((exercise, i) => (
+            {gymDayData.exercises.map((exercise, i) => (
               <Paragraph key={i}>
                 {bulkNumberToWeightString(exercise.weightsPerSet)}
               </Paragraph>
@@ -82,11 +110,19 @@ const renderGymDay = ({ item, index }: { item: GymDayData; index: number }) => {
           </View>
         </View>
       </Card>
-    </Link>
+    </Pressable>
   );
 };
-const StyledList = styled(List);
+
 export default function GimDayList({ gymDays }: GimDayListProps) {
+  const {
+    selectModeOn: selectMode,
+    setSelectModeOff,
+    selectedItemsArr: selectedExercises,
+    onLongPress,
+    onSelectableItemPress,
+  } = useSelectableItem();
+
   const onPressInsert = async () => {
     const res = await Services.createNewGymDay();
     router.replace({
@@ -94,14 +130,55 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
       params: { id: res.id },
     });
   };
+
+  const getMenuItems = () => {
+    if (!selectMode) {
+      return null;
+    }
+    const menuItems: MenuItemProps[] = [
+      {
+        title: "Stop Selecting",
+        onPress: () => {
+          setSelectModeOff();
+        },
+      },
+      {
+        title: "Delete",
+        onPress: () => {
+          setSelectModeOff();
+          Services.bulkDeleteGymDays(selectedExercises);
+        },
+      },
+    ];
+    return menuItems;
+  };
+
   return (
     <View className="w-full h-full">
-      <HeaderNav title="Gym Days" />
+      <HeaderNav title="Gym Days" menuItems={getMenuItems()} />
       <List
         style={{ backgroundColor: "transparent" }}
         className="h-5/6"
         data={gymDays}
-        renderItem={renderGymDay}
+        renderItem={({ item, index }) => {
+          if (selectMode) {
+            return (
+              <SimpleGymCard
+                onPress={() => onSelectableItemPress(item.id)}
+                gymDayData={item}
+                key={item.id}
+                highlighted={selectedExercises.includes(item.id)}
+              />
+            );
+          }
+          return (
+            <LinkGymDayCard
+              index={index}
+              item={item}
+              onLongPress={() => onLongPress(item.id)}
+            />
+          );
+        }}
       />
       <AddButton onPress={onPressInsert} />
     </View>

@@ -10,7 +10,6 @@ import HeaderNav, { MenuItemProps } from "../../ui/header-nav";
 import AddButton from "../../ui/add-button";
 import { Link } from "expo-router";
 import * as services from "@services";
-import * as db from "@db";
 import { router } from "expo-router";
 import { useSelectableItem } from "features/hooks/useSelectableItem";
 
