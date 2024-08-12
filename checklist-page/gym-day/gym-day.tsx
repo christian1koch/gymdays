@@ -109,6 +109,7 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
         title: "Delete",
         onPress: () => {
           services.bulkDeleteExercises(id, selectedExercises);
+          setSelectMode(false);
         },
       },
     ];
