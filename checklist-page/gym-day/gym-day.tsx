@@ -12,6 +12,7 @@ import { Link } from "expo-router";
 import * as services from "@services";
 import * as db from "@db";
 import { router } from "expo-router";
+import { useSelectableItem } from "features/hooks/useSelectableItem";
 
 interface GymDayProps extends GymDayData {}
 
@@ -75,11 +76,16 @@ const StyledText = styled(Text);
 
 const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
   const [currentName, setCurrentName] = useState(name);
-  const [selectMode, setSelectMode] = useState(false);
   const onEndEditing = async () => {
     services.renameGymDay(id, currentName);
   };
-  const [selectedExercises, setSelectedExercises] = useState<number[]>([]);
+  const {
+    selectModeOn: selectMode,
+    setSelectModeOff,
+    selectedItemsArr: selectedExercises,
+    onLongPress,
+    onSelectableItemPress,
+  } = useSelectableItem();
 
   const onAddExercise = async () => {
     try {
@@ -101,34 +107,18 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
       {
         title: "Stop Selecting",
         onPress: () => {
-          setSelectMode(false);
-          setSelectedExercises([]);
+          setSelectModeOff();
         },
       },
       {
         title: "Delete",
         onPress: () => {
           services.bulkDeleteExercises(id, selectedExercises);
-          setSelectMode(false);
+          setSelectModeOff();
         },
       },
     ];
     return menuItems;
-  };
-
-  const onLongPress = (id: number) => {
-    setSelectMode(true);
-    setSelectedExercises([...selectedExercises, id]);
-  };
-
-  const onSelectableCardPress = (id: number) => {
-    if (!selectedExercises.includes(id)) {
-      return setSelectedExercises([...selectedExercises, id]);
-    }
-    const newSelectedExercises = [...selectedExercises];
-    const idIndex = newSelectedExercises.findIndex((ex) => ex === id);
-    newSelectedExercises.splice(idIndex, 1);
-    return setSelectedExercises(newSelectedExercises);
   };
 
   return (
@@ -155,7 +145,7 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
                   key={item.id}
                   item={item}
                   index={index}
-                  onPress={() => onSelectableCardPress(item.id)}
+                  onPress={() => onSelectableItemPress(item.id)}
                   selected={selectedExercises.some((ex) => ex === item.id)}
                 />
               );

@@ -117,7 +117,7 @@ const OptionsMenu = ({ menuItems }: OptionsMenuProps) => {
 
         <Group>
           {menuItems.map((menuItem) => (
-            <Group.Item>
+            <Group.Item key={menuItem.title}>
               <TamaguiButton
                 onPress={() => {
                   menuItem.onPress();
