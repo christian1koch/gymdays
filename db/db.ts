@@ -6,14 +6,30 @@ import * as schema from "./schema";
 import { parseDBExercise, parseDBGymDay } from "./helper";
 import { dateToYearMonthDay } from "../libs/utils/utils";
 
+const dbName = __DEV__
+  ? process.env.EXPO_PUBLIC_DEV_DB_NAME
+  : process.env.EXPO_PUBLIC_PROD_DB_NAME;
+
+if (!dbName) {
+  throw new Error("DB name not found");
+}
+
 const getDB = async () => {
-  const expo = await SQLite.openDatabaseAsync("databaseName.db");
+  const expo = await SQLite.openDatabaseAsync(dbName);
   const db = drizzle(expo, { schema: { ...schema } });
   return db;
 };
 
 export const initDatabase = async () => {
-  const db = await SQLite.openDatabaseAsync("databaseName.db");
+  let dbName = process.env.EXPO_PUBLIC_DEV_DB_NAME;
+  if (!__DEV__) {
+    dbName = process.env.EXPO_PUBLIC_PROD_DB_NAME;
+  }
+  console.log("DB name", dbName);
+  if (!dbName) {
+    throw new Error("DB name not found");
+  }
+  const db = await SQLite.openDatabaseAsync(dbName);
   const query = await db.execAsync(`
    PRAGMA journal_mode = WAL;
     CREATE TABLE IF NOT EXISTS gym_day (
@@ -32,17 +48,37 @@ export const initDatabase = async () => {
       FOREIGN KEY(exerciseType) REFERENCES exercise_type(name),
       FOREIGN KEY(gym_day) REFERENCES gym_day(id) ON DELETE CASCADE
     );`);
+
+  const defaultValues = [
+    "Bench Press",
+    "Deadlift",
+    "Squats",
+    "Shoulder Press",
+    "Lateral Raise",
+    "Bicep Curls",
+    "Tricep Pull-down",
+    "Back Row",
+    "Lat Pulldown",
+  ];
+
+  for (const value of defaultValues) {
+    await db.execAsync(`
+        INSERT INTO exercise_type (name)
+        SELECT '${value}'
+        WHERE NOT EXISTS (SELECT 1 FROM exercise_type WHERE name = '${value}');
+      `);
+  }
   return db;
 };
 
 export const getTest = async () => {
-  const db = await SQLite.openDatabaseAsync("databaseName.db");
+  const db = await SQLite.openDatabaseAsync(dbName);
   const result = await db.getAllAsync("SELECT * FROM test");
   return result;
 };
 
 export const getGymDays = async () => {
-  const expo = await SQLite.openDatabaseAsync("databaseName.db");
+  const expo = await SQLite.openDatabaseAsync(dbName);
   const db = drizzle(expo, { schema: { ...schema } });
   const gymDays = await db.query.gymDay.findMany({
     with: {
@@ -53,7 +89,7 @@ export const getGymDays = async () => {
 };
 
 export const getGymDayById = async (id: number) => {
-  const expo = await SQLite.openDatabaseAsync("databaseName.db");
+  const expo = await SQLite.openDatabaseAsync(dbName);
   const db = drizzle(expo, { schema: { ...schema } });
   const gymDay = await db.query.gymDay.findFirst({
     where: (gymDay, { eq }) => eq(gymDay.id, id),
@@ -68,7 +104,7 @@ export const getGymDayById = async (id: number) => {
 };
 
 export const insertNewGymDay = async () => {
-  const expo = await SQLite.openDatabaseAsync("databaseName.db");
+  const expo = await SQLite.openDatabaseAsync(dbName);
   const db = drizzle(expo, { schema: { ...schema } });
   const date = new Date();
   const insertedIds = await db

@@ -125,7 +125,7 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
 
   const onPressInsert = async () => {
     const res = await Services.createNewGymDay();
-    router.replace({
+    router.navigate({
       pathname: "/gym-days/[id]",
       params: { id: res.id },
     });
