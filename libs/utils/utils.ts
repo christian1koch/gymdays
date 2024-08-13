@@ -9,3 +9,20 @@ export function numberToWeightString(weight: number): string {
 export function bulkNumberToWeightString(weights: number[]): string {
   return weights.map((weight) => `${weight}`).join(" ");
 }
+
+const getDefaultWeights = () => {
+  let weights: number[] = [];
+  const setOfWeights = new Set<string>();
+  for (let i = 2.5; i <= 100; i += 2.5) {
+    setOfWeights.add("" + i);
+    weights.push(i);
+  }
+  for (let i = 2; i <= 100; i += 2) {
+    if (!setOfWeights.has("" + i)) {
+      weights.push(i);
+    }
+  }
+  return weights.sort((a, b) => a - b);
+};
+
+export const DEFAULT_WEIGHTS = getDefaultWeights();

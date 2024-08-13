@@ -28,15 +28,13 @@ const SetRenderer = ({
   onDelete,
 }: SetRendererProps) => (
   <SetCard
+    onEndEditing={onEndEditing}
     index={index + 1}
     weight={weight}
     key={index}
-    onChangeText={(weight) => {
-      let newWeight = weight;
-      newWeight = newWeight.replace(",", ".");
-      onWeightChange(Number(newWeight));
+    onChangeWeight={(weight) => {
+      onWeightChange(weight);
     }}
-    onEndEditing={onEndEditing}
     deleteMode={isOnDeleteMode}
     onDelete={onDelete}
   />

@@ -52,7 +52,7 @@ export default function HeaderNav({
           }}
           onEndEditing={onInputEndEditing}
           value={title}
-          onChangeText={onChangeText}
+          onChangeWeight={onChangeText}
         />
       ) : (
         <H2
