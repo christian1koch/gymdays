@@ -15,7 +15,7 @@ export const gymDaysSlice = createSlice({
   initialState,
   reducers: {
     addGymDay: (state, action: PayloadAction<GymDayData>) => {
-      state.gymDays.push(action.payload);
+      state.gymDays.unshift(action.payload);
     },
     upsertGymDays: (state, action: PayloadAction<GymDayData[]>) => {
       state.gymDays = action.payload;

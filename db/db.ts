@@ -107,9 +107,10 @@ export const insertNewGymDay = async () => {
   const expo = await SQLite.openDatabaseAsync(dbName);
   const db = drizzle(expo, { schema: { ...schema } });
   const date = new Date();
+  console.log(dateToYearMonthDay(date));
   const insertedIds = await db
     .insert(gymDay)
-    .values({ name: "New Gym Day", date: dateToYearMonthDay(date) })
+    .values({ name: "New Gym Day", date: date.toUTCString() })
     .returning({ insertedId: gymDay.id });
   return insertedIds[0];
 };

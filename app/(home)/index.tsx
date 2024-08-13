@@ -13,6 +13,7 @@ import { useAppSelector } from "../hooks";
 import { useFonts } from "expo-font";
 import * as db from "@db";
 import { Footer } from "checklist-page/footer";
+import { selectGymDaysSortedByDate } from "app/store";
 
 const dbForStudio = SQLite.openDatabaseSync("databaseName.db");
 
@@ -23,7 +24,7 @@ export default function App() {
   // useDrizzleStudio(dbForStudio);
   const [gymDays, setGymDays] = useState<GymDayData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const gymDaysInStore = useAppSelector((state) => state.gymDays.gymDays);
+  const sortedGymDays = useAppSelector(selectGymDaysSortedByDate);
   const [loaded] = useFonts({
     Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
     InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
@@ -54,7 +55,7 @@ export default function App() {
 
   return (
     <View className="flex-1">
-      <GimDayList gymDays={gymDaysInStore} />
+      <GimDayList gymDays={sortedGymDays} />
       <Footer />
       <StatusBar style="auto" />
     </View>

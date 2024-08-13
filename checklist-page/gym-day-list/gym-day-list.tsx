@@ -27,6 +27,8 @@ import * as Services from "@services";
 import { useSelectableItem } from "features/hooks/useSelectableItem";
 import { Plus } from "@tamagui/lucide-icons";
 import { PortalGate } from "libs/portal/PortalContext";
+import { useAppSelector } from "app/hooks";
+import { selectTodaysGymDay } from "app/store";
 interface GimDayListProps {
   gymDays: GymDayData[];
 }
@@ -126,6 +128,8 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
     onSelectableItemPress,
   } = useSelectableItem();
 
+  const todaysGymDay = useAppSelector(selectTodaysGymDay);
+
   const onPressInsert = async () => {
     const res = await Services.createNewGymDay();
     router.navigate({
@@ -156,6 +160,29 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
     return menuItems;
   };
 
+  const currentGymDayButtons = (
+    <Group orientation="horizontal" className="mx-6">
+      <Group.Item>
+        <Button
+          className="flex-1"
+          onPress={() => {
+            if (todaysGymDay) {
+              router.navigate({
+                pathname: "/gym-days/[id]",
+                params: { id: todaysGymDay.id },
+              });
+            }
+          }}
+        >
+          Go to Current Gym Day
+        </Button>
+      </Group.Item>
+      <Group.Item>
+        <Button onPress={onPressInsert} bg={"$accentBackground"} icon={Plus} />
+      </Group.Item>
+    </Group>
+  );
+
   return (
     <View className="flex-1">
       <HeaderNav title="Gym Days" menuItems={getMenuItems()} />
@@ -184,21 +211,11 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
         }}
       />
       <PortalGate name="footer" isEntry>
-        <Group orientation="horizontal" className="mx-6">
-          <Group.Item>
-            <Button className="flex-1" onPress={onPressInsert}>
-              Go to Current Gym Day
-            </Button>
-          </Group.Item>
-          <Group.Item>
-            {/* <AddButton onPress={onPressInsert} /> */}
-            <Button
-              onPress={onPressInsert}
-              bg={"$accentBackground"}
-              icon={Plus}
-            />
-          </Group.Item>
-        </Group>
+        {todaysGymDay ? (
+          currentGymDayButtons
+        ) : (
+          <AddButton text="Create new gym day" onPress={onPressInsert} />
+        )}
       </PortalGate>
     </View>
   );

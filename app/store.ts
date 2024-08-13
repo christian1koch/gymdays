@@ -50,3 +50,19 @@ export const selectLastExerciseFromExerciseTypeAfterCurrent = createSelector(
     }
   }
 );
+
+export const selectTodaysGymDay = createSelector(
+  [selectGymDaysSortedByDate],
+  (gymDays) => {
+    const todaysGymDay = gymDays.find((gymDay) => {
+      const today = new Date();
+      const gymDayDate = new Date(gymDay.date);
+      return (
+        today.getDate() === gymDayDate.getDate() &&
+        today.getMonth() === gymDayDate.getMonth() &&
+        today.getFullYear() === gymDayDate.getFullYear()
+      );
+    });
+    return todaysGymDay;
+  }
+);

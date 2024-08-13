@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 export const Footer = () => {
   return (
-    <View className="flex-row items-center justify-between">
+    <View className="flex-row items-center justify-between my-5">
       <PortalGate name="footer" />
     </View>
   );

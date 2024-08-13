@@ -1,5 +1,5 @@
 export function dateToYearMonthDay(date: Date): string {
-  return date.toISOString().split("T")[0];
+  return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
 }
 
 export function numberToWeightString(weight: number): string {
