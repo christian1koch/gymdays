@@ -12,6 +12,7 @@ import { Link } from "expo-router";
 import * as services from "@services";
 import { router } from "expo-router";
 import { useSelectableItem } from "features/hooks/useSelectableItem";
+import { PortalGate } from "libs/portal/PortalContext";
 
 interface GymDayProps extends GymDayData {}
 
@@ -160,9 +161,9 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
           }}
           data={exercises}
         />
-        <View className="mx-6">
+        <PortalGate name="footer" isEntry>
           <AddButton text="Add New Exercise" onPress={onAddExercise} />
-        </View>
+        </PortalGate>
       </View>
     </View>
   );

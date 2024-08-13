@@ -8,7 +8,7 @@ interface AddButtonProps {
 }
 export default function AddButton({ onPress, text }: AddButtonProps) {
   return (
-    <View className="w-full my-10">
+    <View className="flex-1 mx-6">
       <Button onPress={onPress} icon={Plus}>
         {text}
       </Button>

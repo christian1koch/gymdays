@@ -5,6 +5,7 @@ import { getExerciseById, getExerciseTypes } from "../../../../db/db";
 import Exercise from "../../../../checklist-page/exercise";
 import HeaderNav from "../../../../ui/header-nav";
 import { useAppSelector } from "../../../hooks";
+import { Footer } from "checklist-page/footer";
 
 export default function Page() {
   const searchParams = useLocalSearchParams();
@@ -40,6 +41,7 @@ export default function Page() {
         ]}
       />
       <Exercise exercise={exercise} deleteMode={deleteMode} />
+      <Footer />
     </>
   );
 }

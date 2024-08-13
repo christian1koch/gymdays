@@ -1,6 +1,8 @@
 import { useLocalSearchParams } from "expo-router";
 import GymDay from "../../../checklist-page/gym-day/gym-day";
 import { useAppSelector } from "../../hooks";
+import { Footer } from "checklist-page/footer";
+import { View } from "react-native";
 
 export default function Page() {
   const { gymdayId } = useLocalSearchParams();
@@ -10,5 +12,10 @@ export default function Page() {
   if (!gymDay) {
     return null;
   }
-  return <GymDay {...gymDay} />;
+  return (
+    <View className="flex-1">
+      <GymDay {...gymDay} />
+      <Footer />
+    </View>
+  );
 }

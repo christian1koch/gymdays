@@ -17,6 +17,7 @@ import { TamaguiProvider, createTamagui } from "@tamagui/core";
 import config from "./../tamagui.config";
 import { PortalProvider } from "@tamagui/portal";
 import { Theme } from "tamagui";
+import { CustomPortalProvider } from "libs/portal/PortalContext";
 
 const tamaguiConfig = createTamagui(config);
 
@@ -25,22 +26,27 @@ export default function HomeLayout() {
   return (
     <>
       <Provider store={store}>
-        <TamaguiProvider defaultTheme={colorScheme!} config={tamaguiConfig}>
-          <ThemeProvider
-            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-          >
-            <PortalProvider shouldAddRootHost>
-              <IconRegistry icons={EvaIconsPack} />
-              <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
-                <AutocompleteDropdownContextProvider>
-                  <SafeAreaProvider>
-                    <Slot />
-                  </SafeAreaProvider>
-                </AutocompleteDropdownContextProvider>
-              </ApplicationProvider>
-            </PortalProvider>
-          </ThemeProvider>
-        </TamaguiProvider>
+        <CustomPortalProvider>
+          <TamaguiProvider defaultTheme={colorScheme!} config={tamaguiConfig}>
+            <ThemeProvider
+              value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+            >
+              <PortalProvider shouldAddRootHost>
+                <IconRegistry icons={EvaIconsPack} />
+                <ApplicationProvider
+                  {...eva}
+                  theme={{ ...eva.light, ...theme }}
+                >
+                  <AutocompleteDropdownContextProvider>
+                    <SafeAreaProvider>
+                      <Slot />
+                    </SafeAreaProvider>
+                  </AutocompleteDropdownContextProvider>
+                </ApplicationProvider>
+              </PortalProvider>
+            </ThemeProvider>
+          </TamaguiProvider>
+        </CustomPortalProvider>
       </Provider>
     </>
   );

@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardHeader,
+  Group,
   H3,
   H4,
   Paragraph,
@@ -24,6 +25,8 @@ import { insertNewGymDay } from "../../db/db";
 import { router } from "expo-router";
 import * as Services from "@services";
 import { useSelectableItem } from "features/hooks/useSelectableItem";
+import { Plus } from "@tamagui/lucide-icons";
+import { PortalGate } from "libs/portal/PortalContext";
 interface GimDayListProps {
   gymDays: GymDayData[];
 }
@@ -154,7 +157,7 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
   };
 
   return (
-    <View className="w-full h-full">
+    <View className="flex-1">
       <HeaderNav title="Gym Days" menuItems={getMenuItems()} />
       <List
         style={{ backgroundColor: "transparent" }}
@@ -180,7 +183,23 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
           );
         }}
       />
-      <AddButton onPress={onPressInsert} />
+      <PortalGate name="footer" isEntry>
+        <Group orientation="horizontal" className="mx-6">
+          <Group.Item>
+            <Button className="flex-1" onPress={onPressInsert}>
+              Go to Current Gym Day
+            </Button>
+          </Group.Item>
+          <Group.Item>
+            {/* <AddButton onPress={onPressInsert} /> */}
+            <Button
+              onPress={onPressInsert}
+              bg={"$accentBackground"}
+              icon={Plus}
+            />
+          </Group.Item>
+        </Group>
+      </PortalGate>
     </View>
   );
 }

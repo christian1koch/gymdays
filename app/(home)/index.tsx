@@ -5,8 +5,6 @@ import "expo-router/entry";
 
 import GimDayList from "../../checklist-page/gym-day-list/gym-day-list";
 import { useEffect, useState } from "react";
-import { getGymDays } from "../../db/db";
-import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import * as SQLite from "expo-sqlite";
 import { Text } from "@ui-kitten/components";
 import { styled } from "nativewind";
@@ -14,6 +12,7 @@ import * as Services from "../services/services";
 import { useAppSelector } from "../hooks";
 import { useFonts } from "expo-font";
 import * as db from "@db";
+import { Footer } from "checklist-page/footer";
 
 const dbForStudio = SQLite.openDatabaseSync("databaseName.db");
 
@@ -54,8 +53,9 @@ export default function App() {
   }
 
   return (
-    <View className="h-full">
+    <View className="flex-1">
       <GimDayList gymDays={gymDaysInStore} />
+      <Footer />
       <StatusBar style="auto" />
     </View>
   );

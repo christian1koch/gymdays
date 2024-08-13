@@ -13,6 +13,7 @@ import { useAppSelector } from "app/hooks";
 import { selectLastExerciseFromExerciseTypeAfterCurrent } from "app/store";
 import { Text } from "tamagui";
 import { SimpleSetList } from "./gym-day/exercise-card";
+import { PortalGate } from "libs/portal/PortalContext";
 
 interface ExerciseItem extends AutocompleteDropdownItem {}
 
@@ -133,14 +134,14 @@ export default function Exercise({ exercise, deleteMode }: ExerciseProps) {
         deleteMode={deleteMode}
         onDeleteSet={onDeleteSet}
       />
-      <View className="justify-center h-26 mx-6">
+      <PortalGate name="footer" isEntry>
         <AddButton
           onPress={() => {
             services.addNewSet(exercise.gymDay, exercise.id, 20);
           }}
           text="Add new set"
         />
-      </View>
+      </PortalGate>
     </View>
   );
 }
