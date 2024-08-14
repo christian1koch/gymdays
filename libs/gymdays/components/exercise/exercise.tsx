@@ -4,9 +4,9 @@ import {
 	AutocompleteDropdownItem,
 } from "react-native-autocomplete-dropdown";
 import SetList from "./set-list";
-import AddButton from "../ui/add-button";
+import AddButton from "@ui/add-button";
 import { BasicExercise } from "../../types";
-import { createNewExerciseType, getExerciseTypes } from "../db/db";
+import { createNewExerciseType, getExerciseTypes } from "@gymDays/db";
 import * as services from "libs/gymdays/features/services/services";
 import { View } from "tamagui";
 import { useAppSelector } from "app/hooks";

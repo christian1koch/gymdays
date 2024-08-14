@@ -1,5 +1,5 @@
-import { BasicExercise, GymDayData } from "../gymdays/data";
-import { DBExercise, DBGymDay, DBGymDayWithExercises } from "./schema";
+import { BasicExercise, GymDayData } from "@gymDays/types";
+import { DBExercise, DBGymDayWithExercises } from "./schema";
 
 export function parseDBGymDay(dbGymDay: DBGymDayWithExercises): GymDayData {
 	const exercises = dbGymDay.exercises.map((e) => parseDBExercise(e));

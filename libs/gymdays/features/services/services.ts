@@ -1,4 +1,4 @@
-import * as db from "@db";
+import * as db from "@gymDays/db";
 import * as actions from "libs/gymdays/features/store/gym-days-slice";
 import { store } from "../../../../app/store";
 

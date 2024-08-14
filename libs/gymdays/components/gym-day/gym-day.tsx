@@ -1,13 +1,13 @@
 import { BasicExercise, GymDayData } from "../../types";
 import { View, FlatList } from "react-native";
-import { dateToYearMonthDay } from "../../libs/utils/utils";
+import { dateToYearMonthDay } from "@utils/utils";
 import { styled } from "nativewind";
 import ExerciseCard from "./exercise-card";
-import Divider from "../../ui/divider";
+import Divider from "@ui/divider";
 import { Text } from "@ui-kitten/components";
 import { useState } from "react";
-import HeaderNav, { MenuItemProps } from "../../ui/header-nav";
-import AddButton from "../../ui/add-button";
+import HeaderNav, { MenuItemProps } from "@ui/header-nav";
+import AddButton from "@ui/add-button";
 import { Link } from "expo-router";
 import * as services from "libs/gymdays/features/services/services";
 import { router } from "expo-router";

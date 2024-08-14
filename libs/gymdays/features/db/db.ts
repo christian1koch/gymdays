@@ -4,7 +4,7 @@ import { exercise, exerciseType, gymDay } from "./schema";
 import { eq, inArray } from "drizzle-orm";
 import * as schema from "./schema";
 import { parseDBExercise, parseDBGymDay } from "./helper";
-import { dateToYearMonthDay } from "../libs/utils/utils";
+import { dateToYearMonthDay } from "@utils/utils";
 
 const dbName = __DEV__
 	? process.env.EXPO_PUBLIC_DEV_DB_NAME
@@ -30,7 +30,7 @@ export const initDatabase = async () => {
 		throw new Error("DB name not found");
 	}
 	const db = await SQLite.openDatabaseAsync(dbName);
-	const query = await db.execAsync(`
+	await db.execAsync(`
    PRAGMA journal_mode = WAL;
     CREATE TABLE IF NOT EXISTS gym_day (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -174,7 +174,7 @@ export const createNewSet = async (exerciseId: number, weight: number) => {
 	console.log(JSON.stringify(newExercise), exerciseId);
 	newExercise.weightsPerSet.push(weight);
 	const db = await getDB();
-	const res = await db
+	await db
 		.update(exercise)
 		.set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) })
 		.where(eq(exercise.id, newExercise.id));
@@ -190,7 +190,7 @@ export const updateSets = async (
 	const newExercise = await getExerciseById(exerciseId);
 	newExercise.weightsPerSet = sets;
 	const db = await getDB();
-	const res = await db
+	await db
 		.update(exercise)
 		.set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) })
 		.where(eq(exercise.id, newExercise.id));
@@ -201,7 +201,7 @@ export const deleteSet = async (exerciseId: number, index: number) => {
 	const newExercise = await getExerciseById(exerciseId);
 	newExercise.weightsPerSet.splice(index, 1);
 	const db = await getDB();
-	const res = await db
+	await db
 		.update(exercise)
 		.set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) });
 	return newExercise;

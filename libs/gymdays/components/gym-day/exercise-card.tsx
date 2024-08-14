@@ -1,8 +1,7 @@
 import React from "react";
 import { Pressable, PressableProps } from "react-native";
-import Divider from "../../ui/divider";
+import Divider from "@ui/divider";
 import { View, Paragraph } from "tamagui";
-import { boolean } from "drizzle-orm/mysql-core";
 
 interface ExerciseCardProps extends PressableProps {
 	name: string;

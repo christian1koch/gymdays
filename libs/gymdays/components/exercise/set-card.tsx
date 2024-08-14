@@ -1,4 +1,3 @@
-import { TextInputProps } from "react-native";
 import { View, Text, Button, H2 } from "tamagui";
 import { styled } from "nativewind";
 import classNames from "classnames";

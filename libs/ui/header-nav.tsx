@@ -1,9 +1,8 @@
 import { Group, H2, Popover, Button as TamaguiButton, Input } from "tamagui";
 import { ChevronLeft, MoreHorizontal } from "@tamagui/lucide-icons";
 import { Href, Link } from "expo-router";
-import { styled } from "nativewind";
 import { useState } from "react";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 
 interface HeaderNavProps {
 	title: string;

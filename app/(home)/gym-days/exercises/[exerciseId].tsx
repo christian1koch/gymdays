@@ -1,11 +1,9 @@
-import { useGlobalSearchParams, useLocalSearchParams } from "expo-router";
-import { BasicExercise } from "../../../../gymdays/data";
-import { useEffect, useState } from "react";
-import { getExerciseById, getExerciseTypes } from "../../../../db/db";
-import Exercise from "../../../../gymdays/exercise";
+import { useLocalSearchParams } from "expo-router";
+import Exercise from "@gymDays/components/exercise/exercise";
 import HeaderNav from "../../../../libs/ui/header-nav";
 import { useAppSelector } from "../../../hooks";
-import { Footer } from "gymdays/footer";
+import { Footer } from "@gymDays/components/shared/footer";
+import { useState } from "react";
 
 export default function Page() {
 	const searchParams = useLocalSearchParams();

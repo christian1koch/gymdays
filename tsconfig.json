@@ -4,11 +4,17 @@
 		"strict": true,
 		"baseUrl": ".",
 		"paths": {
-			"@services": ["libs/gymdays/features/services/services.ts"],
-			"@db": ["db/db.ts"],
-			"@actions/gymDays": [
+			"@gymDays/db": ["libs/gymdays/features/db/db.ts"],
+			"@gymDays/services": ["libs/gymdays/features/services/services.ts"],
+			"@gymDays/actions": [
 				"libs/gymdays/features/store/gym-days-slice.ts"
-			]
+			],
+			"@gymDays/components/*": ["libs/gymdays/components/*"],
+			"@gymDays/hooks/*": ["libs/gymdays/features/hooks/*"],
+			"@gymDays/types": ["libs/gymdays/types.ts"],
+			"@ui/*": ["libs/ui/*"],
+			"@utils/*": ["libs/utils/*"],
+			"@theme/*": ["libs/theme/*"]
 		}
 	}
 }

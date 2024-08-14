@@ -1,27 +1,12 @@
 import { Layout, List, useTheme } from "@ui-kitten/components";
-import { GymDayData } from "../data";
-import {
-	Button,
-	Card,
-	CardHeader,
-	Group,
-	H3,
-	H4,
-	Paragraph,
-	Text,
-	View,
-	XStack,
-} from "tamagui";
-import {
-	bulkNumberToWeightString,
-	dateToYearMonthDay,
-} from "../../libs/utils/utils";
+import { GymDayData } from "@gymDays/types";
+import { Button, Card, Group, H3, Paragraph, View } from "tamagui";
+import { bulkNumberToWeightString, dateToYearMonthDay } from "@utils/utils";
 import { styled } from "tamagui";
 import { Pressable, ViewProps } from "react-native";
 import { Link } from "expo-router";
-import AddButton from "../../ui/add-button";
-import HeaderNav, { MenuItemProps } from "../../ui/header-nav";
-import { insertNewGymDay } from "../../db/db";
+import AddButton from "@ui/add-button";
+import HeaderNav, { MenuItemProps } from "@ui/header-nav";
 import { router } from "expo-router";
 import * as Services from "libs/gymdays/features/services/services";
 import { useSelectableItem } from "libs/gymdays/features/hooks/useSelectableItem";

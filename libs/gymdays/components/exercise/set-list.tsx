@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import "react-native-get-random-values";
 import { SetCard } from "./set-card";
-import * as Services from "libs/gymdays/features/services/services";
+
 interface SetListProps {
 	sets: number[];
 	onEndEditingUpdate: (weights: number[]) => void;

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { BasicExercise, GymDayData } from "../../gymdays/data";
+import { BasicExercise, GymDayData } from "@gymDays/types";
 
 export interface GymDaysState {
 	gymDays: GymDayData[];
