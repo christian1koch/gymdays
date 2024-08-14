@@ -1,9 +1,9 @@
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { Slot, Stack } from "expo-router";
 import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
+	DarkTheme,
+	DefaultTheme,
+	ThemeProvider,
 } from "@react-navigation/native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import * as eva from "@eva-design/eva";
@@ -22,32 +22,39 @@ import { CustomPortalProvider } from "libs/portal/PortalContext";
 const tamaguiConfig = createTamagui(config);
 
 export default function HomeLayout() {
-  const colorScheme = useColorScheme();
-  return (
-    <>
-      <Provider store={store}>
-        <CustomPortalProvider>
-          <TamaguiProvider defaultTheme={colorScheme!} config={tamaguiConfig}>
-            <ThemeProvider
-              value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-            >
-              <PortalProvider shouldAddRootHost>
-                <IconRegistry icons={EvaIconsPack} />
-                <ApplicationProvider
-                  {...eva}
-                  theme={{ ...eva.light, ...theme }}
-                >
-                  <AutocompleteDropdownContextProvider>
-                    <SafeAreaProvider>
-                      <Slot />
-                    </SafeAreaProvider>
-                  </AutocompleteDropdownContextProvider>
-                </ApplicationProvider>
-              </PortalProvider>
-            </ThemeProvider>
-          </TamaguiProvider>
-        </CustomPortalProvider>
-      </Provider>
-    </>
-  );
+	const colorScheme = useColorScheme();
+	return (
+		<>
+			<Provider store={store}>
+				<CustomPortalProvider>
+					<TamaguiProvider
+						defaultTheme={colorScheme!}
+						config={tamaguiConfig}
+					>
+						<ThemeProvider
+							value={
+								colorScheme === "dark"
+									? DarkTheme
+									: DefaultTheme
+							}
+						>
+							<PortalProvider shouldAddRootHost>
+								<IconRegistry icons={EvaIconsPack} />
+								<ApplicationProvider
+									{...eva}
+									theme={{ ...eva.light, ...theme }}
+								>
+									<AutocompleteDropdownContextProvider>
+										<SafeAreaProvider>
+											<Slot />
+										</SafeAreaProvider>
+									</AutocompleteDropdownContextProvider>
+								</ApplicationProvider>
+							</PortalProvider>
+						</ThemeProvider>
+					</TamaguiProvider>
+				</CustomPortalProvider>
+			</Provider>
+		</>
+	);
 }

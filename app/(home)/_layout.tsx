@@ -4,15 +4,15 @@ import { View } from "react-native";
 import { PortalGate } from "libs/portal/PortalContext";
 
 export default function HomeLayout() {
-  const styles = useSafeAreaInsetsStyles();
-  return (
-    <>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: styles.safeArea,
-        }}
-      />
-    </>
-  );
+	const styles = useSafeAreaInsetsStyles();
+	return (
+		<>
+			<Stack
+				screenOptions={{
+					headerShown: false,
+					contentStyle: styles.safeArea,
+				}}
+			/>
+		</>
+	);
 }

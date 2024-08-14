@@ -3,15 +3,15 @@ import { View } from "react-native";
 import { Button } from "tamagui";
 
 interface AddButtonProps {
-  onPress: () => void;
-  text?: string;
+	onPress: () => void;
+	text?: string;
 }
 export default function AddButton({ onPress, text }: AddButtonProps) {
-  return (
-    <View className="flex-1 mx-6">
-      <Button onPress={onPress} icon={Plus}>
-        {text}
-      </Button>
-    </View>
-  );
+	return (
+		<View className="flex-1 mx-6">
+			<Button onPress={onPress} icon={Plus}>
+				{text}
+			</Button>
+		</View>
+	);
 }

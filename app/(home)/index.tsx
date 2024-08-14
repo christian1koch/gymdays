@@ -20,44 +20,44 @@ const dbForStudio = SQLite.openDatabaseSync("databaseName.db");
 const StyledText = styled(Text);
 
 export default function App() {
-  db.initDatabase();
-  // useDrizzleStudio(dbForStudio);
-  const [gymDays, setGymDays] = useState<GymDayData[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const sortedGymDays = useAppSelector(selectGymDaysSortedByDate);
-  const [loaded] = useFonts({
-    Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
-    InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
-  });
+	db.initDatabase();
+	// useDrizzleStudio(dbForStudio);
+	const [gymDays, setGymDays] = useState<GymDayData[]>([]);
+	const [isLoading, setIsLoading] = useState(false);
+	const sortedGymDays = useAppSelector(selectGymDaysSortedByDate);
+	const [loaded] = useFonts({
+		Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
+		InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
+	});
 
-  useEffect(() => {
-    if (loaded) {
-      // can hide splash screen here
-    }
-  }, [loaded]);
-  useEffect(() => {
-    const fetchGymDays = async () => {
-      setIsLoading(true);
-      try {
-        const newGymDays = await Services.fetchAllGymDays();
-        setGymDays(newGymDays);
-      } catch (error: any) {
-        console.log(error.message);
-      }
-      setIsLoading(false);
-    };
-    fetchGymDays();
-  }, []);
+	useEffect(() => {
+		if (loaded) {
+			// can hide splash screen here
+		}
+	}, [loaded]);
+	useEffect(() => {
+		const fetchGymDays = async () => {
+			setIsLoading(true);
+			try {
+				const newGymDays = await Services.fetchAllGymDays();
+				setGymDays(newGymDays);
+			} catch (error: any) {
+				console.log(error.message);
+			}
+			setIsLoading(false);
+		};
+		fetchGymDays();
+	}, []);
 
-  if (!loaded) {
-    return null;
-  }
+	if (!loaded) {
+		return null;
+	}
 
-  return (
-    <View className="flex-1">
-      <GimDayList gymDays={sortedGymDays} />
-      <Footer />
-      <StatusBar style="auto" />
-    </View>
-  );
+	return (
+		<View className="flex-1">
+			<GimDayList gymDays={sortedGymDays} />
+			<Footer />
+			<StatusBar style="auto" />
+		</View>
+	);
 }

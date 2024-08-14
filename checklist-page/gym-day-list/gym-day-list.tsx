@@ -1,20 +1,20 @@
 import { Layout, List, useTheme } from "@ui-kitten/components";
 import { GymDayData } from "../data";
 import {
-  Button,
-  Card,
-  CardHeader,
-  Group,
-  H3,
-  H4,
-  Paragraph,
-  Text,
-  View,
-  XStack,
+	Button,
+	Card,
+	CardHeader,
+	Group,
+	H3,
+	H4,
+	Paragraph,
+	Text,
+	View,
+	XStack,
 } from "tamagui";
 import {
-  bulkNumberToWeightString,
-  dateToYearMonthDay,
+	bulkNumberToWeightString,
+	dateToYearMonthDay,
 } from "../../libs/utils/utils";
 import { styled } from "tamagui";
 import { Pressable, ViewProps } from "react-native";
@@ -30,193 +30,210 @@ import { PortalGate } from "libs/portal/PortalContext";
 import { useAppSelector } from "app/hooks";
 import { selectTodaysGymDay } from "app/store";
 interface GimDayListProps {
-  gymDays: GymDayData[];
+	gymDays: GymDayData[];
 }
 
 interface HeaderProps extends ViewProps {
-  date: Date;
-  name: string;
+	date: Date;
+	name: string;
 }
 const StyledLayout = styled(Layout);
 
 const Header = ({ date, name, ...viewProps }: HeaderProps) => {
-  const theme = useTheme();
-  return (
-    <StyledLayout
-      {...viewProps}
-      className="flex-row items-center justify-between"
-    >
-      <H3>{name}</H3>
-      <StyledLayout
-        className="rounded-full p-1 mx-2"
-        style={{
-          backgroundColor: theme["color-primary-500"],
-        }}
-      >
-        <Paragraph>{dateToYearMonthDay(new Date(date))}</Paragraph>
-      </StyledLayout>
-    </StyledLayout>
-  );
+	const theme = useTheme();
+	return (
+		<StyledLayout
+			{...viewProps}
+			className="flex-row items-center justify-between"
+		>
+			<H3>{name}</H3>
+			<StyledLayout
+				className="rounded-full p-1 mx-2"
+				style={{
+					backgroundColor: theme["color-primary-500"],
+				}}
+			>
+				<Paragraph>{dateToYearMonthDay(new Date(date))}</Paragraph>
+			</StyledLayout>
+		</StyledLayout>
+	);
 };
 
 const LinkGymDayCard = ({
-  item,
-  index,
-  onLongPress,
+	item,
+	index,
+	onLongPress,
 }: {
-  item: GymDayData;
-  index: number;
-  onLongPress: () => void;
+	item: GymDayData;
+	index: number;
+	onLongPress: () => void;
 }) => {
-  return (
-    <Link
-      key={index}
-      href={{
-        pathname: "/gym-days/[id]",
-        params: { id: item.id },
-      }}
-      asChild
-    >
-      <SimpleGymCard onLongPress={onLongPress} gymDayData={item} />
-    </Link>
-  );
+	return (
+		<Link
+			key={index}
+			href={{
+				pathname: "/gym-days/[id]",
+				params: { id: item.id },
+			}}
+			asChild
+		>
+			<SimpleGymCard onLongPress={onLongPress} gymDayData={item} />
+		</Link>
+	);
 };
 
 const SimpleGymCard = ({
-  gymDayData,
-  onPress,
-  onLongPress,
-  highlighted,
+	gymDayData,
+	onPress,
+	onLongPress,
+	highlighted,
 }: {
-  gymDayData: GymDayData;
-  onPress?: () => void;
-  onLongPress?: () => void;
-  highlighted?: boolean;
+	gymDayData: GymDayData;
+	onPress?: () => void;
+	onLongPress?: () => void;
+	highlighted?: boolean;
 }) => {
-  return (
-    <Pressable onLongPress={onLongPress} onPress={onPress}>
-      <Card className="mb-3" bg={!highlighted ? "$background" : "$borderColor"}>
-        <Card.Header>
-          <Header date={new Date(gymDayData.date)} name={gymDayData.name} />
-        </Card.Header>
+	return (
+		<Pressable onLongPress={onLongPress} onPress={onPress}>
+			<Card
+				className="mb-3"
+				bg={!highlighted ? "$background" : "$borderColor"}
+			>
+				<Card.Header>
+					<Header
+						date={new Date(gymDayData.date)}
+						name={gymDayData.name}
+					/>
+				</Card.Header>
 
-        <View className="flex-row p-6">
-          <View>
-            {gymDayData.exercises.map((exercise, i) => (
-              <Paragraph key={i}>{exercise.name}</Paragraph>
-            ))}
-          </View>
-          <View className="flex-1 items-end">
-            {gymDayData.exercises.map((exercise, i) => (
-              <Paragraph key={i}>
-                {bulkNumberToWeightString(exercise.weightsPerSet)}
-              </Paragraph>
-            ))}
-          </View>
-        </View>
-      </Card>
-    </Pressable>
-  );
+				<View className="flex-row p-6">
+					<View>
+						{gymDayData.exercises.map((exercise, i) => (
+							<Paragraph key={i}>{exercise.name}</Paragraph>
+						))}
+					</View>
+					<View className="flex-1 items-end">
+						{gymDayData.exercises.map((exercise, i) => (
+							<Paragraph key={i}>
+								{bulkNumberToWeightString(
+									exercise.weightsPerSet
+								)}
+							</Paragraph>
+						))}
+					</View>
+				</View>
+			</Card>
+		</Pressable>
+	);
 };
 
 export default function GimDayList({ gymDays }: GimDayListProps) {
-  const {
-    selectModeOn: selectMode,
-    setSelectModeOff,
-    selectedItemsArr: selectedExercises,
-    onLongPress,
-    onSelectableItemPress,
-  } = useSelectableItem();
+	const {
+		selectModeOn: selectMode,
+		setSelectModeOff,
+		selectedItemsArr: selectedExercises,
+		onLongPress,
+		onSelectableItemPress,
+	} = useSelectableItem();
 
-  const todaysGymDay = useAppSelector(selectTodaysGymDay);
+	const todaysGymDay = useAppSelector(selectTodaysGymDay);
 
-  const onPressInsert = async () => {
-    const res = await Services.createNewGymDay();
-    router.navigate({
-      pathname: "/gym-days/[id]",
-      params: { id: res.id },
-    });
-  };
+	const onPressInsert = async () => {
+		const res = await Services.createNewGymDay();
+		router.navigate({
+			pathname: "/gym-days/[id]",
+			params: { id: res.id },
+		});
+	};
 
-  const getMenuItems = () => {
-    if (!selectMode) {
-      return null;
-    }
-    const menuItems: MenuItemProps[] = [
-      {
-        title: "Stop Selecting",
-        onPress: () => {
-          setSelectModeOff();
-        },
-      },
-      {
-        title: "Delete",
-        onPress: () => {
-          setSelectModeOff();
-          Services.bulkDeleteGymDays(selectedExercises);
-        },
-      },
-    ];
-    return menuItems;
-  };
+	const getMenuItems = () => {
+		if (!selectMode) {
+			return null;
+		}
+		const menuItems: MenuItemProps[] = [
+			{
+				title: "Stop Selecting",
+				onPress: () => {
+					setSelectModeOff();
+				},
+			},
+			{
+				title: "Delete",
+				onPress: () => {
+					setSelectModeOff();
+					Services.bulkDeleteGymDays(selectedExercises);
+				},
+			},
+		];
+		return menuItems;
+	};
 
-  const currentGymDayButtons = (
-    <Group orientation="horizontal" className="mx-6">
-      <Group.Item>
-        <Button
-          className="flex-1"
-          onPress={() => {
-            if (todaysGymDay) {
-              router.navigate({
-                pathname: "/gym-days/[id]",
-                params: { id: todaysGymDay.id },
-              });
-            }
-          }}
-        >
-          Go to Current Gym Day
-        </Button>
-      </Group.Item>
-      <Group.Item>
-        <Button onPress={onPressInsert} bg={"$accentBackground"} icon={Plus} />
-      </Group.Item>
-    </Group>
-  );
+	const currentGymDayButtons = (
+		<Group orientation="horizontal" className="mx-6">
+			<Group.Item>
+				<Button
+					className="flex-1"
+					onPress={() => {
+						if (todaysGymDay) {
+							router.navigate({
+								pathname: "/gym-days/[id]",
+								params: { id: todaysGymDay.id },
+							});
+						}
+					}}
+				>
+					Go to Current Gym Day
+				</Button>
+			</Group.Item>
+			<Group.Item>
+				<Button
+					onPress={onPressInsert}
+					bg={"$accentBackground"}
+					icon={Plus}
+				/>
+			</Group.Item>
+		</Group>
+	);
 
-  return (
-    <View className="flex-1">
-      <HeaderNav title="Gym Days" menuItems={getMenuItems()} />
-      <List
-        style={{ backgroundColor: "transparent" }}
-        className="h-5/6"
-        data={gymDays}
-        renderItem={({ item, index }) => {
-          if (selectMode) {
-            return (
-              <SimpleGymCard
-                onPress={() => onSelectableItemPress(item.id)}
-                gymDayData={item}
-                key={item.id}
-                highlighted={selectedExercises.includes(item.id)}
-              />
-            );
-          }
-          return (
-            <LinkGymDayCard
-              index={index}
-              item={item}
-              onLongPress={() => onLongPress(item.id)}
-            />
-          );
-        }}
-      />
-      <PortalGate name="footer" isEntry>
-        {todaysGymDay ? (
-          currentGymDayButtons
-        ) : (
-          <AddButton text="Create new gym day" onPress={onPressInsert} />
-        )}
-      </PortalGate>
-    </View>
-  );
+	return (
+		<View className="flex-1">
+			<HeaderNav title="Gym Days" menuItems={getMenuItems()} />
+			<List
+				style={{ backgroundColor: "transparent" }}
+				className="h-5/6"
+				data={gymDays}
+				renderItem={({ item, index }) => {
+					if (selectMode) {
+						return (
+							<SimpleGymCard
+								onPress={() => onSelectableItemPress(item.id)}
+								gymDayData={item}
+								key={item.id}
+								highlighted={selectedExercises.includes(
+									item.id
+								)}
+							/>
+						);
+					}
+					return (
+						<LinkGymDayCard
+							index={index}
+							item={item}
+							onLongPress={() => onLongPress(item.id)}
+						/>
+					);
+				}}
+			/>
+			<PortalGate name="footer" isEntry>
+				{todaysGymDay ? (
+					currentGymDayButtons
+				) : (
+					<AddButton
+						text="Create new gym day"
+						onPress={onPressInsert}
+					/>
+				)}
+			</PortalGate>
+		</View>
+	);
 }

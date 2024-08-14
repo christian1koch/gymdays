@@ -2,24 +2,24 @@ import { relations } from "drizzle-orm";
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
 export const gymDay = sqliteTable("gym_day", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  date: text("date").notNull(),
-  name: text("name").notNull(),
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	date: text("date").notNull(),
+	name: text("name").notNull(),
 });
 
 export const exerciseType = sqliteTable("exercise_type", {
-  name: text("name").primaryKey(),
+	name: text("name").primaryKey(),
 });
 
 export const exercise = sqliteTable("exercise", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  exerciseType: text("exerciseType")
-    .references(() => exerciseType.name)
-    .notNull(),
-  gymDay: integer("gym_day")
-    .references(() => gymDay.id, { onDelete: "cascade" })
-    .notNull(),
-  weightsPerSet: text("weightsPerSet"), // Storing as comma-separated string
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	exerciseType: text("exerciseType")
+		.references(() => exerciseType.name)
+		.notNull(),
+	gymDay: integer("gym_day")
+		.references(() => gymDay.id, { onDelete: "cascade" })
+		.notNull(),
+	weightsPerSet: text("weightsPerSet"), // Storing as comma-separated string
 });
 // export const postsRelations = relations(posts, ({ one }) => ({
 //   author: one(users, {
@@ -28,19 +28,19 @@ export const exercise = sqliteTable("exercise", {
 //   }),
 // }));
 export const exerciseRelations = relations(exercise, ({ one }) => ({
-  gymDay: one(gymDay, {
-    fields: [exercise.gymDay],
-    references: [gymDay.id],
-  }),
+	gymDay: one(gymDay, {
+		fields: [exercise.gymDay],
+		references: [gymDay.id],
+	}),
 }));
 
 export const gymDayRelations = relations(gymDay, ({ many }) => ({
-  exercises: many(exercise),
+	exercises: many(exercise),
 }));
 
 export type DBGymDay = typeof gymDay.$inferSelect;
 export type DBExercise = typeof exercise.$inferSelect;
 export type DBExerciseType = typeof exerciseType.$inferSelect;
 export interface DBGymDayWithExercises extends DBGymDay {
-  exercises: DBExercise[];
+	exercises: DBExercise[];
 }

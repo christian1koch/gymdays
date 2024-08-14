@@ -17,156 +17,166 @@ import { PortalGate } from "libs/portal/PortalContext";
 interface GymDayProps extends GymDayData {}
 
 interface Listable<T> {
-  item: T;
-  index: number;
+	item: T;
+	index: number;
 }
 
 interface MainExeciseCardProps extends Listable<BasicExercise> {
-  onLongPress: () => void;
+	onLongPress: () => void;
 }
 
 interface SelectableExerciseCardProps extends Listable<BasicExercise> {
-  selected?: boolean;
-  onPress: () => void;
+	selected?: boolean;
+	onPress: () => void;
 }
 
 const SelectableExerciseCard = ({
-  item,
-  index,
-  selected,
-  onPress,
+	item,
+	index,
+	selected,
+	onPress,
 }: SelectableExerciseCardProps) => {
-  return (
-    <ExerciseCard
-      key={index}
-      name={item.name}
-      sets={item.weightsPerSet}
-      index={index}
-      onPress={onPress}
-      highlighted={selected}
-    />
-  );
+	return (
+		<ExerciseCard
+			key={index}
+			name={item.name}
+			sets={item.weightsPerSet}
+			index={index}
+			onPress={onPress}
+			highlighted={selected}
+		/>
+	);
 };
 
 const MainExerciseCard = ({
-  item,
-  index,
-  onLongPress,
+	item,
+	index,
+	onLongPress,
 }: MainExeciseCardProps) => {
-  return (
-    <Link
-      href={{
-        pathname: "/gym-days/exercises/[id]",
-        params: { id: item.id, gymDayId: item.gymDay },
-      }}
-      asChild
-    >
-      <ExerciseCard
-        key={index}
-        name={item.name}
-        sets={item.weightsPerSet}
-        index={index}
-        onLongPress={onLongPress}
-      />
-    </Link>
-  );
+	return (
+		<Link
+			href={{
+				pathname: "/gym-days/exercises/[id]",
+				params: { id: item.id, gymDayId: item.gymDay },
+			}}
+			asChild
+		>
+			<ExerciseCard
+				key={index}
+				name={item.name}
+				sets={item.weightsPerSet}
+				index={index}
+				onLongPress={onLongPress}
+			/>
+		</Link>
+	);
 };
 
 const StyledText = styled(Text);
 
 const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
-  const [currentName, setCurrentName] = useState(name);
-  const onEndEditing = async () => {
-    services.renameGymDay(id, currentName);
-  };
-  const {
-    selectModeOn: selectMode,
-    setSelectModeOff,
-    selectedItemsArr: selectedExercises,
-    onLongPress,
-    onSelectableItemPress,
-  } = useSelectableItem();
+	const [currentName, setCurrentName] = useState(name);
+	const onEndEditing = async () => {
+		services.renameGymDay(id, currentName);
+	};
+	const {
+		selectModeOn: selectMode,
+		setSelectModeOff,
+		selectedItemsArr: selectedExercises,
+		onLongPress,
+		onSelectableItemPress,
+	} = useSelectableItem();
 
-  const onAddExercise = async () => {
-    try {
-      const newExercise = await services.createNewExercise(id, "Bench Press");
-      router.navigate({
-        pathname: "/gym-days/exercises/[id]",
-        params: { id: newExercise.id, gymDayId: id },
-      });
-    } catch (error: any) {
-      console.log(error.message);
-    }
-  };
+	const onAddExercise = async () => {
+		try {
+			const newExercise = await services.createNewExercise(
+				id,
+				"Bench Press"
+			);
+			router.navigate({
+				pathname: "/gym-days/exercises/[id]",
+				params: { id: newExercise.id, gymDayId: id },
+			});
+		} catch (error: any) {
+			console.log(error.message);
+		}
+	};
 
-  const getMenuItems = () => {
-    if (!selectMode) {
-      return null;
-    }
-    const menuItems: MenuItemProps[] = [
-      {
-        title: "Stop Selecting",
-        onPress: () => {
-          setSelectModeOff();
-        },
-      },
-      {
-        title: "Delete",
-        onPress: () => {
-          services.bulkDeleteExercises(id, selectedExercises);
-          setSelectModeOff();
-        },
-      },
-    ];
-    return menuItems;
-  };
+	const getMenuItems = () => {
+		if (!selectMode) {
+			return null;
+		}
+		const menuItems: MenuItemProps[] = [
+			{
+				title: "Stop Selecting",
+				onPress: () => {
+					setSelectModeOff();
+				},
+			},
+			{
+				title: "Delete",
+				onPress: () => {
+					services.bulkDeleteExercises(id, selectedExercises);
+					setSelectModeOff();
+				},
+			},
+		];
+		return menuItems;
+	};
 
-  return (
-    <View className="flex-1">
-      <View>
-        <HeaderNav
-          title={currentName}
-          isEditable
-          onChangeText={setCurrentName}
-          onEndEditing={onEndEditing}
-          href={"/"}
-          menuItems={getMenuItems()}
-        />
-        <StyledText className="self-center" appearance="hint">
-          {dateToYearMonthDay(new Date(date))}
-        </StyledText>
-        <Divider className="mb-5" horizonal />
-        <FlatList
-          className="h-4/6"
-          renderItem={({ item, index }) => {
-            if (selectMode) {
-              return (
-                <SelectableExerciseCard
-                  key={item.id}
-                  item={item}
-                  index={index}
-                  onPress={() => onSelectableItemPress(item.id)}
-                  selected={selectedExercises.some((ex) => ex === item.id)}
-                />
-              );
-            }
-            return (
-              <MainExerciseCard
-                key={item.id}
-                item={item}
-                index={index}
-                onLongPress={() => onLongPress(item.id)}
-              />
-            );
-          }}
-          data={exercises}
-        />
-        <PortalGate name="footer" isEntry>
-          <AddButton text="Add New Exercise" onPress={onAddExercise} />
-        </PortalGate>
-      </View>
-    </View>
-  );
+	return (
+		<View className="flex-1">
+			<View>
+				<HeaderNav
+					title={currentName}
+					isEditable
+					onChangeText={setCurrentName}
+					onEndEditing={onEndEditing}
+					href={"/"}
+					menuItems={getMenuItems()}
+				/>
+				<StyledText className="self-center" appearance="hint">
+					{dateToYearMonthDay(new Date(date))}
+				</StyledText>
+				<Divider className="mb-5" horizonal />
+				<FlatList
+					className="h-4/6"
+					renderItem={({ item, index }) => {
+						if (selectMode) {
+							return (
+								<SelectableExerciseCard
+									key={item.id}
+									item={item}
+									index={index}
+									onPress={() =>
+										onSelectableItemPress(item.id)
+									}
+									selected={selectedExercises.some(
+										(ex) => ex === item.id
+									)}
+								/>
+							);
+						}
+						return (
+							<MainExerciseCard
+								key={item.id}
+								item={item}
+								index={index}
+								onLongPress={() => onLongPress(item.id)}
+							/>
+						);
+					}}
+					data={exercises}
+				/>
+				<PortalGate name="footer" isEntry>
+					<AddButton
+						text="Add New Exercise"
+						onPress={onAddExercise}
+					/>
+				</PortalGate>
+			</View>
+		</View>
+	);
 };
 
 export default GymDay;
