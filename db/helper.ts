@@ -1,4 +1,4 @@
-import { BasicExercise, GymDayData } from "../checklist-page/data";
+import { BasicExercise, GymDayData } from "../gymdays/data";
 import { DBExercise, DBGymDay, DBGymDayWithExercises } from "./schema";
 
 export function parseDBGymDay(dbGymDay: DBGymDayWithExercises): GymDayData {

@@ -1,11 +1,11 @@
 import { useGlobalSearchParams, useLocalSearchParams } from "expo-router";
-import { BasicExercise } from "../../../../checklist-page/data";
+import { BasicExercise } from "../../../../gymdays/data";
 import { useEffect, useState } from "react";
 import { getExerciseById, getExerciseTypes } from "../../../../db/db";
-import Exercise from "../../../../checklist-page/exercise";
+import Exercise from "../../../../gymdays/exercise";
 import HeaderNav from "../../../../ui/header-nav";
 import { useAppSelector } from "../../../hooks";
-import { Footer } from "checklist-page/footer";
+import { Footer } from "gymdays/footer";
 
 export default function Page() {
 	const searchParams = useLocalSearchParams();

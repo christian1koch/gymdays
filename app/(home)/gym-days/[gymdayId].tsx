@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
-import GymDay from "../../../checklist-page/gym-day/gym-day";
+import GymDay from "../../../gymdays/gym-day/gym-day";
 import { useAppSelector } from "../../hooks";
-import { Footer } from "checklist-page/footer";
+import { Footer } from "gymdays/footer";
 import { View } from "react-native";
 
 export default function Page() {

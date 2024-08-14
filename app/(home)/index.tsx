@@ -1,9 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import { View } from "tamagui";
-import { GymDayData } from "../../checklist-page/data";
+import { GymDayData } from "../../gymdays/data";
 import "expo-router/entry";
 
-import GimDayList from "../../checklist-page/gym-day-list/gym-day-list";
+import GimDayList from "../../gymdays/gym-day-list/gym-day-list";
 import { useEffect, useState } from "react";
 import * as SQLite from "expo-sqlite";
 import { Text } from "@ui-kitten/components";
@@ -12,7 +12,7 @@ import * as Services from "../services/services";
 import { useAppSelector } from "../hooks";
 import { useFonts } from "expo-font";
 import * as db from "@db";
-import { Footer } from "checklist-page/footer";
+import { Footer } from "gymdays/footer";
 import { selectGymDaysSortedByDate } from "app/store";
 
 const dbForStudio = SQLite.openDatabaseSync("databaseName.db");
