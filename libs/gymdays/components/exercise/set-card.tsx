@@ -37,8 +37,8 @@ export function SetCard({
 			onValueChange={onChangeWeight}
 			placeholder={{}}
 			items={weightArrayToLabelValue(DEFAULT_WEIGHTS)}
-			onDonePress={onEndEditing}
 			value={weight}
+			onClose={onEndEditing}
 		>
 			<View
 				className={classNames(
