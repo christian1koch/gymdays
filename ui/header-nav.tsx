@@ -45,6 +45,7 @@ export default function HeaderNav({
 					onEndEditing={onInputEndEditing}
 					defaultValue={title}
 					onChangeText={onChangeText}
+					enterKeyHint="done"
 				/>
 			) : (
 				<H2
