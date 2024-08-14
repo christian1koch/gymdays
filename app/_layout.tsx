@@ -17,7 +17,7 @@ import { TamaguiProvider, createTamagui } from "@tamagui/core";
 import config from "./../tamagui.config";
 import { PortalProvider } from "@tamagui/portal";
 import { Theme } from "tamagui";
-import { CustomPortalProvider } from "libs/portal/PortalContext";
+import { CustomPortalProvider } from "libs/utils/portal/PortalContext";
 
 const tamaguiConfig = createTamagui(config);
 

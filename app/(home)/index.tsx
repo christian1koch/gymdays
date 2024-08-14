@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import * as SQLite from "expo-sqlite";
 import { Text } from "@ui-kitten/components";
 import { styled } from "nativewind";
-import * as Services from "../services/services";
+import * as Services from "../../libs/gymdays/features/services/services";
 import { useAppSelector } from "../hooks";
 import { useFonts } from "expo-font";
 import * as db from "@db";

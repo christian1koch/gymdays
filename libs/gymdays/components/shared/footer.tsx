@@ -1,4 +1,4 @@
-import { PortalGate } from "libs/portal/PortalContext";
+import { PortalGate } from "libs/utils/portal/PortalContext";
 import { View } from "react-native";
 
 export const Footer = () => {

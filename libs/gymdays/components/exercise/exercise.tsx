@@ -5,15 +5,15 @@ import {
 } from "react-native-autocomplete-dropdown";
 import SetList from "./set-list";
 import AddButton from "../ui/add-button";
-import { BasicExercise } from "./data";
+import { BasicExercise } from "../../types";
 import { createNewExerciseType, getExerciseTypes } from "../db/db";
-import * as services from "@services";
+import * as services from "libs/gymdays/features/services/services";
 import { View } from "tamagui";
 import { useAppSelector } from "app/hooks";
 import { selectLastExerciseFromExerciseTypeAfterCurrent } from "app/store";
 import { Text } from "tamagui";
-import { SimpleSetList } from "./gym-day/exercise-card";
-import { PortalGate } from "libs/portal/PortalContext";
+import { SimpleSetList } from "../gym-day/exercise-card";
+import { PortalGate } from "libs/utils/portal/PortalContext";
 
 interface ExerciseItem extends AutocompleteDropdownItem {}
 

@@ -23,10 +23,10 @@ import AddButton from "../../ui/add-button";
 import HeaderNav, { MenuItemProps } from "../../ui/header-nav";
 import { insertNewGymDay } from "../../db/db";
 import { router } from "expo-router";
-import * as Services from "@services";
-import { useSelectableItem } from "features/hooks/useSelectableItem";
+import * as Services from "libs/gymdays/features/services/services";
+import { useSelectableItem } from "libs/gymdays/features/hooks/useSelectableItem";
 import { Plus } from "@tamagui/lucide-icons";
-import { PortalGate } from "libs/portal/PortalContext";
+import { PortalGate } from "libs/utils/portal/PortalContext";
 import { useAppSelector } from "app/hooks";
 import { selectTodaysGymDay } from "app/store";
 interface GimDayListProps {

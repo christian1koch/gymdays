@@ -3,7 +3,7 @@ import { BasicExercise } from "../../../../gymdays/data";
 import { useEffect, useState } from "react";
 import { getExerciseById, getExerciseTypes } from "../../../../db/db";
 import Exercise from "../../../../gymdays/exercise";
-import HeaderNav from "../../../../ui/header-nav";
+import HeaderNav from "../../../../libs/ui/header-nav";
 import { useAppSelector } from "../../../hooks";
 import { Footer } from "gymdays/footer";
 

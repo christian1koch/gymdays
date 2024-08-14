@@ -1,5 +1,5 @@
 import { configureStore, createSelector } from "@reduxjs/toolkit";
-import gymDaysReducer from "../features/gym-days/gym-days-slice";
+import gymDaysReducer from "../libs/gymdays/features/store/gym-days-slice";
 
 export const store = configureStore({
 	reducer: { gymDays: gymDaysReducer },
