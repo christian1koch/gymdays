@@ -76,6 +76,8 @@ const StyledText = styled(Text);
 
 const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
 	const [currentName, setCurrentName] = useState(name);
+
+	console.log("name", name);
 	const onEndEditing = async () => {
 		services.renameGymDay(id, currentName);
 	};

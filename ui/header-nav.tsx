@@ -44,7 +44,7 @@ export default function HeaderNav({
 					autoFocus
 					onEndEditing={onInputEndEditing}
 					defaultValue={title}
-					onChangeWeight={onChangeText}
+					onChangeText={onChangeText}
 				/>
 			) : (
 				<H2
