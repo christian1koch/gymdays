@@ -1,34 +1,31 @@
 {
-  "expo": {
-    "name": "check1ist-app",
-    "slug": "check1ist-app",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "c1k.gymdays"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "c1k.gymdays"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      "expo-router",
-      "expo-font"
-    ],
-    "scheme": "your-app-scheme"
-  }
+	"expo": {
+		"name": "gymdays-app",
+		"slug": "gymdays-app",
+		"version": "1.0.0",
+		"orientation": "portrait",
+		"icon": "./assets/gym-days-icon.png",
+		"userInterfaceStyle": "automatic",
+		"splash": {
+			"image": "./assets/gym-days-icon.png",
+			"resizeMode": "contain",
+			"backgroundColor": "#ffffff"
+		},
+		"ios": {
+			"supportsTablet": true,
+			"bundleIdentifier": "c1k.gymdays"
+		},
+		"android": {
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/gym-days-icon.png",
+				"backgroundColor": "#ffffff"
+			},
+			"package": "c1k.gymdays"
+		},
+		"web": {
+			"favicon": "./assets/gym-days-icon.png"
+		},
+		"plugins": ["expo-router", "expo-font"],
+		"scheme": "your-app-scheme"
+	}
 }
