@@ -37,7 +37,7 @@
 		"nativewind": "^2.0.11",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
-		"react-native": "^0.75.0",
+		"react-native": "0.74.5",
 		"react-native-autocomplete-dropdown": "^4.0.0-rc.5",
 		"react-native-get-random-values": "^1.11.0",
 		"react-native-picker-select": "^9.3.1",
