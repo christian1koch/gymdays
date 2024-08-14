@@ -1,5 +1,5 @@
 import * as db from "@gymDays/db";
-import * as actions from "libs/gymdays/features/store/gym-days-slice";
+import * as actions from "@gymDays/actions";
 import { store } from "../../../../app/store";
 
 async function fetchAllGymDays() {
