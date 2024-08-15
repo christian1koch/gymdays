@@ -13,7 +13,7 @@ export function bulkNumberToWeightString(weights: number[]): string {
 const getDefaultWeights = () => {
 	let weights: number[] = [];
 	const setOfWeights = new Set<string>();
-	for (let i = 2.5; i <= 100; i += 2.5) {
+	for (let i = 2.5; i <= 200; i += 2.5) {
 		setOfWeights.add("" + i);
 		weights.push(i);
 	}
