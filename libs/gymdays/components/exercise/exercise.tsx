@@ -34,12 +34,11 @@ function exerciseTypesToExerciseItems(exerciseTypes: string[]): ExerciseItem[] {
 
 interface ExerciseProps {
 	exercise: BasicExercise;
-	deleteMode?: boolean;
 }
 
 const DEFAULT_SET_WEIGHT = 20;
 
-export default function Exercise({ exercise, deleteMode }: ExerciseProps) {
+export default function Exercise({ exercise }: ExerciseProps) {
 	const [exerciseTypes, setExerciseTypes] = useState<string[]>([]);
 	const { weightsPerSet: weights } = exercise;
 
@@ -147,7 +146,6 @@ export default function Exercise({ exercise, deleteMode }: ExerciseProps) {
 				key={"set-of" + exercise.id}
 				sets={weights}
 				onEndEditingUpdate={onWeightChange}
-				deleteMode={deleteMode}
 				onDeleteSet={onDeleteSet}
 			/>
 			<PortalGate name="footer" isEntry>

@@ -67,7 +67,6 @@ export default function Page() {
 		];
 		return menuItems;
 	};
-	const [deleteMode, setDeleteMode] = useState(false);
 
 	if (!exercise) {
 		return null;
@@ -82,7 +81,7 @@ export default function Page() {
 				}}
 				menuItems={getMenuItems()}
 			/>
-			<Exercise exercise={exercise} deleteMode={deleteMode} />
+			<Exercise exercise={exercise} />
 			<Footer />
 		</SelectableItemContext.Provider>
 	);

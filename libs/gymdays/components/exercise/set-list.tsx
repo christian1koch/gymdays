@@ -15,7 +15,6 @@ interface SetRendererProps {
 	index: number;
 	onWeightChange: (newWeight: number) => void;
 	onEndEditing: () => void;
-	isOnDeleteMode?: boolean;
 	onDelete: () => void;
 }
 
@@ -24,7 +23,6 @@ const SetRenderer = ({
 	index,
 	onWeightChange,
 	onEndEditing,
-	isOnDeleteMode,
 	onDelete,
 }: SetRendererProps) => (
 	<SetCard
@@ -35,7 +33,6 @@ const SetRenderer = ({
 		onChangeWeight={(weight) => {
 			onWeightChange(weight);
 		}}
-		deleteMode={isOnDeleteMode}
 		onDelete={onDelete}
 	/>
 );
@@ -44,7 +41,6 @@ const SetList: React.FC<SetListProps> = ({
 	sets,
 	onEndEditingUpdate,
 	onDeleteSet,
-	deleteMode,
 }) => {
 	const [weights, setWeights] = useState(sets);
 
@@ -52,7 +48,6 @@ const SetList: React.FC<SetListProps> = ({
 		const newWeights = [...weights];
 		newWeights.splice(setIndex, 1);
 		setWeights(newWeights);
-		console.log("new Weights", newWeights);
 		onDeleteSet(newWeights);
 	};
 
@@ -83,7 +78,6 @@ const SetList: React.FC<SetListProps> = ({
 					weight={item}
 					onWeightChange={(weight) => onChangeWeight(index, weight)}
 					onEndEditing={handleOnEndEditing}
-					isOnDeleteMode={deleteMode}
 					onDelete={() => _onDeleteSet(index)}
 				/>
 			)}
