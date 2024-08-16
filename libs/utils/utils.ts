@@ -25,4 +25,8 @@ const getDefaultWeights = () => {
 	return weights.sort((a, b) => a - b);
 };
 
+export const getArrayLastElement = <T>(arr: T[]) => {
+	return arr[arr.length - 1];
+};
+
 export const DEFAULT_WEIGHTS = getDefaultWeights();

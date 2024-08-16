@@ -14,6 +14,7 @@ import { selectLastExerciseFromExerciseTypeAfterCurrent } from "app/store";
 import { Text } from "tamagui";
 import { SimpleSetList } from "../gym-day/exercise-card";
 import { PortalGate } from "libs/utils/portal/PortalContext";
+import { getArrayLastElement } from "@utils/utils";
 
 interface ExerciseItem extends AutocompleteDropdownItem {}
 
@@ -36,10 +37,12 @@ interface ExerciseProps {
 	deleteMode?: boolean;
 }
 
+const DEFAULT_SET_WEIGHT = 20;
+
 export default function Exercise({ exercise, deleteMode }: ExerciseProps) {
 	const [exerciseTypes, setExerciseTypes] = useState<string[]>([]);
 	const { weightsPerSet: weights } = exercise;
-	console.log("sets", weights);
+
 	const exerciseItems = exerciseTypesToExerciseItems(exerciseTypes);
 	const [selectedItem, setSelectedItem] = useState<ExerciseItem | null>(
 		basicExerciseToExerciseItem(exercise)
@@ -103,6 +106,17 @@ export default function Exercise({ exercise, deleteMode }: ExerciseProps) {
 		return <SimpleSetList sets={lastExerciseOfType?.weightsPerSet ?? []} />;
 	};
 
+	const getNewDefaultWeight = () => {
+		if (weights.length > 0) {
+			return getArrayLastElement(weights);
+		}
+		if (lastExerciseOfType && lastExerciseOfType.weightsPerSet.length > 0) {
+			const { weightsPerSet } = lastExerciseOfType;
+			return getArrayLastElement(weightsPerSet);
+		}
+		return DEFAULT_SET_WEIGHT;
+	};
+
 	return (
 		<View className="flex-1" bg="$background025">
 			<View className="flex-col items-center my-10 mx-6 h-28 justify-between">
@@ -139,7 +153,11 @@ export default function Exercise({ exercise, deleteMode }: ExerciseProps) {
 			<PortalGate name="footer" isEntry>
 				<AddButton
 					onPress={() => {
-						services.addNewSet(exercise.gymDay, exercise.id, 20);
+						services.addNewSet(
+							exercise.gymDay,
+							exercise.id,
+							getNewDefaultWeight()
+						);
 					}}
 					text="Add new set"
 				/>
