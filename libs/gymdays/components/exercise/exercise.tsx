@@ -89,10 +89,6 @@ export default function Exercise({ exercise }: ExerciseProps) {
 		services.updateSets(exercise.gymDay, exercise.id, weights);
 	};
 
-	const onDeleteSet = (newWeights: number[]) => {
-		services.updateSets(exercise.gymDay, exercise.id, newWeights);
-	};
-
 	const firstTimeExerciseText = "Your First time doing " + selectedItem?.id;
 
 	const getSetInfo = () => {
@@ -146,7 +142,6 @@ export default function Exercise({ exercise }: ExerciseProps) {
 				key={"set-of" + exercise.id}
 				sets={weights}
 				onEndEditingUpdate={onWeightChange}
-				onDeleteSet={onDeleteSet}
 			/>
 			<PortalGate name="footer" isEntry>
 				<AddButton

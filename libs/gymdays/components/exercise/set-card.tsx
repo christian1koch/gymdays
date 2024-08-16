@@ -1,10 +1,9 @@
-import { View, Text, Button, H2 } from "tamagui";
+import { View, Text, H2 } from "tamagui";
 import { styled } from "nativewind";
 import classNames from "classnames";
 import RNPickerSelect from "react-native-picker-select";
-import { X } from "@tamagui/lucide-icons";
 import { DEFAULT_WEIGHTS } from "libs/utils/utils";
-import { Pressable, TouchableOpacity } from "react-native";
+import { Pressable } from "react-native";
 import { useSelectableItemContext } from "@gymDays/hooks/useSelectableItem";
 
 const StyledText = styled(Text);
@@ -15,7 +14,6 @@ interface SetCardProps {
 	deleteMode?: boolean;
 	className?: string;
 	onChangeWeight: (newWeight: number) => void;
-	onDelete: () => void;
 	onEndEditing: () => void;
 }
 
