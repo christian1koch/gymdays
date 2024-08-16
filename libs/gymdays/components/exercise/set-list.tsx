@@ -29,7 +29,7 @@ const SetRenderer = ({
 }: SetRendererProps) => (
 	<SetCard
 		onEndEditing={onEndEditing}
-		index={index + 1}
+		index={index}
 		weight={weight}
 		key={index}
 		onChangeWeight={(weight) => {
