@@ -10,9 +10,11 @@ import { useFonts } from "expo-font";
 import * as db from "@gymDays/db";
 import { Footer } from "@gymDays/components/shared/footer";
 import { selectGymDaysSortedByDate } from "app/store";
+import { getDBPath } from "libs/gymdays/features/db/backup";
 
 export default function App() {
 	db.initDatabase();
+	console.log("path to db", getDBPath());
 	// useDrizzleStudio(dbForStudio);
 	const sortedGymDays = useAppSelector(selectGymDaysSortedByDate);
 	const [loaded] = useFonts({

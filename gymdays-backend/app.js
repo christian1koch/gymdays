@@ -1,9 +1,9 @@
 import express from "express";
 import * as db from "./database.js";
 import multer from "multer";
-import { uploadFile } from "./s3.js";
+import { uploadFile, getDownloadUrl } from "./s3.js";
 import { generateUsername } from "unique-username-generator";
-import { createBackup } from "./db.js";
+import { createBackup, getBackupURL } from "./db.js";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -54,6 +54,7 @@ app.listen(8081, () => {
 
 app.post("/backup", upload.single("file"), async (req, res) => {
     const file = req.file;
+    console.log("file", file);
     try {
         const result = await uploadFile(file);
         const newUserName = generateUsername("", 0, 15);
@@ -64,4 +65,14 @@ app.post("/backup", upload.single("file"), async (req, res) => {
         res.status(400);
         res.json({ message: error.message });
     }
+});
+
+app.get("/backup/:id", async (req, res) => {
+    const id = req.params.id;
+    const backup = await getBackupURL(id);
+    const backupId = backup.rows[0].backup_data;
+    const downloadUrl = await getDownloadUrl(backupId);
+    res.json(downloadUrl);
+
+    res.status(200);
 });

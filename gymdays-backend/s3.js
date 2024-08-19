@@ -1,6 +1,12 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+    PutObjectCommand,
+    GetObjectCommand,
+    S3Client,
+} from "@aws-sdk/client-s3";
 import dotenv from "dotenv";
 import crypto from "node:crypto";
+
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const randomImageName = () => crypto.randomBytes(32).toString("hex");
 
@@ -40,3 +46,13 @@ export async function uploadFile(file) {
 }
 
 // download from s3
+
+export async function getDownloadUrl(keyId = "") {
+    const objectParams = {
+        Bucket: bucketName,
+        Key: keyId,
+    };
+    const command = new GetObjectCommand(objectParams);
+    const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+    return url;
+}

@@ -14,6 +14,7 @@ import { Plus } from "@tamagui/lucide-icons";
 import { PortalGate } from "libs/utils/portal/PortalContext";
 import { useAppSelector } from "app/hooks";
 import { selectTodaysGymDay } from "app/store";
+import { createBackup } from "libs/gymdays/features/db/backup";
 interface GimDayListProps {
 	gymDays: GymDayData[];
 }
@@ -209,6 +210,13 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
 					);
 				}}
 			/>
+			<Button
+				onPress={() => {
+					createBackup();
+				}}
+			>
+				Create Back up
+			</Button>
 			<PortalGate name="footer" isEntry>
 				{todaysGymDay ? (
 					currentGymDayButtons
