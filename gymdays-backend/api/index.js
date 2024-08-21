@@ -1,45 +1,20 @@
 import express from "express";
-import * as db from "./database.js";
+import * as db from "../database.js";
 import multer from "multer";
-import { uploadFile, getDownloadUrl } from "./s3.js";
+import { uploadFile, getDownloadUrl } from "../s3.js";
 import { generateUsername } from "unique-username-generator";
-import { createBackup, getBackupURL, replaceBackup } from "./db.js";
+import { createBackup, getBackupURL, replaceBackup } from "../db.js";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-
+const port = process.env.PORT || 3000;
 db.intiDb();
 const app = express();
 
 app.use(express.json());
 
-app.get("/notes", async (req, res) => {
-    const notes = await db.getNotes();
-    res.send(notes);
-});
-app.get("/gymdays", async (req, res) => {
-    const gymDays = await db.getGymDays();
-    res.send(gymDays);
-});
-app.get("/exercise-types", async (req, res) => {
-    const exerciseTypes = await db.getExerciseTypes();
-    res.send(exerciseTypes);
-});
-
-app.get("/notes/:id", async (req, res) => {
-    const id = req.params.id;
-    const note = await db.getNote(id);
-    res.send(note);
-});
-
 app.get("/", async (req, res) => {
     res.send("WORKS");
-});
-
-app.post("/notes", async (req, res) => {
-    const { title, contents } = req.body;
-    const note = await db.createNote(title, contents);
-    res.status(201).send(note);
 });
 
 // eslint-disable-next-line no-unused-vars
@@ -47,9 +22,9 @@ app.use((err, req, res, next) => {
     res.status(500).send("Something broke!");
 });
 
-app.listen(8081, () => {
+app.listen(process.env.PORT || 3000, () => {
     // eslint-disable-next-line no-console
-    console.log("Server is on Port 8081");
+    console.log("Server is on Port" + (port + 1));
 });
 
 app.post("/backup", upload.single("file"), async (req, res) => {
