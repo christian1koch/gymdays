@@ -1,14 +1,14 @@
 import express from "express";
-import * as db from "../database.js";
 import multer from "multer";
 import { uploadFile, getDownloadUrl } from "../s3.js";
 import { generateUsername } from "unique-username-generator";
 import { createBackup, getBackupURL, replaceBackup } from "../db.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-const port = process.env.PORT || 3000;
-db.intiDb();
+const port = process.env.PORT || 8080;
 const app = express();
 
 app.use(express.json());
@@ -22,9 +22,9 @@ app.use((err, req, res, next) => {
     res.status(500).send("Something broke!");
 });
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(port, () => {
     // eslint-disable-next-line no-console
-    console.log("Server is on Port" + (port + 1));
+    console.log("Server is on Port" + port);
 });
 
 app.post("/backup", upload.single("file"), async (req, res) => {
