@@ -17,6 +17,7 @@ import { TamaguiProvider, createTamagui } from "@tamagui/core";
 import config from "./../tamagui.config";
 import { PortalProvider } from "@tamagui/portal";
 import { CustomPortalProvider } from "libs/utils/portal/PortalContext";
+import Toast from "react-native-toast-message";
 
 const tamaguiConfig = createTamagui(config);
 
@@ -54,6 +55,7 @@ export default function HomeLayout() {
 					</TamaguiProvider>
 				</CustomPortalProvider>
 			</Provider>
+			<Toast />
 		</>
 	);
 }

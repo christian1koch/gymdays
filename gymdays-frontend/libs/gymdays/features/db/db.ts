@@ -20,6 +20,22 @@ const getDB = async () => {
 	return db;
 };
 
+export const getDBSync = () => {
+	const db = SQLite.openDatabaseSync(dbName);
+	return db;
+};
+
+export const restartDb = async () => {
+	let expo = await SQLite.openDatabaseAsync(dbName);
+	await expo.closeAsync();
+	expo = await SQLite.openDatabaseAsync(dbName);
+};
+
+export const createCheckPoint = async () => {
+	const db = await SQLite.openDatabaseAsync(dbName);
+	db.execAsync(`pragma wal_checkpoint`);
+};
+
 export const initDatabase = async () => {
 	let dbName = process.env.EXPO_PUBLIC_DEV_DB_NAME;
 	if (!__DEV__) {
@@ -30,6 +46,7 @@ export const initDatabase = async () => {
 		throw new Error("DB name not found");
 	}
 	const db = await SQLite.openDatabaseAsync(dbName);
+
 	await db.execAsync(`
    PRAGMA journal_mode = WAL;
     CREATE TABLE IF NOT EXISTS gym_day (
@@ -47,7 +64,12 @@ export const initDatabase = async () => {
       weightsPerSet TEXT,
       FOREIGN KEY(exerciseType) REFERENCES exercise_type(name),
       FOREIGN KEY(gym_day) REFERENCES gym_day(id) ON DELETE CASCADE
-    );`);
+    );
+	CREATE TABLE IF NOT EXISTS user_settings (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		backup_id TEXT NOT NULL
+	);
+	`);
 
 	const defaultValues = [
 		"Bench Press",
@@ -219,4 +241,17 @@ export const bulkDeleteGymDays = async (gymDayIds: number[]) => {
 	const db = await getDB();
 	const res = await db.delete(gymDay).where(inArray(gymDay.id, gymDayIds));
 	return res;
+};
+
+export const getBackupId = async () => {
+	const db = await getDB();
+	console.log("finding usersettings");
+	const userSettings = await db.query.userSettings.findFirst();
+	console.log("user settings", userSettings);
+	return userSettings?.backupId;
+};
+
+export const createNewBackup = async (backupId: string) => {
+	const db = await getDB();
+	await db.insert(schema.userSettings).values({ backupId });
 };

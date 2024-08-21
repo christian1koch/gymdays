@@ -27,6 +27,11 @@ export const exercise = sqliteTable("exercise", {
 //     references: [users.id],
 //   }),
 // }));
+
+export const userSettings = sqliteTable("user_settings", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	backupId: text("backup_id").notNull(),
+});
 export const exerciseRelations = relations(exercise, ({ one }) => ({
 	gymDay: one(gymDay, {
 		fields: [exercise.gymDay],
@@ -41,6 +46,7 @@ export const gymDayRelations = relations(gymDay, ({ many }) => ({
 export type DBGymDay = typeof gymDay.$inferSelect;
 export type DBExercise = typeof exercise.$inferSelect;
 export type DBExerciseType = typeof exerciseType.$inferSelect;
+export type DBUserSettings = typeof userSettings.$inferSelect;
 export interface DBGymDayWithExercises extends DBGymDay {
 	exercises: DBExercise[];
 }

@@ -14,7 +14,7 @@ import { Plus } from "@tamagui/lucide-icons";
 import { PortalGate } from "libs/utils/portal/PortalContext";
 import { useAppSelector } from "app/hooks";
 import { selectTodaysGymDay } from "app/store";
-import { createBackup } from "libs/gymdays/features/db/backup";
+
 interface GimDayListProps {
 	gymDays: GymDayData[];
 }
@@ -134,9 +134,17 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
 
 	const getMenuItems = () => {
 		if (!selectMode) {
-			return null;
+			const menuItems = [
+				{
+					title: "Backups",
+					onPress: () => {
+						router.navigate("/backup");
+					},
+				},
+			];
+			return menuItems;
 		}
-		const menuItems: MenuItemProps[] = [
+		const selectedMenuItems: MenuItemProps[] = [
 			{
 				title: "Stop Selecting",
 				onPress: () => {
@@ -151,7 +159,7 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
 				},
 			},
 		];
-		return menuItems;
+		return selectedMenuItems;
 	};
 
 	const currentGymDayButtons = (
@@ -210,13 +218,6 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
 					);
 				}}
 			/>
-			<Button
-				onPress={() => {
-					createBackup();
-				}}
-			>
-				Create Back up
-			</Button>
 			<PortalGate name="footer" isEntry>
 				{todaysGymDay ? (
 					currentGymDayButtons

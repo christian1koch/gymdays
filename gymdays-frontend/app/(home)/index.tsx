@@ -10,12 +10,12 @@ import { useFonts } from "expo-font";
 import * as db from "@gymDays/db";
 import { Footer } from "@gymDays/components/shared/footer";
 import { selectGymDaysSortedByDate } from "app/store";
-import { getDBPath } from "libs/gymdays/features/db/backup";
+import Toast from "react-native-toast-message";
+import useDrizzleStudioWithDB from "@gymDays/hooks/useDrizzleStudioWithDb";
 
 export default function App() {
 	db.initDatabase();
-	console.log("path to db", getDBPath());
-	// useDrizzleStudio(dbForStudio);
+	useDrizzleStudioWithDB();
 	const sortedGymDays = useAppSelector(selectGymDaysSortedByDate);
 	const [loaded] = useFonts({
 		Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
