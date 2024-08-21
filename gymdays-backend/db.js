@@ -6,6 +6,12 @@ export async function createBackup(userId = "", link = "") {
     return result;
 }
 
+export async function replaceBackup(userId = "", link = "") {
+    const result =
+        await sql`UPDATE backup SET backup_data = ${link} WHERE user_id = ${userId}`;
+    return result;
+}
+
 export async function getBackupURL(userId = "") {
     const result =
         await sql`SELECT backup_data FROM backup WHERE user_id = ${userId}`;
