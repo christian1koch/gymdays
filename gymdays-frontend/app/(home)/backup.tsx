@@ -65,6 +65,7 @@ export default function BackupPage() {
 			if (backupId) {
 				const res = await updateBackup(backupId);
 				showCreateSuccessToast();
+				console.log(res);
 				return;
 			}
 			const res = await createBackup();
@@ -73,7 +74,7 @@ export default function BackupPage() {
 			showCreateSuccessToast();
 		} catch (error) {
 			const err = error as Error;
-			console.log(err);
+			console.log(err.message);
 			showErrorToast(err.message);
 		} finally {
 			setIsLoadingAction(false);

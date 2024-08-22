@@ -8,7 +8,7 @@ dotenv.config();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8081;
 const app = express();
 
 app.use(express.json());
@@ -24,7 +24,7 @@ app.use((err, req, res, next) => {
 
 app.listen(port, () => {
     // eslint-disable-next-line no-console
-    console.log("Server is on Port" + port);
+    console.log("Server is on Port " + port);
 });
 
 app.post("/backup", upload.single("file"), async (req, res) => {
@@ -61,11 +61,13 @@ app.put("/backup/:id", upload.single("file"), async (req, res) => {
     }
     try {
         const result = await uploadFile(file);
-        const res = await replaceBackup(id, result);
+        await replaceBackup(id, result);
+
         res.status(201);
         res.json({ id: backupId });
     } catch (error) {
-        res.status(500);
-        res.json({ message: error.message });
+        // eslint-disable-next-line no-console
+        console.log("error", error);
+        res.status(500).send({ error });
     }
 });

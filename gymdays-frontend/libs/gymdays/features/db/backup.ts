@@ -53,7 +53,11 @@ export async function updateBackup(backupId?: string) {
 		method: "PUT",
 		body: formData,
 	});
+	console.log("tempRES", tempRes);
 	const res = await tempRes.json();
+	if (!tempRes.ok) {
+		throw new Error(res.m);
+	}
 	return res;
 }
 

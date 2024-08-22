@@ -41,8 +41,7 @@ export async function uploadFile(file) {
         ContentType: file.mimetype,
     };
     const command = new PutObjectCommand(uploadParams);
-    const res = await s3.send(command);
-    console.log("response!!!", res);
+    await s3.send(command);
     return randomName;
 }
 
