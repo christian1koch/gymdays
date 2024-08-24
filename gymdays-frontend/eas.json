@@ -18,7 +18,8 @@
 		},
 		"production": {
 			"ios": {
-				"image": "latest"
+				"image": "latest",
+				"ascAppId": "6661024733"
 			},
 			"env": {
 				"EXPO_PUBLIC_PROD_DB_NAME": "prod-db-name",
@@ -26,8 +27,7 @@
 				"EXPO_PUBLIC_DEV_API_URL": "http://localhost:8081/backup",
 				"EXPO_PUBLIC_PROD_API_URL": "https://gymdays.onrender.com/backup"
 			},
-			"channel": "production",
-			"ascAppId": "6661024733"
+			"channel": "production"
 		}
 	},
 	"submit": {
