@@ -18,8 +18,7 @@
 		},
 		"production": {
 			"ios": {
-				"image": "latest",
-				"ascAppId": "6661024733"
+				"image": "latest"
 			},
 			"env": {
 				"EXPO_PUBLIC_PROD_DB_NAME": "prod-db-name",
@@ -31,6 +30,10 @@
 		}
 	},
 	"submit": {
-		"production": {}
+		"production": {
+			"ios": {
+				"ascAppId": "6661024733"
+			}
+		}
 	}
 }
