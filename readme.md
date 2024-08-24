@@ -1,3 +1,9 @@
+# To make a release
+- Update in gymdays-frontend/app.json the version to the desired version
+- Use the same version in Github add a tag and create a release with that tag
+
+
+
 # Common Pitfalls
 
 ## Deploying
