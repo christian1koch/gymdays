@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
 	AutocompleteDropdown,
 	AutocompleteDropdownItem,
@@ -8,13 +8,14 @@ import AddButton from "@ui/add-button";
 import { BasicExercise } from "../../types";
 import { createNewExerciseType, getExerciseTypes } from "@gymDays/db";
 import * as services from "libs/gymdays/features/services/services";
-import { View } from "tamagui";
+import { Button, SizableText, View } from "tamagui";
 import { useAppSelector } from "app/hooks";
 import { selectLastExerciseFromExerciseTypeAfterCurrent } from "app/store";
 import { Text } from "tamagui";
 import { SimpleSetList } from "../gym-day/exercise-card";
 import { PortalGate } from "libs/utils/portal/PortalContext";
 import { getArrayLastElement } from "@utils/utils";
+import { Plus } from "@tamagui/lucide-icons";
 
 interface ExerciseItem extends AutocompleteDropdownItem {}
 
@@ -42,7 +43,10 @@ export default function Exercise({ exercise }: ExerciseProps) {
 	const [exerciseTypes, setExerciseTypes] = useState<string[]>([]);
 	const { weightsPerSet: weights } = exercise;
 
-	const exerciseItems = exerciseTypesToExerciseItems(exerciseTypes);
+	const exerciseItems = useMemo(
+		() => exerciseTypesToExerciseItems(exerciseTypes),
+		[exerciseTypes]
+	);
 	const [selectedItem, setSelectedItem] = useState<ExerciseItem | null>(
 		basicExerciseToExerciseItem(exercise)
 	);
@@ -54,7 +58,7 @@ export default function Exercise({ exercise }: ExerciseProps) {
 		)
 	);
 	const [text, setText] = useState("");
-	const onBlurSave = async () => {
+	const onCreateExercise = async () => {
 		if (text && !exerciseTypes.includes(text)) {
 			const newExerciseTypes = [...exerciseTypes, text];
 			setExerciseTypes(newExerciseTypes);
@@ -120,14 +124,12 @@ export default function Exercise({ exercise }: ExerciseProps) {
 				<AutocompleteDropdown
 					inputContainerStyle={{ width: 300 }}
 					key={exerciseTypes.length}
-					clearOnFocus={false}
+					clearOnFocus={true}
 					closeOnBlur={true}
 					closeOnSubmit={true}
-					onSubmit={onBlurSave}
-					onBlur={onBlurSave}
 					initialValue={
 						selectedItem || basicExerciseToExerciseItem(exercise)
-					} // or just '2'
+					}
 					onSelectItem={(item) => onSelectItem(item)}
 					dataSet={exerciseItems}
 					showClear={false}
@@ -136,6 +138,21 @@ export default function Exercise({ exercise }: ExerciseProps) {
 					textInputProps={{
 						enterKeyHint: "done",
 					}}
+					EmptyResultComponent={
+						<View className="flex-row items-center">
+							<SizableText
+								className="flex-1 text-center"
+								size="$5"
+							>
+								Add new Exercise
+							</SizableText>
+							<Button
+								onPress={onCreateExercise}
+								theme="accent"
+								icon={Plus}
+							/>
+						</View>
+					}
 				/>
 			</View>
 			<SetList
