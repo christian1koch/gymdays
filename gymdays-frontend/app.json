@@ -9,7 +9,7 @@
 		"splash": {
 			"image": "./assets/gym-days-icon.png",
 			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
+			"backgroundColor": "#f6e8ff"
 		},
 		"ios": {
 			"supportsTablet": true,
@@ -18,7 +18,7 @@
 		"android": {
 			"adaptiveIcon": {
 				"foregroundImage": "./assets/gym-days-icon.png",
-				"backgroundColor": "#ffffff"
+				"backgroundColor": "#f6e8ff"
 			},
 			"package": "c1k.gymdays"
 		},
