@@ -24,3 +24,6 @@
     	uri: pathToDb,
     } as any);
     ```
+
+## Push Notifications Error
+Fixed by adding the expo-notification package, more on it [here](https://github.com/expo/fyi/blob/main/apns-entitlement-sdk-51.md)
