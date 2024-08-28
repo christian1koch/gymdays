@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import "react-native-get-random-values";
 import { SetCard } from "./set-card";
+import { NOT_IMPLEMENTED_REPS } from "../shared/todos";
 
 interface SetListProps {
 	sets: number[];
@@ -9,32 +10,14 @@ interface SetListProps {
 	deleteMode?: boolean;
 }
 
-interface SetRendererProps {
-	weight: number;
-	index: number;
-	onWeightChange: (newWeight: number) => void;
-	onEndEditing: () => void;
-}
-
-const SetRenderer = ({
-	weight,
-	index,
-	onWeightChange,
-	onEndEditing,
-}: SetRendererProps) => (
-	<SetCard
-		onEndEditing={onEndEditing}
-		index={index}
-		weight={weight}
-		key={index}
-		onChangeWeight={(weight) => {
-			onWeightChange(weight);
-		}}
-	/>
-);
-
 const SetList: React.FC<SetListProps> = ({ sets, onEndEditingUpdate }) => {
 	const [weights, setWeights] = useState(sets);
+	const [repsList, setRepsList] = useState([
+		NOT_IMPLEMENTED_REPS,
+		NOT_IMPLEMENTED_REPS + 1,
+		NOT_IMPLEMENTED_REPS - 1,
+		NOT_IMPLEMENTED_REPS + 2,
+	]);
 
 	useEffect(() => {
 		setWeights(sets);
@@ -46,8 +29,18 @@ const SetList: React.FC<SetListProps> = ({ sets, onEndEditingUpdate }) => {
 		setWeights(newWeights);
 	};
 
-	const handleOnEndEditing = () => {
+	const onChangeReps = (index: number, newRep: number) => {
+		const newRepsList = [...repsList];
+		newRepsList[index] = newRep;
+		setRepsList(newRepsList);
+	};
+
+	const handleWeightsEndEditing = () => {
 		onEndEditingUpdate(weights);
+	};
+
+	const handleRepsEndEditing = () => {
+		console.log(weights);
 	};
 
 	return (
@@ -58,11 +51,14 @@ const SetList: React.FC<SetListProps> = ({ sets, onEndEditingUpdate }) => {
 			style={{ alignSelf: "center", backgroundColor: "none" }}
 			contentContainerStyle={{ gap: 5 }}
 			renderItem={({ item, index }) => (
-				<SetRenderer
+				<SetCard
 					index={index}
 					weight={item}
-					onWeightChange={(weight) => onChangeWeight(index, weight)}
-					onEndEditing={handleOnEndEditing}
+					reps={repsList[index]}
+					onChangeWeight={(weight) => onChangeWeight(index, weight)}
+					onChangeReps={(reps) => onChangeReps(index, reps)}
+					handleWeightsEditEnd={handleWeightsEndEditing}
+					handleRepsEditEnd={handleRepsEndEditing}
 				/>
 			)}
 		/>

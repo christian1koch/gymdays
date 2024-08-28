@@ -29,4 +29,14 @@ export const getArrayLastElement = <T>(arr: T[]) => {
 	return arr[arr.length - 1];
 };
 
+function getDefaultReps() {
+	let reps: number[] = [];
+	for (let i = 1; i <= 100; i++) {
+		reps.push(i);
+	}
+	return reps;
+}
+
 export const DEFAULT_WEIGHTS = getDefaultWeights();
+
+export const DEFAULT_REPS = getDefaultReps();
