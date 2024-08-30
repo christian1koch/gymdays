@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { View } from "tamagui";
+import { View, Text } from "tamagui";
 import "expo-router/entry";
 
 import GimDayList from "@gymDays/components/gym-day-list/gym-day-list";
@@ -12,15 +12,26 @@ import { Footer } from "@gymDays/components/shared/footer";
 import { selectGymDaysSortedByDate } from "app/store";
 import Toast from "react-native-toast-message";
 import useDrizzleStudioWithDB from "@gymDays/hooks/useDrizzleStudioWithDb";
+import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
+import migrations from "drizzle/migrations";
+import { drizzle } from "drizzle-orm/expo-sqlite";
+import { openDatabaseSync } from "expo-sqlite";
 
 export default function App() {
 	db.initDatabase();
+	let dbName = process.env.EXPO_PUBLIC_DEV_DB_NAME;
+	if (!__DEV__) {
+		dbName = process.env.EXPO_PUBLIC_PROD_DB_NAME;
+	}
+	const expoDB = openDatabaseSync(dbName!);
+	const newDB = drizzle(expoDB);
 	useDrizzleStudioWithDB();
 	const sortedGymDays = useAppSelector(selectGymDaysSortedByDate);
 	const [loaded] = useFonts({
 		Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
 		InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
 	});
+	const { success, error } = useMigrations(newDB, migrations);
 
 	useEffect(() => {
 		if (loaded) {
@@ -37,6 +48,22 @@ export default function App() {
 		};
 		fetchGymDays();
 	}, []);
+
+	if (error) {
+		console.log(error.cause);
+		return (
+			<View>
+				<Text>Migration error: {error.message}</Text>
+			</View>
+		);
+	}
+	if (!success) {
+		return (
+			<View>
+				<Text>Migration is in progress...</Text>
+			</View>
+		);
+	}
 
 	if (!loaded) {
 		return null;

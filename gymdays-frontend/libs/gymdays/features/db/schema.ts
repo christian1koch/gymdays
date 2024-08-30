@@ -19,34 +19,41 @@ export const exercise = sqliteTable("exercise", {
 	gymDay: integer("gym_day")
 		.references(() => gymDay.id, { onDelete: "cascade" })
 		.notNull(),
-	weightsPerSet: text("weightsPerSet"), // Storing as comma-separated string
 });
-// export const postsRelations = relations(posts, ({ one }) => ({
-//   author: one(users, {
-//     fields: [posts.authorId],
-//     references: [users.id],
-//   }),
-// }));
+
+export const set = sqliteTable("set", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	exerciseId: integer("exercise_id")
+		.references(() => exercise.id, { onDelete: "cascade" })
+		.notNull(),
+	weights: integer("weights").notNull(),
+	reps: integer("reps").notNull(),
+});
 
 export const userSettings = sqliteTable("user_settings", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	backupId: text("backup_id").notNull(),
 });
-export const exerciseRelations = relations(exercise, ({ one }) => ({
-	gymDay: one(gymDay, {
-		fields: [exercise.gymDay],
-		references: [gymDay.id],
-	}),
-}));
+// export const exerciseRelations = relations(exercise, ({ one }) => ({
+// 	gymDay: one(gymDay, {
+// 		fields: [exercise.gymDay],
+// 		references: [gymDay.id],
+// 	}),
+// }));
 
-export const gymDayRelations = relations(gymDay, ({ many }) => ({
-	exercises: many(exercise),
-}));
+// export const gymDayRelations = relations(gymDay, ({ many }) => ({
+// 	exercises: many(exercise),
+// }));
 
 export type DBGymDay = typeof gymDay.$inferSelect;
 export type DBExercise = typeof exercise.$inferSelect;
 export type DBExerciseType = typeof exerciseType.$inferSelect;
 export type DBUserSettings = typeof userSettings.$inferSelect;
+export type DBSet = typeof set.$inferSelect;
 export interface DBGymDayWithExercises extends DBGymDay {
-	exercises: DBExercise[];
+	exercises: DBExerciseWithSets[];
+}
+
+export interface DBExerciseWithSets extends DBExercise {
+	sets: DBSet[];
 }

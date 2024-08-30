@@ -14,10 +14,16 @@ if (!dbName) {
 	throw new Error("DB name not found");
 }
 
-const getDB = async () => {
+export const getDB = async () => {
 	const expo = await SQLite.openDatabaseAsync(dbName);
 	const db = drizzle(expo, { schema: { ...schema } });
 	return db;
+};
+
+export const getDBAndConnection = async () => {
+	const expo = await SQLite.openDatabaseAsync(dbName);
+	const db = drizzle(expo, { schema: { ...schema } });
+	return { db, connection: expo };
 };
 
 export const getDBSync = () => {
@@ -152,6 +158,9 @@ export const getExerciseById = async (id: number) => {
 	const db = await getDB();
 	const dbExercise = await db.query.exercise.findFirst({
 		where: (exercise, { eq }) => eq(exercise.id, id),
+		// with: {
+		// 	sets: true,
+		// },
 	});
 	console.log("exercise from DB", dbExercise);
 	if (!dbExercise) {
@@ -191,43 +200,43 @@ export const createNewExercise = async (gymDayId: number, name: string) => {
 	return await getExerciseById(res[0].insertedId);
 };
 
-export const createNewSet = async (exerciseId: number, weight: number) => {
-	const newExercise = await getExerciseById(exerciseId);
-	console.log(JSON.stringify(newExercise), exerciseId);
-	newExercise.weightsPerSet.push(weight);
-	const db = await getDB();
-	await db
-		.update(exercise)
-		.set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) })
-		.where(eq(exercise.id, newExercise.id));
-	return newExercise;
-};
+// export const createNewSet = async (exerciseId: number, weight: number) => {
+// 	const newExercise = await getExerciseById(exerciseId);
+// 	console.log(JSON.stringify(newExercise), exerciseId);
+// 	newExercise.weightsPerSet.push(weight);
+// 	const db = await getDB();
+// 	await db
+// 		.update(exercise)
+// 		.set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) })
+// 		.where(eq(exercise.id, newExercise.id));
+// 	return newExercise;
+// };
 
-export const updateSets = async (
-	exerciseId: number,
-	index: number,
-	sets: number[]
-) => {
-	console.log("updating sets");
-	const newExercise = await getExerciseById(exerciseId);
-	newExercise.weightsPerSet = sets;
-	const db = await getDB();
-	await db
-		.update(exercise)
-		.set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) })
-		.where(eq(exercise.id, newExercise.id));
-	return newExercise;
-};
+// export const updateSets = async (
+// 	exerciseId: number,
+// 	index: number,
+// 	sets: number[]
+// ) => {
+// 	console.log("updating sets");
+// 	const newExercise = await getExerciseById(exerciseId);
+// 	newExercise.weightsPerSet = sets;
+// 	const db = await getDB();
+// 	await db
+// 		.update(exercise)
+// 		.set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) })
+// 		.where(eq(exercise.id, newExercise.id));
+// 	return newExercise;
+// };
 
-export const deleteSet = async (exerciseId: number, index: number) => {
-	const newExercise = await getExerciseById(exerciseId);
-	newExercise.weightsPerSet.splice(index, 1);
-	const db = await getDB();
-	await db
-		.update(exercise)
-		.set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) });
-	return newExercise;
-};
+// export const deleteSet = async (exerciseId: number, index: number) => {
+// 	const newExercise = await getExerciseById(exerciseId);
+// 	newExercise.weightsPerSet.splice(index, 1);
+// 	const db = await getDB();
+// 	await db
+// 		.update(exercise)
+// 		.set({ weightsPerSet: JSON.stringify(newExercise.weightsPerSet) });
+// 	return newExercise;
+// };
 
 export const bulkDeleteExercises = async (exerciseIds: number[]) => {
 	const db = await getDB();
