@@ -1,5 +1,8 @@
 export function dateToYearMonthDay(date: Date): string {
-	return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+	// Month + 1 bc is zero indexed...
+	const newDate =
+		date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+	return newDate;
 }
 
 export function numberToWeightString(weight: number): string {
