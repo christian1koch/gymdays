@@ -54,7 +54,7 @@ export function SetCard({ index, className, set }: SetCardProps) {
 		services.updateSet(set.exerciseId, set.id, currentWeight, currentReps);
 	};
 
-	const isSelected = selectedItemsArr.includes(index);
+	const isSelected = selectedItemsArr.includes(set.id);
 
 	// if (selectModeOn) {
 	// 	return (
@@ -70,7 +70,10 @@ export function SetCard({ index, className, set }: SetCardProps) {
 	return (
 		<Pressable
 			style={{ zIndex: 200 }}
-			onLongPress={() => onLongPress(index)}
+			onLongPress={() => onLongPress(set.id)}
+			onPress={
+				selectModeOn ? () => onSelectableItemPress(set.id) : undefined
+			}
 		>
 			<View
 				className={classNames(
@@ -85,6 +88,7 @@ export function SetCard({ index, className, set }: SetCardProps) {
 						Set {index + 1}:
 					</StyledText>
 					<RNPickerSelect
+						disabled={selectModeOn}
 						onValueChange={handleRepsChange}
 						placeholder={{}}
 						items={repsInLevelValue(DEFAULT_REPS)}
@@ -101,6 +105,7 @@ export function SetCard({ index, className, set }: SetCardProps) {
 				</View>
 				<View className="self-center">
 					<RNPickerSelect
+						disabled={selectModeOn}
 						onValueChange={handleWeightChange}
 						placeholder={{}}
 						items={weightArrayToLabelValue(DEFAULT_WEIGHTS)}

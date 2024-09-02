@@ -14,6 +14,7 @@ import { Plus } from "@tamagui/lucide-icons";
 import { PortalGate } from "libs/utils/portal/PortalContext";
 import { useAppSelector } from "app/hooks";
 import { selectTodaysGymDay } from "app/store";
+import { HorizontalList } from "@ui/horizontal-list";
 
 interface GimDayListProps {
 	gymDays: GymDayData[];
@@ -82,8 +83,8 @@ const SimpleGymCard = ({
 	return (
 		<Pressable onLongPress={onLongPress} onPress={onPress}>
 			<Card
-				className="mb-3"
-				bg={!highlighted ? "$background" : "$borderColor"}
+				className="mb-3 border-2"
+				borderColor={highlighted ? "$color" : "$colorTransparent"}
 			>
 				<Card.Header>
 					<Header
@@ -99,13 +100,20 @@ const SimpleGymCard = ({
 						))}
 					</View>
 					<View className="flex-1 items-end">
-						{gymDayData.exercises.map((exercise, i) => (
-							<Paragraph key={i}>
-								{exercise.sets.map((set) => {
-									return set.weights;
-								})}
-							</Paragraph>
-						))}
+						{gymDayData.exercises.map((exercise, i) => {
+							if (exercise.sets.length > 1) {
+								return (
+									<Paragraph>
+										{Math.max(
+											...exercise.sets.map(
+												(s) => s.weights
+											)
+										)}
+										kg
+									</Paragraph>
+								);
+							}
+						})}
 					</View>
 				</View>
 			</Card>

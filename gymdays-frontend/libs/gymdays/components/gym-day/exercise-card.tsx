@@ -1,14 +1,17 @@
 import React from "react";
-import { Pressable, PressableProps } from "react-native";
+import { FlatList, Pressable, PressableProps } from "react-native";
 import Divider from "@ui/divider";
-import { View, Paragraph } from "tamagui";
+import { View, Paragraph, SizableText } from "tamagui";
 import { Set } from "@gymDays/types";
+import { BasicCard } from "@ui/basic-card";
 
 interface ExerciseCardProps extends PressableProps {
 	name: string;
 	sets: Set[];
 	index: number;
 	highlighted?: boolean;
+	onLongPress?: () => void;
+	onPress?: () => void;
 }
 
 const ExerciseCard: React.FC<ExerciseCardProps> = ({
@@ -16,46 +19,48 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
 	sets,
 	index,
 	highlighted,
-	...presableProps
+	onLongPress,
+	onPress,
 }) => {
 	return (
-		<Pressable {...presableProps}>
-			<View
-				className="h-24 mt-2 rounded-lg p-2 px-4 flex-row border-2"
-				bg={!highlighted ? "$background" : "$borderColor"}
-				borderColor={"$accentBackground"}
-				borderTopWidth="$-1.5"
-			>
-				<View
-					bg={"$color05"}
-					className="rounded-3xl h-5 w-5 justify-center items-center mr-2"
-				>
-					<Paragraph>{index + 1}</Paragraph>
+		<View
+			bg={"$accentBackground"}
+			borderColor={highlighted ? "$color" : "$colorTransparent"}
+			className="rounded-xl overflow-hidden"
+			borderWidth={highlighted ? "$1" : "$0"}
+		>
+			<Pressable onLongPress={onLongPress} onPress={onPress}>
+				<View className="items-center justify-center my-1">
+					<SizableText size={"$4"}>{name}</SizableText>
 				</View>
-				<View className="justify-between">
-					<Paragraph className=" font-semibold">{name}</Paragraph>
-					<SimpleSetList sets={sets} />
-				</View>
+			</Pressable>
+			<View minHeight={64}>
+				<HorizontalSetRenderer sets={sets} />
 			</View>
-		</Pressable>
+		</View>
 	);
 };
 
 export default ExerciseCard;
 
-export const SimpleSetList = ({ sets }: { sets: Set[] }) => {
+export const HorizontalSetRenderer = ({ sets }: { sets: Set[] }) => {
 	return (
-		<View className="flex-row">
-			{sets.map((set, i) => (
-				<View key={i}>
-					<View className="flex-row">
-						<Paragraph className="">
-							{set.weights + " kg"}
-						</Paragraph>
-						{i < sets.length - 1 && <Divider className="mx-2" />}
-					</View>
-				</View>
-			))}
+		<View>
+			<FlatList
+				data={sets}
+				horizontal
+				keyExtractor={(item) => "" + item.id}
+				renderItem={({ item: set, index }) => {
+					return (
+						<BasicCard
+							key={set.id}
+							className={index < sets.length - 1 ? " mr-1 " : ""}
+							title={set.weights + "kg"}
+							footer={set.reps + "x"}
+						/>
+					);
+				}}
+			/>
 		</View>
 	);
 };

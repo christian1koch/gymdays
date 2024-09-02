@@ -96,8 +96,6 @@ export const gymDaysSlice = createSlice({
 			action: PayloadAction<{
 				exerciseId: number;
 				setId: number;
-				weight: number;
-				reps: number;
 			}>
 		) => {
 			const gymDay = state.gymDays.find((gymDay) =>
@@ -169,6 +167,27 @@ export const gymDaysSlice = createSlice({
 				(gymDay) => !action.payload.includes(gymDay.id)
 			);
 		},
+		bulkDeleteSets: (
+			state,
+			action: PayloadAction<{
+				setIds: number[];
+				exerciseId: number;
+			}>
+		) => {
+			const gymDay = state.gymDays.find((gymDay) =>
+				gymDay.exercises.find(
+					(exercise) => exercise.id === action.payload.exerciseId
+				)
+			);
+			const exercise = gymDay?.exercises.find(
+				(exercise) => exercise.id === action.payload.exerciseId
+			);
+			if (exercise) {
+				exercise.sets = exercise?.sets.filter(
+					(s) => !action.payload.setIds.includes(s.id)
+				);
+			}
+		},
 	},
 });
 
@@ -184,6 +203,7 @@ export const {
 	addNewSet,
 	removeSet,
 	updateSet,
+	bulkDeleteSets,
 	bulkDeleteExercises,
 	bulkDeleteGymDays,
 } = gymDaysSlice.actions;

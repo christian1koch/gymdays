@@ -5,17 +5,18 @@ import {
 } from "react-native-autocomplete-dropdown";
 import SetList from "./set-list";
 import AddButton from "@ui/add-button";
-import { BasicExercise } from "../../types";
+import { BasicExercise, Set } from "../../types";
 import { createNewExerciseType, getExerciseTypes } from "@gymDays/db";
 import * as services from "libs/gymdays/features/services/services";
-import { Button, SizableText, View } from "tamagui";
+import { Button, Paragraph, SizableText, View } from "tamagui";
 import { useAppSelector } from "app/hooks";
 import { selectLastExerciseFromExerciseTypeAfterCurrent } from "app/store";
 import { Text } from "tamagui";
-import { SimpleSetList } from "../gym-day/exercise-card";
+
 import { PortalGate } from "libs/utils/portal/PortalContext";
 import { getArrayLastElement } from "@utils/utils";
 import { Plus } from "@tamagui/lucide-icons";
+import { HorizontalList } from "@ui/horizontal-list";
 
 interface ExerciseItem extends AutocompleteDropdownItem {}
 
@@ -99,7 +100,23 @@ export default function Exercise({ exercise }: ExerciseProps) {
 		if (lastExerciseOfType.sets.length <= 0) {
 			return <Text>{firstTimeExerciseText}</Text>;
 		}
-		return <SimpleSetList sets={lastExerciseOfType.sets} />;
+		return (
+			<HorizontalList
+				list={lastExerciseOfType.sets.map((s) => (
+					<View className="flex-row items-baseline content-baseline">
+						<View
+							bg={"$accentColor"}
+							className="rounded-lg items-center justify-center"
+						>
+							<Paragraph className="m-1">
+								{s.weights + "kg"}{" "}
+							</Paragraph>
+						</View>
+						<Paragraph bg={"$black05"}> x{s.reps}</Paragraph>
+					</View>
+				))}
+			/>
+		);
 	};
 
 	const getNewDefaultWeight = () => {
@@ -138,7 +155,7 @@ export default function Exercise({ exercise }: ExerciseProps) {
 		<View className="flex-1" bg="$background025">
 			<View className="flex-col items-center my-10 mx-6 h-28 justify-between">
 				{selectedItem && <Text>Last Sets of {selectedItem?.id}: </Text>}
-				{getSetInfo()}
+				<View className="my-2">{getSetInfo()}</View>
 				<AutocompleteDropdown
 					inputContainerStyle={{ width: 300 }}
 					key={exerciseTypes.length}

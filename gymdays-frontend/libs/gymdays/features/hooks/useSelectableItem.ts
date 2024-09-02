@@ -17,7 +17,6 @@ export function useSelectableItem(): SelectableItemType {
 
 	const onSelectableItemPress = useCallback(
 		(id: number) => {
-			console.log(selectedItems, id, "done");
 			if (!selectedItems) {
 				return;
 			}
@@ -27,6 +26,9 @@ export function useSelectableItem(): SelectableItemType {
 			const newSelectedItems = [...selectedItems];
 			const idIndex = newSelectedItems.findIndex((ex) => ex === id);
 			newSelectedItems.splice(idIndex, 1);
+			if (newSelectedItems.length === 0) {
+				return setSelectedItems(undefined);
+			}
 			return setSelectedItems(newSelectedItems);
 		},
 		[selectedItems]

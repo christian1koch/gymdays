@@ -269,3 +269,11 @@ export const createNewBackup = async (backupId: string) => {
 	const db = await getDB();
 	await db.insert(schema.userSettings).values({ backupId });
 };
+
+export const bulkDeleteSets = async (setIds: number[]) => {
+	const db = await getDB();
+	const res = await db
+		.delete(schema.set)
+		.where(inArray(schema.set.id, setIds));
+	return res;
+};

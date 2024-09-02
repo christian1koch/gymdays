@@ -23,22 +23,6 @@ export default function Page() {
 	const { selectModeOn, setSelectModeOff, selectedItemsArr } =
 		selectableItemProps;
 
-	const getSelectedItemsToWeights = () => {
-		if (!exercise) {
-			return [];
-		}
-		const newWeightsWithNull: (number | null)[] = [
-			...exercise.weightsPerSet,
-		];
-		for (const indexValue of selectedItemsArr) {
-			newWeightsWithNull[indexValue] = null;
-		}
-		const newWeights: number[] = newWeightsWithNull.filter(
-			(v) => v != null
-		);
-		return newWeights;
-	};
-
 	const getMenuItems = () => {
 		if (!selectModeOn) {
 			return null;
@@ -56,10 +40,9 @@ export default function Page() {
 					if (!exercise) {
 						return null;
 					}
-					await services.updateSets(
-						exercise.gymDay,
-						exercise.id,
-						getSelectedItemsToWeights()
+					await services.bulkDeleteSets(
+						selectedItemsArr,
+						exercise.id
 					);
 					setSelectModeOff();
 				},

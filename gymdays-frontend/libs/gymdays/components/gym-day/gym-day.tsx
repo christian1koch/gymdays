@@ -76,8 +76,6 @@ const StyledText = styled(Text);
 
 const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
 	const [currentName, setCurrentName] = useState(name);
-
-	console.log("name", name);
 	const onEndEditing = async () => {
 		services.renameGymDay(id, currentName);
 	};
@@ -142,6 +140,16 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
 				</StyledText>
 				<Divider className="mb-5" horizonal />
 				<FlatList
+					ItemSeparatorComponent={() => {
+						return (
+							<View
+								style={{
+									width: 10,
+									height: 10,
+								}}
+							/>
+						);
+					}}
 					className="h-4/6"
 					renderItem={({ item, index }) => {
 						if (selectMode) {

@@ -96,6 +96,11 @@ async function bulkDeleteGymDays(gymDayIds: number[]) {
 	store.dispatch(actions.bulkDeleteGymDays(gymDayIds));
 }
 
+async function bulkDeleteSets(setIds: number[], exerciseId: number) {
+	await db.bulkDeleteSets(setIds);
+	store.dispatch(actions.bulkDeleteSets({ setIds, exerciseId }));
+}
+
 export {
 	fetchAllGymDays,
 	fetchGymDayById,
@@ -105,6 +110,7 @@ export {
 	updateExerciseName,
 	addNewSet,
 	updateSet,
+	bulkDeleteSets,
 	bulkDeleteExercises,
 	renameGymDay,
 	bulkDeleteGymDays,
