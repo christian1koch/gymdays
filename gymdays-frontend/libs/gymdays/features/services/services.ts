@@ -61,7 +61,7 @@ async function addNewSet(exerciseId: number, weight: number, reps: number) {
 	return newSet;
 }
 
-async function updateSets(
+async function updateSet(
 	exerciseId: number,
 	setId: number,
 	weight: number,
@@ -104,7 +104,7 @@ export {
 	createNewExercise,
 	updateExerciseName,
 	addNewSet,
-	updateSets,
+	updateSet,
 	bulkDeleteExercises,
 	renameGymDay,
 	bulkDeleteGymDays,

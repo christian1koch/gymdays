@@ -7,6 +7,7 @@ import { Pressable } from "react-native";
 import { useSelectableItemContext } from "@gymDays/hooks/useSelectableItem";
 import { Set } from "@gymDays/types";
 import { useState } from "react";
+import * as services from "@gymDays/services";
 
 const StyledText = styled(Text);
 
@@ -49,11 +50,8 @@ export function SetCard({ index, className, set }: SetCardProps) {
 		setCurrentReps(newReps);
 	};
 
-	const handleOnWeightEditFinish = () => {
-		// update Weight in the DB & Store
-	};
-	const handleOnRepsEditFinish = () => {
-		// update Reps in the DB & Store
+	const handleSetEndEditing = () => {
+		services.updateSet(set.exerciseId, set.id, currentWeight, currentReps);
 	};
 
 	const isSelected = selectedItemsArr.includes(index);
@@ -91,7 +89,7 @@ export function SetCard({ index, className, set }: SetCardProps) {
 						placeholder={{}}
 						items={repsInLevelValue(DEFAULT_REPS)}
 						value={currentReps}
-						onClose={handleOnRepsEditFinish}
+						onClose={handleSetEndEditing}
 					>
 						<View
 							className="rounded-md justify-center flex-row w-12"
@@ -107,7 +105,7 @@ export function SetCard({ index, className, set }: SetCardProps) {
 						placeholder={{}}
 						items={weightArrayToLabelValue(DEFAULT_WEIGHTS)}
 						value={currentWeight}
-						onClose={handleOnWeightEditFinish}
+						onClose={handleSetEndEditing}
 					>
 						<View className="self-center flex-row items-baseline">
 							<H2>{currentWeight}</H2>

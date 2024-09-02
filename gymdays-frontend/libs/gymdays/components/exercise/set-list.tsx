@@ -7,11 +7,10 @@ import { Set } from "@gymDays/types";
 
 interface SetListProps {
 	sets: Set[];
-	onEndEditingUpdate: (weights: number[]) => void;
 	deleteMode?: boolean;
 }
 
-const SetList: React.FC<SetListProps> = ({ sets, onEndEditingUpdate }) => {
+const SetList: React.FC<SetListProps> = ({ sets }) => {
 	return (
 		<FlatList
 			data={sets}

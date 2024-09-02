@@ -38,6 +38,7 @@ interface ExerciseProps {
 }
 
 const DEFAULT_SET_WEIGHT = 20;
+const DEFAULT_SET_REPS = 10;
 
 export default function Exercise({ exercise }: ExerciseProps) {
 	const [exerciseTypes, setExerciseTypes] = useState<string[]>([]);
@@ -89,10 +90,6 @@ export default function Exercise({ exercise }: ExerciseProps) {
 		fetchExerciseTypes();
 	}, []);
 
-	const onWeightChange = (weights: number[]) => {
-		services.updateSets(exercise.gymDay, exercise.id, weights);
-	};
-
 	const firstTimeExerciseText = "Your First time doing " + selectedItem?.id;
 
 	const getSetInfo = () => {
@@ -102,7 +99,7 @@ export default function Exercise({ exercise }: ExerciseProps) {
 		if (lastExerciseOfType.sets.length <= 0) {
 			return <Text>{firstTimeExerciseText}</Text>;
 		}
-		return <SimpleSetList sets={sets} />;
+		return <SimpleSetList sets={lastExerciseOfType.sets} />;
 	};
 
 	const getNewDefaultWeight = () => {
@@ -116,6 +113,25 @@ export default function Exercise({ exercise }: ExerciseProps) {
 			return weights;
 		}
 		return DEFAULT_SET_WEIGHT;
+	};
+
+	const getNewDefaultSetValues = () => {
+		const defaultValues = {
+			weight: DEFAULT_SET_WEIGHT,
+			reps: DEFAULT_SET_REPS,
+		};
+		if (lastExerciseOfType && lastExerciseOfType.sets.length > 0) {
+			const { sets: setsOfLastExercise } = lastExerciseOfType;
+			const { weights, reps } = getArrayLastElement(setsOfLastExercise);
+			defaultValues.weight = weights;
+			defaultValues.reps = reps;
+		}
+		if (sets.length > 0) {
+			const { weights, reps } = getArrayLastElement(sets);
+			defaultValues.weight = weights;
+			defaultValues.reps = reps;
+		}
+		return defaultValues;
 	};
 
 	return (
@@ -157,19 +173,12 @@ export default function Exercise({ exercise }: ExerciseProps) {
 					}
 				/>
 			</View>
-			<SetList
-				key={"set-of" + exercise.id}
-				sets={sets}
-				onEndEditingUpdate={onWeightChange}
-			/>
+			<SetList key={"set-of" + exercise.id} sets={sets} />
 			<PortalGate name="footer" isEntry>
 				<AddButton
 					onPress={() => {
-						services.addNewSet(
-							exercise.gymDay,
-							exercise.id,
-							getNewDefaultWeight()
-						);
+						const { weight, reps } = getNewDefaultSetValues();
+						services.addNewSet(exercise.id, weight, reps);
 					}}
 					text="Add new set"
 				/>
