@@ -14,6 +14,7 @@ export function parseDBGymDay(dbGymDay: DBGymDayWithExercises): GymDayData {
 }
 
 export function parseDBExercise(dbExercise: DBExerciseWithSets): BasicExercise {
+	console.log("dbExercisesets", dbExercise.sets);
 	const newExercise: BasicExercise = {
 		id: dbExercise.id,
 		gymDay: dbExercise.gymDay,

@@ -34,16 +34,24 @@ export const userSettings = sqliteTable("user_settings", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	backupId: text("backup_id").notNull(),
 });
-// export const exerciseRelations = relations(exercise, ({ one }) => ({
-// 	gymDay: one(gymDay, {
-// 		fields: [exercise.gymDay],
-// 		references: [gymDay.id],
-// 	}),
-// }));
+export const exerciseRelations = relations(exercise, ({ one, many }) => ({
+	gymDay: one(gymDay, {
+		fields: [exercise.gymDay],
+		references: [gymDay.id],
+	}),
+	sets: many(set),
+}));
+export const setRelations = relations(set, ({ one, many }) => ({
+	gymDay: one(exercise, {
+		fields: [set.exerciseId],
+		references: [exercise.id],
+	}),
+	sets: many(set),
+}));
 
-// export const gymDayRelations = relations(gymDay, ({ many }) => ({
-// 	exercises: many(exercise),
-// }));
+export const gymDayRelations = relations(gymDay, ({ many }) => ({
+	exercises: many(exercise),
+}));
 
 export type DBGymDay = typeof gymDay.$inferSelect;
 export type DBExercise = typeof exercise.$inferSelect;

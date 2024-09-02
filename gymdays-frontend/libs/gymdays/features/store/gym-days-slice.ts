@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { BasicExercise, GymDayData } from "@gymDays/types";
+import { BasicExercise, GymDayData, Set } from "@gymDays/types";
 
 export interface GymDaysState {
 	gymDays: GymDayData[];
@@ -47,27 +47,72 @@ export const gymDaysSlice = createSlice({
 				gymDay.exercises.push(action.payload.exercise);
 			}
 		},
-		updateSets: (
+		addNewSet: (
 			state,
 			action: PayloadAction<{
-				gymDayId: number;
 				exerciseId: number;
-				weightsPerSet: number[];
+				set: Set;
 			}>
 		) => {
-			const gymDay = state.gymDays.find(
-				(gymDay) => gymDay.id === action.payload.gymDayId
+			const gymDay = state.gymDays.find((gymDay) =>
+				gymDay.exercises.find(
+					(exercise) => exercise.id === action.payload.exerciseId
+				)
 			);
-			if (!gymDay) {
-				return state;
-			}
-			const exercise = gymDay.exercises.find(
+			const exercise = gymDay?.exercises.find(
 				(exercise) => exercise.id === action.payload.exerciseId
 			);
-			if (!exercise) {
-				return state;
+			if (exercise) {
+				exercise.sets.push(action.payload.set);
 			}
-			exercise.weightsPerSet = action.payload.weightsPerSet;
+		},
+		updateSet: (
+			state,
+			action: PayloadAction<{
+				exerciseId: number;
+				setId: number;
+				weight: number;
+				reps: number;
+			}>
+		) => {
+			const gymDay = state.gymDays.find((gymDay) =>
+				gymDay.exercises.find(
+					(exercise) => exercise.id === action.payload.exerciseId
+				)
+			);
+			const exercise = gymDay?.exercises.find(
+				(exercise) => exercise.id === action.payload.exerciseId
+			);
+			const set = exercise?.sets.find(
+				(s) => s.id === action.payload.setId
+			);
+			if (set) {
+				set.reps = action.payload.reps;
+				set.weights = action.payload.weight;
+			}
+		},
+		removeSet: (
+			state,
+			action: PayloadAction<{
+				exerciseId: number;
+				setId: number;
+				weight: number;
+				reps: number;
+			}>
+		) => {
+			const gymDay = state.gymDays.find((gymDay) =>
+				gymDay.exercises.find(
+					(exercise) => exercise.id === action.payload.exerciseId
+				)
+			);
+			const exercise = gymDay?.exercises.find(
+				(exercise) => exercise.id === action.payload.exerciseId
+			);
+			if (exercise) {
+				exercise.sets = exercise?.sets.filter(
+					(s) => s.id !== action.payload.setId
+				);
+			}
 		},
 		removeExercise: (
 			state,
@@ -136,7 +181,9 @@ export const {
 	addExercise,
 	removeExercise,
 	renameExercise,
-	updateSets,
+	addNewSet,
+	removeSet,
+	updateSet,
 	bulkDeleteExercises,
 	bulkDeleteGymDays,
 } = gymDaysSlice.actions;

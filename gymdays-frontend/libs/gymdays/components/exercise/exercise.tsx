@@ -41,7 +41,7 @@ const DEFAULT_SET_WEIGHT = 20;
 
 export default function Exercise({ exercise }: ExerciseProps) {
 	const [exerciseTypes, setExerciseTypes] = useState<string[]>([]);
-	const { weightsPerSet: weights } = exercise;
+	const { sets } = exercise;
 
 	const exerciseItems = useMemo(
 		() => exerciseTypesToExerciseItems(exerciseTypes),
@@ -99,19 +99,21 @@ export default function Exercise({ exercise }: ExerciseProps) {
 		if (!lastExerciseOfType) {
 			return <Text>{firstTimeExerciseText}</Text>;
 		}
-		if (lastExerciseOfType.weightsPerSet.length <= 0) {
+		if (lastExerciseOfType.sets.length <= 0) {
 			return <Text>{firstTimeExerciseText}</Text>;
 		}
-		return <SimpleSetList sets={lastExerciseOfType?.weightsPerSet ?? []} />;
+		return <SimpleSetList sets={sets} />;
 	};
 
 	const getNewDefaultWeight = () => {
-		if (weights.length > 0) {
-			return getArrayLastElement(weights);
+		if (sets.length > 0) {
+			const { weights } = getArrayLastElement(sets);
+			return weights;
 		}
-		if (lastExerciseOfType && lastExerciseOfType.weightsPerSet.length > 0) {
-			const { weightsPerSet } = lastExerciseOfType;
-			return getArrayLastElement(weightsPerSet);
+		if (lastExerciseOfType && lastExerciseOfType.sets.length > 0) {
+			const { sets } = lastExerciseOfType;
+			const { weights } = getArrayLastElement(sets);
+			return weights;
 		}
 		return DEFAULT_SET_WEIGHT;
 	};
@@ -157,7 +159,7 @@ export default function Exercise({ exercise }: ExerciseProps) {
 			</View>
 			<SetList
 				key={"set-of" + exercise.id}
-				sets={weights}
+				sets={sets}
 				onEndEditingUpdate={onWeightChange}
 			/>
 			<PortalGate name="footer" isEntry>

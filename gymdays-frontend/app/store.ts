@@ -42,7 +42,7 @@ export const selectLastExerciseFromExerciseTypeAfterCurrent = createSelector(
 			for (const exercise of gymDay.exercises) {
 				const isLastExercise =
 					exerciseType === exercise.name &&
-					exercise.weightsPerSet.length > 0 &&
+					exercise.sets.length > 0 &&
 					exercise.id !== exerciseId;
 				if (isLastExercise) {
 					return exercise;

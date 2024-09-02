@@ -101,9 +101,9 @@ const SimpleGymCard = ({
 					<View className="flex-1 items-end">
 						{gymDayData.exercises.map((exercise, i) => (
 							<Paragraph key={i}>
-								{bulkNumberToWeightString(
-									exercise.weightsPerSet
-								)}
+								{exercise.sets.map((set) => {
+									return set.weights;
+								})}
 							</Paragraph>
 						))}
 					</View>

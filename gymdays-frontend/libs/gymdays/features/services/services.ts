@@ -46,29 +46,34 @@ async function updateExerciseName(
 	store.dispatch(actions.renameExercise({ gymDayId, exerciseId, name }));
 }
 
-async function addNewSet(gymId: number, exerciseId: number, weight: number) {
-	const exerciseWithNewSet = await db.createNewSet(exerciseId, weight);
+async function addNewSet(exerciseId: number, weight: number, reps: number) {
+	const newSet = await db.createNewSet(exerciseId, weight, reps);
+	if (!newSet) {
+		return;
+	}
+
 	store.dispatch(
-		actions.updateSets({
-			gymDayId: gymId,
+		actions.addNewSet({
 			exerciseId: exerciseId,
-			weightsPerSet: exerciseWithNewSet.weightsPerSet,
+			set: newSet,
 		})
 	);
-	return exerciseWithNewSet;
+	return newSet;
 }
 
-async function updateSets(gymId: number, exerciseId: number, sets: number[]) {
-	const exerciseWithNewSet = await db.updateSets(
-		exerciseId,
-		exerciseId,
-		sets
-	);
+async function updateSets(
+	exerciseId: number,
+	setId: number,
+	weight: number,
+	reps: number
+) {
+	const exerciseWithNewSet = await db.updateSet(setId, weight, reps);
 	store.dispatch(
-		actions.updateSets({
-			gymDayId: gymId,
-			exerciseId: exerciseId,
-			weightsPerSet: exerciseWithNewSet.weightsPerSet,
+		actions.updateSet({
+			exerciseId,
+			setId,
+			weight,
+			reps,
 		})
 	);
 	return exerciseWithNewSet;

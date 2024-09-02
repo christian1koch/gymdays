@@ -40,7 +40,7 @@ const SelectableExerciseCard = ({
 		<ExerciseCard
 			key={index}
 			name={item.name}
-			sets={item.weightsPerSet}
+			sets={item.sets}
 			index={index}
 			onPress={onPress}
 			highlighted={selected}
@@ -64,7 +64,7 @@ const MainExerciseCard = ({
 			<ExerciseCard
 				key={index}
 				name={item.name}
-				sets={item.weightsPerSet}
+				sets={item.sets}
 				index={index}
 				onLongPress={onLongPress}
 			/>

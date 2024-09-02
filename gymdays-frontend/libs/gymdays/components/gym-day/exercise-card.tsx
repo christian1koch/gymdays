@@ -2,10 +2,11 @@ import React from "react";
 import { Pressable, PressableProps } from "react-native";
 import Divider from "@ui/divider";
 import { View, Paragraph } from "tamagui";
+import { Set } from "@gymDays/types";
 
 interface ExerciseCardProps extends PressableProps {
 	name: string;
-	sets: number[];
+	sets: Set[];
 	index: number;
 	highlighted?: boolean;
 }
@@ -42,13 +43,15 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
 export default ExerciseCard;
 
-export const SimpleSetList = ({ sets }: { sets: number[] }) => {
+export const SimpleSetList = ({ sets }: { sets: Set[] }) => {
 	return (
 		<View className="flex-row">
 			{sets.map((set, i) => (
 				<View key={i}>
 					<View className="flex-row">
-						<Paragraph className="">{set + " kg"}</Paragraph>
+						<Paragraph className="">
+							{set.weights + " kg"}
+						</Paragraph>
 						{i < sets.length - 1 && <Divider className="mx-2" />}
 					</View>
 				</View>
