@@ -46,7 +46,6 @@ app.get("/backup/:id", async (req, res) => {
     const backup = await getBackupURL(id);
     const backupId = backup.rows[0].backup_data;
     const downloadUrl = await getDownloadUrl(backupId);
-    console.log("downloadUrl", downloadUrl);
     res.json(downloadUrl);
     res.status(200);
 });

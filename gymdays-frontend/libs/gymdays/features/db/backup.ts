@@ -69,15 +69,9 @@ export async function restoreBackup(userId: string) {
 	const pathToDb = getDBPath();
 	const res = await fetch(`${BASE_URL}/${userId}`);
 	const res2 = await res.json();
-	console.log("res2", res2);
 	await FileSystem.deleteAsync(pathToDb);
-	console.log("deletes this? 1");
 	await FileSystem.deleteAsync(pathToDb + "-shm");
-	console.log("deletes this? 2");
 	await FileSystem.deleteAsync(pathToDb + "-wal");
-	console.log("deletes this? 3");
 	await FileSystem.downloadAsync(res2, pathToDb);
-	console.log("downloads this? 4");
 	await db.restartDb();
-	console.log("restartds DB?");
 }
