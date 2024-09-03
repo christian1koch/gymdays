@@ -4,8 +4,6 @@
 	},
 	"build": {
 		"development": {
-			"developmentClient": true,
-			"distribution": "internal",
 			"channel": "development",
 			"env": {
 				"EXPO_PUBLIC_PROD_DB_NAME": "prod-db-name",
@@ -38,6 +36,11 @@
 	},
 	"submit": {
 		"production": {
+			"ios": {
+				"ascAppId": "6661024733"
+			}
+		},
+		"development": {
 			"ios": {
 				"ascAppId": "6661024733"
 			}
