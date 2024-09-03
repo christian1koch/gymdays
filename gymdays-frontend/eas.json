@@ -9,30 +9,31 @@
 			"channel": "development"
 		},
 		"preview": {
-			"distribution": "internal"
+			"distribution": "internal",
+			"channel": "preview"
 		},
 		"preview2": {
 			"android": {
 				"gradleCommand": ":app:assembleRelease"
+			},
+			"production": {
+				"ios": {
+					"image": "latest"
+				},
+				"env": {
+					"EXPO_PUBLIC_PROD_DB_NAME": "prod-db-name",
+					"EXPO_PUBLIC_DEV_DB_NAME": "dev-db-name.db",
+					"EXPO_PUBLIC_DEV_API_URL": "http://localhost:8081/backup",
+					"EXPO_PUBLIC_PROD_API_URL": "https://gymdays.onrender.com/backup"
+				},
+				"channel": "production"
 			}
 		},
-		"production": {
-			"ios": {
-				"image": "latest"
-			},
-			"env": {
-				"EXPO_PUBLIC_PROD_DB_NAME": "prod-db-name",
-				"EXPO_PUBLIC_DEV_DB_NAME": "dev-db-name.db",
-				"EXPO_PUBLIC_DEV_API_URL": "http://localhost:8081/backup",
-				"EXPO_PUBLIC_PROD_API_URL": "https://gymdays.onrender.com/backup"
-			},
-			"channel": "production"
-		}
-	},
-	"submit": {
-		"production": {
-			"ios": {
-				"ascAppId": "6661024733"
+		"submit": {
+			"production": {
+				"ios": {
+					"ascAppId": "6661024733"
+				}
 			}
 		}
 	}
