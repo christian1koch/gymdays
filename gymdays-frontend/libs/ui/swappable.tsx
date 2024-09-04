@@ -17,8 +17,18 @@ export function Swappable({
 	translateX.addListener(({ value }) => (translateValue.current = value));
 	const panResponder = useRef(
 		PanResponder.create({
-			onStartShouldSetPanResponder: () => true,
-			onMoveShouldSetPanResponder: () => true,
+			onStartShouldSetPanResponder: (e, gestureState) => {
+				if (Math.abs(gestureState.dx) > 30) {
+					return true;
+				}
+				return false;
+			},
+			onMoveShouldSetPanResponder: (e, gestureState) => {
+				if (Math.abs(gestureState.dx) > 10) {
+					return true;
+				}
+				return false;
+			},
 			onPanResponderTerminationRequest: () => false,
 			onPanResponderGrant: (evt, gestureState) => {
 				onSwapping && onSwapping(true);
