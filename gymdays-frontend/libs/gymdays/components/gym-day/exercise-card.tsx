@@ -1,7 +1,6 @@
 import React from "react";
-import { FlatList, Pressable, PressableProps } from "react-native";
-import Divider from "@ui/divider";
-import { View, Paragraph, SizableText } from "tamagui";
+import { Pressable, PressableProps } from "react-native";
+import { View, SizableText } from "tamagui";
 import { Set } from "@gymDays/types";
 import { BasicCard } from "@ui/basic-card";
 
@@ -45,22 +44,16 @@ export default ExerciseCard;
 
 export const HorizontalSetRenderer = ({ sets }: { sets: Set[] }) => {
 	return (
-		<View>
-			<FlatList
-				data={sets}
-				horizontal
-				keyExtractor={(item) => "" + item.id}
-				renderItem={({ item: set, index }) => {
-					return (
-						<BasicCard
-							key={set.id}
-							className={index < sets.length - 1 ? " mr-1 " : ""}
-							title={set.weights + "kg"}
-							footer={set.reps + "x"}
-						/>
-					);
-				}}
-			/>
+		<View className="flex-row flex-wrap gap-1">
+			{sets.map((set, index) => {
+				return (
+					<BasicCard
+						key={set.id}
+						title={set.weights + "kg"}
+						footer={set.reps + "x"}
+					/>
+				);
+			})}
 		</View>
 	);
 };

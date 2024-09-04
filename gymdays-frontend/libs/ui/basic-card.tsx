@@ -8,8 +8,9 @@ export function BasicCard({ title, footer, ...rest }: BasicCardProps) {
 	return (
 		<View
 			bg={"$background"}
-			minWidth={"$10"}
 			height={"$6"}
+			minWidth={"$6"}
+			flex={1}
 			justifyContent="center"
 			alignItems="center"
 			{...rest}
