@@ -68,6 +68,9 @@ export async function updateBackup(backupId?: string) {
 export async function restoreBackup(userId: string) {
 	const pathToDb = getDBPath();
 	const res = await fetch(`${BASE_URL}/${userId}`);
+	if (!res.ok) {
+		throw new Error(res.statusText);
+	}
 	const res2 = await res.json();
 	await FileSystem.deleteAsync(pathToDb);
 	await FileSystem.deleteAsync(pathToDb + "-shm");
