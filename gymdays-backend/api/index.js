@@ -51,13 +51,15 @@ app.get("/backup/:id", async (req, res) => {
 });
 
 app.put("/backup/:id", upload.single("file"), async (req, res) => {
+    console.log("req incoming");
     const file = req.file;
     const id = req.params.id;
     const backup = await getBackupURL(id);
     const backupId = backup.rows[0]?.backup_data;
     if (!backupId) {
+        console.log("no backup id");
         res.status(404);
-        return res.send();
+        return res.send(new Error("no backup id"));
     }
     try {
         const result = await uploadFile(file);
@@ -65,6 +67,7 @@ app.put("/backup/:id", upload.single("file"), async (req, res) => {
 
         res.status(201);
         res.json({ id: backupId });
+        console.log("successful!");
     } catch (error) {
         // eslint-disable-next-line no-console
         console.log("error", error);
