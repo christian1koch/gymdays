@@ -40,21 +40,20 @@ export function Swappable({ children, rightElement }: SwappableProps) {
 		})
 	).current;
 	return (
-		<View className="flex-row">
+		<View>
 			<Animated.View
 				style={{
 					flex: 1,
+					flexDirection: "row",
 					transform: [{ translateX: translateX }],
 				}}
 			>
-				<View className="flex-1" {...panResponder.panHandlers}>
+				<View className="w-full" {...panResponder.panHandlers}>
 					{children}
 				</View>
 				<View
-					className="absolute items-center justify-center h-full"
-					style={{
-						right: -100,
-					}}
+					className="items-center justify-center h-full ml-2"
+					style={{}}
 				>
 					{rightElement}
 				</View>

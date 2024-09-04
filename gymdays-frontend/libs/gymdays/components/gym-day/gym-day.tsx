@@ -13,6 +13,9 @@ import * as services from "libs/gymdays/features/services/services";
 import { router } from "expo-router";
 import { useSelectableItem } from "libs/gymdays/features/hooks/useSelectableItem";
 import { PortalGate } from "libs/utils/portal/PortalContext";
+import { Swappable } from "@ui/swappable";
+import { Button } from "tamagui";
+import { Trash2 } from "@tamagui/lucide-icons";
 
 interface GymDayProps extends GymDayData {}
 
@@ -168,12 +171,30 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
 							);
 						}
 						return (
-							<MainExerciseCard
-								key={item.id}
-								item={item}
-								index={index}
-								onLongPress={() => onLongPress(item.id)}
-							/>
+							<Swappable
+								rightElement={
+									<View className="flex-1 w-20 justify-center items-center">
+										<Button
+											onPress={() =>
+												services.bulkDeleteExercises(
+													id,
+													[item.id]
+												)
+											}
+											circular
+											bg={"$color.red8Dark"}
+											icon={<Trash2 size={"$1"} />}
+										></Button>
+									</View>
+								}
+							>
+								<MainExerciseCard
+									key={item.id}
+									item={item}
+									index={index}
+									onLongPress={() => onLongPress(item.id)}
+								/>
+							</Swappable>
 						);
 					}}
 					data={exercises}
