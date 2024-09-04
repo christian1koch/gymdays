@@ -80,10 +80,14 @@ async function updateSet(
 }
 
 async function bulkDeleteExercises(gymId: number, exerciseIds: number[]) {
-	await db.bulkDeleteExercises(exerciseIds);
-	store.dispatch(
-		actions.bulkDeleteExercises({ gymDayId: gymId, exerciseIds })
-	);
+	try {
+		await db.bulkDeleteExercises(exerciseIds);
+		store.dispatch(
+			actions.bulkDeleteExercises({ gymDayId: gymId, exerciseIds })
+		);
+	} catch (error) {
+		console.log(error);
+	}
 }
 
 async function renameGymDay(gymDayId: number, newName: string) {

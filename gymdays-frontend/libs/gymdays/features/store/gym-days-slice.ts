@@ -156,9 +156,9 @@ export const gymDaysSlice = createSlice({
 				(gymDay) => gymDay.id === action.payload.gymDayId
 			);
 			if (gymDay) {
-				const exerciseSet = new Set(action.payload.exerciseIds);
 				gymDay.exercises = gymDay.exercises.filter(
-					(exercise) => !exerciseSet.has(exercise.id)
+					(exercise) =>
+						!action.payload.exerciseIds.includes(exercise.id)
 				);
 			}
 		},
