@@ -1,13 +1,17 @@
 import { useRef } from "react";
-import { ScrollView, View, Text, Animated, PanResponder } from "react-native";
-import { Button } from "tamagui";
+import { View, Animated, PanResponder } from "react-native";
 
-interface SwappableProps {
+export interface SwappableProps {
 	children: JSX.Element;
-	rightElement: JSX.Element;
+	rightElement?: JSX.Element;
+	onSwapping?: (isSwapping: boolean) => void;
 }
 
-export function Swappable({ children, rightElement }: SwappableProps) {
+export function Swappable({
+	children,
+	rightElement,
+	onSwapping,
+}: SwappableProps) {
 	const translateX = useRef(new Animated.Value(0)).current;
 	const translateValue = useRef(0);
 	translateX.addListener(({ value }) => (translateValue.current = value));
@@ -15,7 +19,9 @@ export function Swappable({ children, rightElement }: SwappableProps) {
 		PanResponder.create({
 			onStartShouldSetPanResponder: () => true,
 			onMoveShouldSetPanResponder: () => true,
+			onPanResponderTerminationRequest: () => false,
 			onPanResponderGrant: (evt, gestureState) => {
+				onSwapping && onSwapping(true);
 				translateX.setOffset(translateValue.current);
 				translateX.setValue(0);
 			},
@@ -36,6 +42,7 @@ export function Swappable({ children, rightElement }: SwappableProps) {
 						useNativeDriver: true,
 					}).start();
 				}
+				onSwapping && onSwapping(false);
 			},
 		})
 	).current;

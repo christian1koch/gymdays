@@ -16,6 +16,7 @@ import { useAppSelector } from "app/hooks";
 import { selectTodaysGymDay } from "app/store";
 import { HorizontalList } from "@ui/horizontal-list";
 import { SwappableWithDelete } from "@ui/swappable-with-delete";
+import { useState } from "react";
 
 interface GimDayListProps {
 	gymDays: GymDayData[];
@@ -131,6 +132,8 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
 		onSelectableItemPress,
 	} = useSelectableItem();
 
+	const [isScrollEnabled, setIsScrollEnabled] = useState(true);
+
 	const todaysGymDay = useAppSelector(selectTodaysGymDay);
 
 	const onPressInsert = async () => {
@@ -205,6 +208,7 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
 				style={{ backgroundColor: "transparent" }}
 				className="h-5/6"
 				data={gymDays}
+				scrollEnabled={isScrollEnabled}
 				renderItem={({ item, index }) => {
 					if (selectMode) {
 						return (
@@ -223,6 +227,9 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
 							key={item.id}
 							onDeletePress={() =>
 								Services.bulkDeleteGymDays([item.id])
+							}
+							onSwapping={(isSwapping) =>
+								setIsScrollEnabled(!isSwapping)
 							}
 						>
 							<LinkGymDayCard

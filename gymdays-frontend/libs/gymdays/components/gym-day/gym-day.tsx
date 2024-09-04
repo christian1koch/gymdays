@@ -83,6 +83,7 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
 	const onEndEditing = async () => {
 		services.renameGymDay(id, currentName);
 	};
+	const [isScrollEnabled, setIsScrollEnabled] = useState(true);
 	const {
 		selectModeOn: selectMode,
 		setSelectModeOff,
@@ -144,6 +145,7 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
 				</StyledText>
 				<Divider className="mb-5" horizonal />
 				<FlatList
+					scrollEnabled={isScrollEnabled}
 					ItemSeparatorComponent={() => {
 						return (
 							<View
@@ -175,6 +177,9 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
 							<SwappableWithDelete
 								onDeletePress={() =>
 									services.bulkDeleteExercises(id, [item.id])
+								}
+								onSwapping={(isSwapping) =>
+									setIsScrollEnabled(!isSwapping)
 								}
 							>
 								<MainExerciseCard

@@ -1,10 +1,9 @@
 import { Trash2 } from "@tamagui/lucide-icons";
 import { View } from "react-native";
-import { Swappable } from "./swappable";
+import { Swappable, SwappableProps } from "./swappable";
 import { Button } from "tamagui";
 
-interface SwappableWithDeleteProps {
-	children: JSX.Element;
+interface SwappableWithDeleteProps extends SwappableProps {
 	onDeletePress: () => void;
 }
 
