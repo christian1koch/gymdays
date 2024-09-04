@@ -22,21 +22,21 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
 	onPress,
 }) => {
 	return (
-		<View
-			bg={"$accentBackground"}
-			borderColor={highlighted ? "$color" : "$colorTransparent"}
-			className="rounded-xl overflow-hidden"
-			borderWidth={highlighted ? "$1" : "$0"}
-		>
-			<Pressable onLongPress={onLongPress} onPress={onPress}>
+		<Pressable onLongPress={onLongPress} onPress={onPress}>
+			<View
+				bg={"$accentBackground"}
+				borderColor={highlighted ? "$color" : "$colorTransparent"}
+				className="rounded-xl overflow-hidden"
+				borderWidth={highlighted ? "$1" : "$0"}
+			>
 				<View className="items-center justify-center my-1">
 					<SizableText size={"$4"}>{name}</SizableText>
 				</View>
-			</Pressable>
-			<View minHeight={64}>
-				<HorizontalSetRenderer sets={sets} />
+				<View minHeight={64}>
+					<HorizontalSetRenderer sets={sets} />
+				</View>
 			</View>
-		</View>
+		</Pressable>
 	);
 };
 
