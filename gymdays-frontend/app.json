@@ -2,7 +2,7 @@
 	"expo": {
 		"name": "gymdays-app",
 		"slug": "gymdays-app",
-		"version": "1.0.10",
+		"version": "1.0.11",
 		"orientation": "portrait",
 		"icon": "./assets/gym-days-icon.png",
 		"userInterfaceStyle": "automatic",
