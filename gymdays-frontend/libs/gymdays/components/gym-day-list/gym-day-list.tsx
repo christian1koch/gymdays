@@ -15,6 +15,7 @@ import { PortalGate } from "libs/utils/portal/PortalContext";
 import { useAppSelector } from "app/hooks";
 import { selectTodaysGymDay } from "app/store";
 import { HorizontalList } from "@ui/horizontal-list";
+import { SwappableWithDelete } from "@ui/swappable-with-delete";
 
 interface GimDayListProps {
 	gymDays: GymDayData[];
@@ -218,11 +219,18 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
 						);
 					}
 					return (
-						<LinkGymDayCard
-							index={index}
-							item={item}
-							onLongPress={() => onLongPress(item.id)}
-						/>
+						<SwappableWithDelete
+							key={item.id}
+							onDeletePress={() =>
+								Services.bulkDeleteGymDays([item.id])
+							}
+						>
+							<LinkGymDayCard
+								index={index}
+								item={item}
+								onLongPress={() => onLongPress(item.id)}
+							/>
+						</SwappableWithDelete>
 					);
 				}}
 			/>

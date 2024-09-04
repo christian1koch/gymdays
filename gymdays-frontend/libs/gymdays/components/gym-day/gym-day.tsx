@@ -16,6 +16,7 @@ import { PortalGate } from "libs/utils/portal/PortalContext";
 import { Swappable } from "@ui/swappable";
 import { Button } from "tamagui";
 import { Trash2 } from "@tamagui/lucide-icons";
+import { SwappableWithDelete } from "@ui/swappable-with-delete";
 
 interface GymDayProps extends GymDayData {}
 
@@ -171,21 +172,9 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
 							);
 						}
 						return (
-							<Swappable
-								rightElement={
-									<View className="flex-1 w-20 justify-center items-center">
-										<Button
-											onPress={() =>
-												services.bulkDeleteExercises(
-													id,
-													[item.id]
-												)
-											}
-											circular
-											bg={"$color.red8Dark"}
-											icon={<Trash2 size={"$1"} />}
-										></Button>
-									</View>
+							<SwappableWithDelete
+								onDeletePress={() =>
+									services.bulkDeleteExercises(id, [item.id])
 								}
 							>
 								<MainExerciseCard
@@ -194,7 +183,7 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
 									index={index}
 									onLongPress={() => onLongPress(item.id)}
 								/>
-							</Swappable>
+							</SwappableWithDelete>
 						);
 					}}
 					data={exercises}
