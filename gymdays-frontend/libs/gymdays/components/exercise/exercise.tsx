@@ -119,19 +119,6 @@ export default function Exercise({ exercise }: ExerciseProps) {
 		);
 	};
 
-	const getNewDefaultWeight = () => {
-		if (sets.length > 0) {
-			const { weights } = getArrayLastElement(sets);
-			return weights;
-		}
-		if (lastExerciseOfType && lastExerciseOfType.sets.length > 0) {
-			const { sets } = lastExerciseOfType;
-			const { weights } = getArrayLastElement(sets);
-			return weights;
-		}
-		return DEFAULT_SET_WEIGHT;
-	};
-
 	const getNewDefaultSetValues = () => {
 		const defaultValues = {
 			weight: DEFAULT_SET_WEIGHT,
@@ -159,12 +146,12 @@ export default function Exercise({ exercise }: ExerciseProps) {
 				<AutocompleteDropdown
 					inputContainerStyle={{ width: 300 }}
 					key={exerciseTypes.length}
-					clearOnFocus={true}
 					closeOnBlur={true}
 					closeOnSubmit={true}
 					initialValue={
 						selectedItem || basicExerciseToExerciseItem(exercise)
 					}
+					clearOnFocus={false}
 					onSelectItem={(item) => onSelectItem(item)}
 					dataSet={exerciseItems}
 					showClear={false}
@@ -172,20 +159,17 @@ export default function Exercise({ exercise }: ExerciseProps) {
 					onChangeText={setText}
 					textInputProps={{
 						enterKeyHint: "done",
+						selectTextOnFocus: true,
 					}}
+					onSubmit={onCreateExercise}
 					EmptyResultComponent={
-						<View className="flex-row items-center">
+						<View className="flex-row items-center h-10">
 							<SizableText
 								className="flex-1 text-center"
 								size="$5"
 							>
 								Add new Exercise
 							</SizableText>
-							<Button
-								onPress={onCreateExercise}
-								theme="accent"
-								icon={Plus}
-							/>
 						</View>
 					}
 				/>
