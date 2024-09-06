@@ -1,7 +1,11 @@
 export function dateToYearMonthDay(date: Date): string {
 	// Month + 1 bc is zero indexed...
-	const newDate =
-		date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+	const monthInNumber = date.getMonth() + 1;
+	const month =
+		monthInNumber.toString().length === 1
+			? "0" + monthInNumber
+			: monthInNumber;
+	const newDate = date.getFullYear() + "." + month + "." + date.getDate();
 	return newDate;
 }
 

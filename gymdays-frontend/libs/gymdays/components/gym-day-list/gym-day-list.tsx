@@ -1,6 +1,6 @@
 import { Layout, List, useTheme } from "@ui-kitten/components";
 import { GymDayData } from "@gymDays/types";
-import { Button, Card, Group, H3, Paragraph, View } from "tamagui";
+import { Button, Card, Group, H3, Paragraph, SizableText, View } from "tamagui";
 import { bulkNumberToWeightString, dateToYearMonthDay } from "@utils/utils";
 import { styled } from "tamagui";
 import { Pressable, ViewProps } from "react-native";
@@ -17,6 +17,7 @@ import { selectTodaysGymDay } from "app/store";
 import { HorizontalList } from "@ui/horizontal-list";
 import { SwappableWithDelete } from "@ui/swappable-with-delete";
 import { useState } from "react";
+import { DarkTheme } from "@react-navigation/native";
 
 interface GimDayListProps {
 	gymDays: GymDayData[];
@@ -31,20 +32,22 @@ const StyledLayout = styled(Layout);
 const Header = ({ date, name, ...viewProps }: HeaderProps) => {
 	const theme = useTheme();
 	return (
-		<StyledLayout
-			{...viewProps}
-			className="flex-row items-center justify-between"
-		>
-			<H3>{name}</H3>
-			<StyledLayout
-				className="rounded-full p-1 mx-2"
-				style={{
-					backgroundColor: theme["color-primary-500"],
-				}}
+		<>
+			<View
+				className=" rounded-bl-2xl absolute p-2 -right-1 -top-1"
+				bg={DarkTheme.colors.background}
 			>
-				<Paragraph>{dateToYearMonthDay(new Date(date))}</Paragraph>
+				<SizableText size={"$4"}>
+					{dateToYearMonthDay(new Date(date))}
+				</SizableText>
+			</View>
+			<StyledLayout
+				{...viewProps}
+				className="flex-row items-center justify-between"
+			>
+				<H3>{name}</H3>
 			</StyledLayout>
-		</StyledLayout>
+		</>
 	);
 };
 

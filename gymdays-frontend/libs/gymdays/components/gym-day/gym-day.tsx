@@ -14,6 +14,7 @@ import { router } from "expo-router";
 import { useSelectableItem } from "libs/gymdays/features/hooks/useSelectableItem";
 import { PortalGate } from "libs/utils/portal/PortalContext";
 import { SwappableWithDelete } from "@ui/swappable-with-delete";
+import { SizableText } from "tamagui";
 
 interface GymDayProps extends GymDayData {}
 
@@ -137,9 +138,9 @@ const GymDay: React.FC<GymDayProps> = ({ id, name, date, exercises }) => {
 					href={"/"}
 					menuItems={getMenuItems()}
 				/>
-				<StyledText className="self-center" appearance="hint">
+				<SizableText className="self-center">
 					{dateToYearMonthDay(new Date(date))}
-				</StyledText>
+				</SizableText>
 				<Divider className="mb-5" horizonal />
 				<FlatList
 					scrollEnabled={isScrollEnabled}
