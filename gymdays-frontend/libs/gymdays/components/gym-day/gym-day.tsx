@@ -13,9 +13,6 @@ import * as services from "libs/gymdays/features/services/services";
 import { router } from "expo-router";
 import { useSelectableItem } from "libs/gymdays/features/hooks/useSelectableItem";
 import { PortalGate } from "libs/utils/portal/PortalContext";
-import { Swappable } from "@ui/swappable";
-import { Button } from "tamagui";
-import { Trash2 } from "@tamagui/lucide-icons";
 import { SwappableWithDelete } from "@ui/swappable-with-delete";
 
 interface GymDayProps extends GymDayData {}
