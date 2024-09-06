@@ -5,6 +5,7 @@ import { eq, inArray } from "drizzle-orm";
 import * as schema from "./schema";
 import { parseDBExercise, parseDBGymDay } from "./helper";
 import { dateToYearMonthDay } from "@utils/utils";
+import { sql } from "drizzle-orm";
 
 const dbName = __DEV__
 	? process.env.EXPO_PUBLIC_DEV_DB_NAME
@@ -252,4 +253,26 @@ export const bulkDeleteSets = async (setIds: number[]) => {
 		.delete(schema.set)
 		.where(inArray(schema.set.id, setIds));
 	return res;
+};
+// TODO: move this to the store when we do #45 to split slices
+export const findPersonalBest = async () => {
+	const db = await getDB();
+	const personalBests = await db
+		.select({
+			exerciseType: exercise.exerciseType,
+			setId: schema.set.id,
+			personalBest: sql`MAX(${schema.set.weights})`,
+			gymDayCount: sql`COUNT(DISTINCT ${exercise.gymDay})`,
+		})
+		.from(schema.set)
+		.innerJoin(exercise, eq(schema.set.exerciseId, exercise.id)) // Join Sets and Exercise
+		.groupBy(exercise.exerciseType) // Group by exercise type
+		.having(sql`COUNT(DISTINCT ${exercise.gymDay}) > 1`);
+
+	const setIds = personalBests.map((setId) => setId.setId);
+
+	const firstTimes = await db.select({
+		setId: schema.set.id,
+	});
+	return setIds;
 };

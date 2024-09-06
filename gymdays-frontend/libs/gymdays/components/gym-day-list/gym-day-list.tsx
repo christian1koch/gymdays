@@ -1,7 +1,7 @@
 import { Layout, List, useTheme } from "@ui-kitten/components";
 import { GymDayData } from "@gymDays/types";
 import { Button, Card, Group, H3, Paragraph, SizableText, View } from "tamagui";
-import { bulkNumberToWeightString, dateToYearMonthDay } from "@utils/utils";
+import { dateToYearMonthDay } from "@utils/utils";
 import { styled } from "tamagui";
 import { Pressable, ViewProps } from "react-native";
 import { Link } from "expo-router";
@@ -10,14 +10,14 @@ import HeaderNav, { MenuItemProps } from "@ui/header-nav";
 import { router } from "expo-router";
 import * as Services from "libs/gymdays/features/services/services";
 import { useSelectableItem } from "libs/gymdays/features/hooks/useSelectableItem";
-import { Plus } from "@tamagui/lucide-icons";
+import { Plus, StarFull } from "@tamagui/lucide-icons";
 import { PortalGate } from "libs/utils/portal/PortalContext";
 import { useAppSelector } from "app/hooks";
 import { selectTodaysGymDay } from "app/store";
-import { HorizontalList } from "@ui/horizontal-list";
 import { SwappableWithDelete } from "@ui/swappable-with-delete";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DarkTheme } from "@react-navigation/native";
+import * as db from "@gymDays/db";
 
 interface GimDayListProps {
 	gymDays: GymDayData[];
@@ -51,14 +51,36 @@ const Header = ({ date, name, ...viewProps }: HeaderProps) => {
 	);
 };
 
+const CardWeightText = ({
+	text,
+	isPersonalBest,
+}: {
+	text: string;
+	isPersonalBest: boolean;
+}) => {
+	if (isPersonalBest) {
+		return (
+			<View className="flex-row items-center">
+				<StarFull size={18} color={"$color.yellow9Dark"} />
+				<Paragraph className="ml-2" color={"$color.yellow9Dark"}>
+					{text}
+				</Paragraph>
+			</View>
+		);
+	}
+	return <Paragraph>{text}</Paragraph>;
+};
+
 const LinkGymDayCard = ({
 	item,
 	index,
 	onLongPress,
+	personalBests,
 }: {
 	item: GymDayData;
 	index: number;
 	onLongPress: () => void;
+	personalBests: number[];
 }) => {
 	return (
 		<Link
@@ -69,7 +91,11 @@ const LinkGymDayCard = ({
 			}}
 			asChild
 		>
-			<SimpleGymCard onLongPress={onLongPress} gymDayData={item} />
+			<SimpleGymCard
+				personalBests={personalBests}
+				onLongPress={onLongPress}
+				gymDayData={item}
+			/>
 		</Link>
 	);
 };
@@ -79,12 +105,31 @@ const SimpleGymCard = ({
 	onPress,
 	onLongPress,
 	highlighted,
+	personalBests,
 }: {
 	gymDayData: GymDayData;
 	onPress?: () => void;
 	onLongPress?: () => void;
 	highlighted?: boolean;
+	personalBests: number[];
 }) => {
+	const { exercises } = gymDayData;
+	const exercisesWithPersonalBest = useMemo(() => {
+		return exercises.map((exercise) => {
+			const maxWeight = Math.max(...exercise.sets.map((s) => s.weights));
+			const isPersonalBest = exercise.sets.some((s) =>
+				personalBests.includes(s.id)
+			);
+			const exerciseForHome = {
+				id: exercise.id,
+				gymDay: exercise.gymDay,
+				name: exercise.name,
+				maxWeight,
+				isPersonalBest,
+			};
+			return exerciseForHome;
+		});
+	}, [exercises, personalBests]);
 	return (
 		<Pressable onLongPress={onLongPress} onPress={onPress}>
 			<Card
@@ -105,17 +150,13 @@ const SimpleGymCard = ({
 						))}
 					</View>
 					<View className="flex-1 items-end">
-						{gymDayData.exercises.map((exercise, i) => {
-							if (exercise.sets.length > 1) {
+						{exercisesWithPersonalBest.map((exercise, i) => {
+							if (exercise.maxWeight > 0) {
 								return (
-									<Paragraph>
-										{Math.max(
-											...exercise.sets.map(
-												(s) => s.weights
-											)
-										)}
-										kg
-									</Paragraph>
+									<CardWeightText
+										text={exercise.maxWeight + "kg"}
+										isPersonalBest={exercise.isPersonalBest}
+									/>
 								);
 							}
 						})}
@@ -136,7 +177,15 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
 	} = useSelectableItem();
 
 	const [isScrollEnabled, setIsScrollEnabled] = useState(true);
+	const [personalBestSetIds, setPersonalBestSetIds] = useState<number[]>([]);
 
+	useEffect(() => {
+		const fetchPersonalBests = async () => {
+			const personalBests = await db.findPersonalBest();
+			setPersonalBestSetIds(personalBests);
+		};
+		fetchPersonalBests();
+	}, []);
 	const todaysGymDay = useAppSelector(selectTodaysGymDay);
 
 	const onPressInsert = async () => {
@@ -222,6 +271,7 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
 								highlighted={selectedExercises.includes(
 									item.id
 								)}
+								personalBests={personalBestSetIds}
 							/>
 						);
 					}
@@ -239,6 +289,7 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
 								index={index}
 								item={item}
 								onLongPress={() => onLongPress(item.id)}
+								personalBests={personalBestSetIds}
 							/>
 						</SwappableWithDelete>
 					);
