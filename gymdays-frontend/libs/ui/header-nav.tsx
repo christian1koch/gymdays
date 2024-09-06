@@ -40,11 +40,18 @@ export default function HeaderNav({
 			)}
 			{isEditingTitle ? (
 				<Input
-					autoFocus
+					selectTextOnFocus
 					onEndEditing={onInputEndEditing}
 					defaultValue={title}
 					onChangeText={onChangeText}
 					enterKeyHint="done"
+					autoFocus
+					onFocus={(e) =>
+						// Workaround for selectTextOnFocus={true} not working
+						e.currentTarget.setNativeProps({
+							selection: { start: 0, end: title.length },
+						})
+					}
 				/>
 			) : (
 				<H2
