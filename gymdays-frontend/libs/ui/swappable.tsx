@@ -35,7 +35,9 @@ export function Swappable({
 				translateX.setOffset(translateValue.current);
 				translateX.setValue(0);
 			},
-			onPanResponderMove: Animated.event([null, { dx: translateX }]),
+			onPanResponderMove: Animated.event([null, { dx: translateX }], {
+				useNativeDriver: false,
+			}),
 			onPanResponderRelease(e, gestureState) {
 				if (translateValue.current < -50) {
 					translateX.setOffset(0);
