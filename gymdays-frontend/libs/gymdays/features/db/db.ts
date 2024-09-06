@@ -53,30 +53,6 @@ export const initDatabase = async () => {
 	}
 	const db = await SQLite.openDatabaseAsync(dbName);
 
-	await db.execAsync(`
-   PRAGMA journal_mode = WAL;
-    CREATE TABLE IF NOT EXISTS gym_day (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      date TEXT NOT NULL,
-      name TEXT NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS exercise_type (
-      name TEXT PRIMARY KEY NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS exercise (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      exerciseType TEXT NOT NULL,
-      gym_day INTEGER NOT NULL,
-      weightsPerSet TEXT,
-      FOREIGN KEY(exerciseType) REFERENCES exercise_type(name),
-      FOREIGN KEY(gym_day) REFERENCES gym_day(id) ON DELETE CASCADE
-    );
-	CREATE TABLE IF NOT EXISTS user_settings (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		backup_id TEXT NOT NULL
-	);
-	`);
-
 	const defaultValues = [
 		"Bench Press",
 		"Deadlift",

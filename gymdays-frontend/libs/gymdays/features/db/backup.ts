@@ -72,9 +72,14 @@ export async function restoreBackup(userId: string) {
 		throw new Error(res.statusText);
 	}
 	const res2 = await res.json();
-	await FileSystem.deleteAsync(pathToDb);
-	await FileSystem.deleteAsync(pathToDb + "-shm");
-	await FileSystem.deleteAsync(pathToDb + "-wal");
+	console.log("pathToDB", pathToDb);
+	try {
+		await FileSystem.deleteAsync(pathToDb);
+		await FileSystem.deleteAsync(pathToDb + "-shm");
+		await FileSystem.deleteAsync(pathToDb + "-wal");
+	} catch (error) {
+		console.log(error);
+	}
 	await FileSystem.downloadAsync(res2, pathToDb);
 	await db.restartDb();
 }

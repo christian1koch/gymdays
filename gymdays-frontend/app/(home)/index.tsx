@@ -18,20 +18,20 @@ import { drizzle } from "drizzle-orm/expo-sqlite";
 import { openDatabaseSync } from "expo-sqlite";
 
 export default function App() {
-	db.initDatabase();
 	let dbName = process.env.EXPO_PUBLIC_DEV_DB_NAME;
 	if (!__DEV__) {
 		dbName = process.env.EXPO_PUBLIC_PROD_DB_NAME;
 	}
 	const expoDB = openDatabaseSync(dbName!);
 	const newDB = drizzle(expoDB);
+	const { success, error } = useMigrations(newDB, migrations);
+
 	useDrizzleStudioWithDB();
 	const sortedGymDays = useAppSelector(selectGymDaysSortedByDate);
 	const [loaded] = useFonts({
 		Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
 		InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
 	});
-	const { success, error } = useMigrations(newDB, migrations);
 
 	useEffect(() => {
 		if (loaded) {
@@ -58,6 +58,7 @@ export default function App() {
 		);
 	}
 	if (!success) {
+		db.initDatabase();
 		return (
 			<View>
 				<Text>Migration is in progress...</Text>

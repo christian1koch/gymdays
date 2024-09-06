@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS `exercise` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`exerciseType` text NOT NULL,
 	`gym_day` integer NOT NULL,
+	`weightsPerSet` text NOT NULL,
 	FOREIGN KEY (`exerciseType`) REFERENCES `exercise_type`(`name`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`gym_day`) REFERENCES `gym_day`(`id`) ON UPDATE no action ON DELETE cascade
 );
