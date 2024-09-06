@@ -4,7 +4,7 @@ import { Button, Card, Group, H3, Paragraph, SizableText, View } from "tamagui";
 import { dateToYearMonthDay } from "@utils/utils";
 import { styled } from "tamagui";
 import { Pressable, ViewProps } from "react-native";
-import { Link } from "expo-router";
+import { Link, useFocusEffect } from "expo-router";
 import AddButton from "@ui/add-button";
 import HeaderNav, { MenuItemProps } from "@ui/header-nav";
 import { router } from "expo-router";
@@ -15,7 +15,7 @@ import { PortalGate } from "libs/utils/portal/PortalContext";
 import { useAppSelector } from "app/hooks";
 import { selectTodaysGymDay } from "app/store";
 import { SwappableWithDelete } from "@ui/swappable-with-delete";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { DarkTheme } from "@react-navigation/native";
 import * as db from "@gymDays/db";
 
@@ -179,13 +179,15 @@ export default function GimDayList({ gymDays }: GimDayListProps) {
 	const [isScrollEnabled, setIsScrollEnabled] = useState(true);
 	const [personalBestSetIds, setPersonalBestSetIds] = useState<number[]>([]);
 
-	useEffect(() => {
-		const fetchPersonalBests = async () => {
-			const personalBests = await db.findPersonalBest();
-			setPersonalBestSetIds(personalBests);
-		};
-		fetchPersonalBests();
-	}, []);
+	useFocusEffect(
+		useCallback(() => {
+			const fetchPersonalBests = async () => {
+				const personalBests = await db.findPersonalBest();
+				setPersonalBestSetIds(personalBests);
+			};
+			fetchPersonalBests();
+		}, [])
+	);
 	const todaysGymDay = useAppSelector(selectTodaysGymDay);
 
 	const onPressInsert = async () => {
